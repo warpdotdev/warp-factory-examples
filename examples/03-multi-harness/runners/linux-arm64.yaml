@@ -1,0 +1,12 @@
+description: >-
+  arm64 runner for implementation, for repositories that build and test on
+  aarch64. Architecture is a runner choice and is independent of which
+  harness an agent runs on; the image must have an arm64 variant.
+instanceShape:
+  vcpus: 4
+  memoryGb: 8
+platform:
+  os: linux
+  arch: aarch64
+  linux:
+    dockerImage: ubuntu:24.04

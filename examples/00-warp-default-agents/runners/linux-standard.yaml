@@ -1,0 +1,9 @@
+description: Standard Linux runner shared by the default agents.
+instanceShape:
+  vcpus: 4
+  memoryGb: 8
+platform:
+  os: linux
+  arch: x86_64
+  linux:
+    dockerImage: ubuntu:24.04

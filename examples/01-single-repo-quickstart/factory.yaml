@@ -1,0 +1,12 @@
+schemaVersion: v1alpha1
+name: single-repo-quickstart
+description: >-
+  The smallest useful factory: one repository, a foreman that routes work, an
+  implementation agent that turns labeled issues into pull requests.
+alias: Quickstart
+repositories:
+  - owner: acme
+    name: api-service
+agentDefaults:
+  model: auto
+  runner: linux-small

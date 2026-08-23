@@ -1,0 +1,11 @@
+description: >-
+  Default runner for the foreman, triage, spec, and review: stages that read
+  code and write prose.
+instanceShape:
+  vcpus: 4
+  memoryGb: 8
+platform:
+  os: linux
+  arch: x86_64
+  linux:
+    dockerImage: ubuntu:24.04

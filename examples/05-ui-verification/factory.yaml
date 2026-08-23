@@ -1,0 +1,13 @@
+schemaVersion: v1alpha1
+name: ui-verification
+description: >-
+  A single-agent factory that verifies UI behavior with computer use: label
+  a pull request or an issue, and the agent runs the app, drives it in a
+  browser, and posts visual evidence.
+alias: Verifier
+repositories:
+  - owner: acme
+    name: webapp
+agentDefaults:
+  model: auto
+  runner: linux-app

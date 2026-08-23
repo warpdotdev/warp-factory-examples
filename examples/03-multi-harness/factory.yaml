@@ -1,0 +1,13 @@
+schemaVersion: v1alpha1
+name: multi-harness
+description: >-
+  The quickstart topology with a different harness per role: a foreman on
+  the Warp Agent harness, a Claude Code implementation agent, and a Codex
+  reviewer.
+alias: Harness Sampler
+repositories:
+  - owner: acme
+    name: api-service
+agentDefaults:
+  model: auto
+  runner: linux-standard

@@ -1,0 +1,51 @@
+name: Validate factory examples
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    # Weekly drift check against the live schema registry.
+    - cron: "0 9 * * 1"
+
+env:
+  PINNED_SCHEMA_VERSION: v1alpha1
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check schema version drift
+        run: |
+          current=$(curl -sf https://app.warp.dev/api/v1/factory-files/schemas | python3 -c 'import json,sys; print(json.load(sys.stdin)["current_version"])')
+          echo "server current_version: $current (pinned: $PINNED_SCHEMA_VERSION)"
+          if [ "$current" != "$PINNED_SCHEMA_VERSION" ]; then
+            echo "::error::Server schema version moved to $current; examples are pinned to $PINNED_SCHEMA_VERSION and need a bump PR."
+            exit 1
+          fi
+
+      - name: Validate every example against the server parser
+        run: |
+          status=0
+          for ex in examples/*/; do
+            echo "::group::$ex"
+            python3 scripts/validate_factory_files.py "$ex" && code=0 || code=$?
+            echo "::endgroup::"
+            if [ "$code" -eq 2 ]; then
+              echo "::error::$ex was not validated (server unreachable). This is not a pass."
+              status=1
+            elif [ "$code" -ne 0 ]; then
+              status=1
+            fi
+          done
+          exit $status
+
+      - name: Check repository conventions
+        run: python3 scripts/check_conventions.py
+
+      - name: Unit tests for the helper scripts
+        run: |
+          python3 scripts/test_verify_default_agents.py -v
+          python3 scripts/test_check_conventions.py -v

@@ -1,0 +1,22 @@
+schemaVersion: v1alpha1
+name: sdlc-issue-to-pr
+description: >-
+  A standing engineering factory built on the default agents: intake from
+  Slack, Linear, and GitHub; triage; optional spec; implementation;
+  adversarial review; a human merge. A custom agent builds the iOS app on
+  macOS.
+alias: Acme
+credentialStrategy: EXECUTOR
+repositories:
+  - owner: acme
+    name: api-service
+  - owner: acme
+    name: webapp
+  - owner: acme
+    name: ios-app
+integrations:
+  - type: slack
+  - type: linear
+agentDefaults:
+  model: auto
+  runner: linux-standard

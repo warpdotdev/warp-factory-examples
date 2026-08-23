@@ -1,0 +1,15 @@
+schemaVersion: v1alpha1
+name: common-automations
+description: >-
+  One maintenance agent behind four standing automations: CI failure
+  triage, a weekly dependency audit, a docs check on push, and issue intake
+  from Slack reactions.
+alias: Maintenance
+repositories:
+  - owner: acme
+    name: api-service
+integrations:
+  - type: slack
+agentDefaults:
+  model: auto
+  runner: linux-standard

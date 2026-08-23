@@ -1,0 +1,11 @@
+description: >-
+  Small runner for code review. Review reads code and writes findings, so
+  no toolchain image is needed.
+instanceShape:
+  vcpus: 2
+  memoryGb: 4
+platform:
+  os: linux
+  arch: x86_64
+  linux:
+    dockerImage: ubuntu:24.04

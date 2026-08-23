@@ -1,0 +1,12 @@
+description: >-
+  Small runner for a single Node service. The image is where the toolchain
+  comes from: node:22-bookworm-slim already has Node and npm, so no setup
+  command has to install them.
+instanceShape:
+  vcpus: 2
+  memoryGb: 4
+platform:
+  os: linux
+  arch: x86_64
+  linux:
+    dockerImage: node:22-bookworm-slim

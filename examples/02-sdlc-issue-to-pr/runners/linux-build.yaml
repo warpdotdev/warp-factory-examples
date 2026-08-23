@@ -1,0 +1,15 @@
+description: >-
+  Build runner for implementation: double the compute of the default, on an
+  image that already carries the Go toolchain.
+setupCommands:
+  # A setup command that exits non-zero fails the whole sandbox, so anything
+  # best-effort has to swallow its own failure.
+  - '(cd /workspace/api-service && go mod download) || echo "Warning: module prefetch skipped" >&2'
+instanceShape:
+  vcpus: 8
+  memoryGb: 16
+platform:
+  os: linux
+  arch: x86_64
+  linux:
+    dockerImage: golang:1.24-bookworm

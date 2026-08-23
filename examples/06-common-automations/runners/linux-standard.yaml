@@ -1,0 +1,9 @@
+description: Standard runner for the maintenance agent.
+instanceShape:
+  vcpus: 4
+  memoryGb: 8
+platform:
+  os: linux
+  arch: x86_64
+  linux:
+    dockerImage: ubuntu:24.04

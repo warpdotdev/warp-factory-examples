@@ -1,0 +1,12 @@
+schemaVersion: v1alpha1
+name: code-review-only
+description: >-
+  A single-agent factory that reviews pull requests: one reviewer, one
+  trigger, advisory findings posted on the PR.
+alias: Reviewer
+repositories:
+  - owner: acme
+    name: api-service
+agentDefaults:
+  model: auto
+  runner: linux-small

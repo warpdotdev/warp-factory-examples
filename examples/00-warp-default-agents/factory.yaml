@@ -1,0 +1,15 @@
+schemaVersion: v1alpha1
+name: warp-default-agents
+description: >-
+  The five default agents Warp seeds when you create a factory, with their
+  default prompts, descriptions, and models, reproduced verbatim as files.
+alias: Warp Defaults
+repositories:
+  - owner: acme
+    name: api-service
+integrations:
+  - type: slack
+  - type: linear
+agentDefaults:
+  model: auto-genius
+  runner: linux-standard
