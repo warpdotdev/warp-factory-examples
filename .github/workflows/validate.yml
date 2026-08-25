@@ -32,6 +32,14 @@ jobs:
           for ex in examples/*/; do
             echo "::group::$ex"
             python3 scripts/validate_factory_files.py "$ex" && code=0 || code=$?
+            if [ "$code" -eq 2 ]; then
+              # Exit 2 means the tree was not checked at all, which is
+              # sometimes a transient server rejection. Retry once before
+              # treating it as a failure.
+              echo "$ex was not validated; retrying once."
+              sleep 10
+              python3 scripts/validate_factory_files.py "$ex" && code=0 || code=$?
+            fi
             echo "::endgroup::"
             if [ "$code" -eq 2 ]; then
               echo "::error::$ex was not validated (server unreachable). This is not a pass."

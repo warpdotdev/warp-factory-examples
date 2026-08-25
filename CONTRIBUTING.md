@@ -10,9 +10,9 @@
   passing does not mean the tree applies as committed.
 - Use real Warp Agent model IDs and harness model names only. Do not commit
   fake MCP server IDs, environment IDs, or cloud provider values in YAML;
-  show those fields in README snippets instead. Managed secret names may
-  appear only when the example's README tells the reader to create them
-  first.
+  show those fields in README snippets instead. Managed secret names and
+  self-hosted worker IDs may appear only when the example's README tells
+  the reader to create them first.
 - Placeholders are `acme/*` repositories by default. A placeholder outside
   that list is allowed only when it cannot be mistaken for a working value
   (e.g. a name like `your-intake-channel`) and the example README's "Make

@@ -32,6 +32,10 @@ The examples target schema version `v1alpha1`.
 - [`examples/06-common-automations`](examples/06-common-automations): a
   catalog of standing automations. CI failure triage, a weekly dependency
   audit, a docs check on push, and Slack reaction intake, all on one agent.
+- [`examples/07-self-hosted-worker`](examples/07-self-hosted-worker):
+  execution on your own infrastructure. The quickstart topology with
+  `workerHost` pointed at a managed self-hosted worker and a runner matched
+  to the worker's platform.
 
 ## Using an example
 
