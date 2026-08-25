@@ -34,8 +34,8 @@ The examples target schema version `v1alpha1`.
   audit, a docs check on push, and Slack reaction intake, all on one agent.
 - [`examples/07-self-hosted-worker`](examples/07-self-hosted-worker):
   execution on your own infrastructure. The quickstart topology with
-  `workerHost` routing runs to a managed self-hosted worker, and a runner
-  matched to the worker's platform.
+  `workerHost` pointed at a managed self-hosted worker and a runner matched
+  to the worker's platform.
 
 ## Using an example
 

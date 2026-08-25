@@ -8,8 +8,7 @@ commands, and the sandbox filesystem run on compute your team provides.
 
 - `workerHost` on `agentDefaults`: every run in this factory executes on the
   worker named `factory-worker`. Any agent or automation can override
-  `workerHost` for its own runs, and `workerHost: warp` sends them back to
-  Warp-hosted compute.
+  `workerHost` for its own runs.
 - Runner and worker platforms must match. Workers run on Linux `amd64` and
   `arm64` only, so this factory's runner is `linux/x86_64`; there are no
   macOS workers.
@@ -18,11 +17,11 @@ commands, and the sandbox filesystem run on compute your team provides.
 
 ## Start the worker first
 
-The committed `workerHost` names a worker called `factory-worker`. Deploy a
+This tree's `workerHost` names a worker called `factory-worker`. Deploy a
 worker with that ID before applying the definition; the
 [self-hosting docs](https://docs.warp.dev/platform/self-hosting/) cover
-starting the worker and choosing its `--worker-id`. Self-hosting requires an
-Enterprise plan with self-hosting enabled.
+starting the worker and choosing its `--worker-id`. Self-hosted execution is
+an Enterprise feature and must be enabled for your team.
 
 ## Tree
 
@@ -41,8 +40,7 @@ runners/
 
 1. Replace `acme/api-service` in `factory.yaml` and
    `automations/issue-labeled/automation.md`.
-2. Keep `workerHost` in step with your worker's `--worker-id`, and change
-   both together when you rename it.
+2. Set `workerHost` to match your worker's `--worker-id`.
 3. Match the runner's `arch` to the worker: `x86_64` for `amd64` hosts,
    `aarch64` for `arm64` hosts.
 4. To move a stage back to Warp-hosted compute, set `workerHost: warp` on
