@@ -1,0 +1,14 @@
+schemaVersion: v1alpha1
+name: self-hosted-worker
+description: >-
+  The quickstart topology with execution routed to a managed self-hosted
+  worker: Warp coordinates the factory, and runs execute on compute your
+  team provides.
+alias: On-Prem
+repositories:
+  - owner: acme
+    name: api-service
+agentDefaults:
+  model: auto
+  runner: linux-worker
+  workerHost: factory-worker

@@ -1,0 +1,11 @@
+description: >-
+  Runner for work routed to the self-hosted worker. The runner's platform
+  must match the worker's: workers run on Linux amd64 and arm64 only.
+instanceShape:
+  vcpus: 4
+  memoryGb: 8
+platform:
+  os: linux
+  arch: x86_64
+  linux:
+    dockerImage: ubuntu:24.04
