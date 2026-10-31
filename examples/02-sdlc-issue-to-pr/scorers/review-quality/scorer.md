@@ -14,7 +14,7 @@ labels:
     score: 0
 passingScore: 1
 samplingRate: 25
-model: claude-4-5-haiku
+model: claude-5-5-haiku-low
 ---
 Evaluate the review agent's findings report. Return `actionable` when each
 finding names a file and line, states the impact, and proposes a correction.

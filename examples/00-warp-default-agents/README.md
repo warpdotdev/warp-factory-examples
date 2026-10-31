@@ -11,15 +11,15 @@ no automations, so nothing triggers it.
 
 ## The default agents
 
-- `foreman` (`FOREMAN`, model `claude-5-opus-high`): "Orchestrates the
+- `foreman` (`FOREMAN`, model `claude-5-5-opus-high`): "Orchestrates the
   factory workflow and dispatches each gated step."
-- `triage` (`TRIAGE`, model `grok-4-5-high`): "Triages requests and
+- `triage` (`TRIAGE`, model `grok-4-7-high`): "Triages requests and
   establishes task state."
-- `spec` (`SPEC`, model `gpt-5-6-sol-high`): "Writes and drives approval of
+- `spec` (`SPEC`, model `gpt-6-1-sol-high`): "Writes and drives approval of
   specifications."
 - `implement` (`IMPLEMENT`, model `auto-genius`): "Implements, validates,
   and updates code changes."
-- `review` (`REVIEW`, model `gpt-5-6-terra-high`): "Reviews factory pull
+- `review` (`REVIEW`, model `gpt-6-1-terra-high`): "Reviews factory pull
   requests and routes findings to rework or human resolution."
 
 Every frontmatter `description` and `model` above is the product default.

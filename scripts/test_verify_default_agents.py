@@ -40,14 +40,14 @@ var defaultAgents = []SeedAgent{{
 \t\tName:        "X Triage Agent",
 \t\tRole:        enums.TriageAgentType,
 \t\tDescription: "Triages requests and establishes task state.",
-\t\tModel:       "grok-4-5-high",
+\t\tModel:       "grok-4-7-high",
 \t\tPrompt:      triagePrompt,
 \t}},
 \t{{
 \t\tName:        "X Spec Agent",
 \t\tRole:        enums.SpecAgentType,
 \t\tDescription: "Writes and drives approval of specifications.",
-\t\tModel:       "gpt-5-6-sol-high",
+\t\tModel:       "gpt-6-1-sol-high",
 \t\tPrompt:      specPrompt,
 \t}},
 \t{{
@@ -61,7 +61,7 @@ var defaultAgents = []SeedAgent{{
 \t\tName:        "X Review Agent",
 \t\tRole:        enums.ReviewAgentType,
 \t\tDescription: "Reviews factory pull requests and routes findings to rework or human resolution.",
-\t\tModel:       "gpt-5-6-terra-high",
+\t\tModel:       "gpt-6-1-terra-high",
 \t\tPrompt:      reviewPrompt,
 \t}},
 }}
@@ -126,8 +126,8 @@ class VerifyDefaultAgentsTest(unittest.TestCase):
     def test_matching_checkout_and_tree_passes(self):
         with tempfile.TemporaryDirectory() as ws, tempfile.TemporaryDirectory() as ex:
             ws_root, ex_root = Path(ws), Path(ex) / "00"
-            sha = write_warp_server_fixture(ws_root, foreman_model="claude-5-opus-high")
-            write_matching_example(ex_root, make_seeds_go("claude-5-opus-high"))
+            sha = write_warp_server_fixture(ws_root, foreman_model="claude-5-5-opus-high")
+            write_matching_example(ex_root, make_seeds_go("claude-5-5-opus-high"))
 
             result = run_script("--warp-server", str(ws_root), "--example", str(ex_root), "--ref", sha)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
@@ -137,11 +137,11 @@ class VerifyDefaultAgentsTest(unittest.TestCase):
     def test_diverged_tree_at_the_right_commit_fails_with_diagnostics(self):
         with tempfile.TemporaryDirectory() as ws, tempfile.TemporaryDirectory() as ex:
             ws_root, ex_root = Path(ws), Path(ex) / "00"
-            sha = write_warp_server_fixture(ws_root, foreman_model="claude-5-opus-high")
-            write_matching_example(ex_root, make_seeds_go("claude-5-opus-high"))
+            sha = write_warp_server_fixture(ws_root, foreman_model="claude-5-5-opus-high")
+            write_matching_example(ex_root, make_seeds_go("claude-5-5-opus-high"))
             # Mutate the tree only -- the checkout is still at the right commit.
             agent_path = ex_root / "agents" / "foreman" / "agent.md"
-            agent_path.write_text(agent_path.read_text().replace("claude-5-opus-high", "claude-4-opus"))
+            agent_path.write_text(agent_path.read_text().replace("claude-5-5-opus-high", "claude-4-opus"))
 
             result = run_script("--warp-server", str(ws_root), "--example", str(ex_root), "--ref", sha)
             self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
@@ -176,10 +176,10 @@ class VerifyDefaultAgentsTest(unittest.TestCase):
             ws_root, ex_root = Path(ws), Path(ex) / "00"
             defaults = ws_root / vdr.DEFAULTS_ROOT / "prompts"
             defaults.mkdir(parents=True)
-            (ws_root / vdr.DEFAULTS_ROOT / "seeds.go").write_text(make_seeds_go("claude-5-opus-high"))
+            (ws_root / vdr.DEFAULTS_ROOT / "seeds.go").write_text(make_seeds_go("claude-5-5-opus-high"))
             for name, body in PROMPT_TEMPLATES.items():
                 (defaults / name).write_text(body)
-            write_matching_example(ex_root, make_seeds_go("claude-5-opus-high"))
+            write_matching_example(ex_root, make_seeds_go("claude-5-5-opus-high"))
             # No `git init` -- ws_root is a plain directory, not a checkout.
 
             result = run_script("--warp-server", str(ws_root), "--example", str(ex_root))
