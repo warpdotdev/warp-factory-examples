@@ -126,9 +126,12 @@ well would fire on every mention of anyone.
          teams: [Platform]
    ```
 
-   `teams`, `projects`, and `states` take plain name lists that the server
-   resolves against Linear when the definition is applied, so add them only
-   after Linear is connected, or the apply will fail on the unresolved name.
+   `teams` and `projects` take plain name lists that the server resolves
+   against Linear when the definition is applied, so add them only after
+   Linear is connected, or the apply will fail on the unresolved name.
+   `agent_session_created` also accepts `labels`, `keywords`, and
+   `creator_ids`; a `states` filter is rejected on this event and belongs
+   on `issue_state_changed` instead.
 
 ## Using Jira instead of Linear
 
