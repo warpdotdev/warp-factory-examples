@@ -7,11 +7,13 @@ tries to reproduce the reported bug the same way.
 
 ## What it demonstrates
 
-- Computer use is on by default for cloud agent runs, whatever the
-  harness, with a bundled Chromium browser and the Playwright CLI in
-  every sandbox; no factory-file field turns it on. Only the
-  computer-use model pick is specific to the Warp Agent harness (what
-  `model: auto` selects).
+- Computer use is a capability of the Warp Agent harness, which is what
+  `model: auto` selects here. Cloud runs on that harness get a bundled
+  Chromium browser and the Playwright CLI in every sandbox, and no
+  factory-file field turns it on. Third-party harnesses don't integrate
+  with Warp's computer-use tools, and the `computerUseModel` setting is
+  inert under them; a foreman on another harness can still delegate to a
+  verifier on the Warp Agent harness.
 - A single-agent factory triggered by labels, with one automation per mode:
   verify a PR, reproduce an issue.
 - Evidence as the deliverable: the screenshots and recordings the agent

@@ -78,14 +78,15 @@ and watches only `acme/api-service` and `acme/webapp`. Nothing in this
 example files GitHub issues or PRs directly against `acme/ios-app`, so
 GitHub intake for iOS work is not wired up. Filter keys combine with AND:
 
-- `mentioned: [warp-factory]` / `assignees: [warp-factory]`: `warp-factory`
-  is Warp Factories' own GitHub identity (a product constant, not a
-  placeholder). Without this key, `issue_mentioned` fires when anyone is
-  @-mentioned in the repos.
+- `mentioned: [warp, warp-factory]` / `assignees: [warp, warp-factory]`:
+  the GitHub handles Warp Factories answers to. `warp` is the current
+  handle and `warp-factory` is the earlier one, which still matches; both
+  are product constants, not placeholders. Without this key,
+  `issue_mentioned` fires when anyone is @-mentioned in the repos.
 - `labels: ["factory:Acme"]`: the factory's routing label,
   `factory:<alias>`. Because filters combine with AND, the label has to be
   on the issue or PR before a mention or assignment trigger can fire; a
-  `@warp-factory` mention on an unlabeled item is silently dropped. Apply
+  `@warp` mention on an unlabeled item is silently dropped. Apply
   the label yourself when you open the item, or before the first mention.
   After that, the foreman keeps the label on everything it touches, so later
   mentions and assignments keep matching.
@@ -97,8 +98,8 @@ merged. The same routing label limits it to factory PRs instead of every
 merge in the repository.
 
 Widen these filters carefully. Dropping the `labels` key from the mention
-triggers makes any `@warp-factory` mention start work, and dropping
-`mentioned` as well would fire on every mention of anyone.
+triggers makes any `@warp` mention start work, and dropping `mentioned` as
+well would fire on every mention of anyone.
 
 ## Make it yours
 
