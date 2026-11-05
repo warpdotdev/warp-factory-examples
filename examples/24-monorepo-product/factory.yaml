@@ -1,0 +1,14 @@
+schemaVersion: v1alpha1
+name: monorepo-product
+description: >-
+  A factory scoped to one product in a monorepo. It changes apps/web, runs
+  the tests of every workspace package a change affects, and escalates any
+  edit under packages/* to the shared-package owners instead of making it
+  silently.
+alias: Web
+repositories:
+  - owner: acme
+    name: monorepo
+agentDefaults:
+  model: auto
+  runner: linux-web
