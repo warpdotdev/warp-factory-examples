@@ -1,0 +1,13 @@
+schemaVersion: v1alpha1
+name: product-change-implementation
+description: >-
+  A spec-gated factory for one repository: a labeled issue becomes a short
+  spec in a draft PR, a human approves the spec with a second label, and only
+  then does the factory implement, review, and hand back the PR.
+alias: Webapp
+repositories:
+  - owner: acme
+    name: webapp
+agentDefaults:
+  model: auto
+  runner: linux-node
