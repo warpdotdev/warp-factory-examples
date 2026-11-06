@@ -29,8 +29,14 @@ of repeating these values. Replace them with your monorepo's.
 
 Run from `/workspace/monorepo`, the checkout of `acme/monorepo`.
 
-- Install the product workspace and its dependencies:
+- Initial install for the product workspace and its dependencies:
   `pnpm install --frozen-lockfile --filter "{apps/web}..."`
+- If the diff touches `packages/*`, run `pnpm install --frozen-lockfile`
+  successfully before the tests or typechecks below. The initial install
+  does not prepare other products such as `apps/admin`; the full install
+  supplies affected dependents and their dependency closure. Do not skip
+  this step or treat a failed install as a warning. Product-only changes
+  keep the scoped install.
 - Tests for every affected package (changed packages and their dependents):
   `pnpm --filter "...[origin/main]" test`
 - Typecheck the same set: `pnpm --filter "...[origin/main]" typecheck`
@@ -42,8 +48,8 @@ Run from `/workspace/monorepo`, the checkout of `acme/monorepo`.
   - Summary: what changed and why, with the issue link.
   - Shared packages: every changed path under `packages/*` and why the edit
     was necessary, or `none`.
-  - Verification: the commands you ran and their results, naming each
-    package they covered.
+  - Verification: the install and check commands you ran and their results,
+    naming each package the checks covered.
 
 ## Escalation rule
 
@@ -52,7 +58,7 @@ A pull request whose diff touches `packages/*`:
 1. opens as a draft, not ready for review;
 2. has review requested from the owning team above;
 3. lists every shared path in its "Shared packages" section;
-4. shows passing tests for the shared package and all of its dependents, not
-   only `apps/web`.
+4. records the successful full install and passing tests and typechecks for
+   the shared package and all of its dependents, not only `apps/web`.
 
 A human on the owning team marks it ready for review. The factory never does.

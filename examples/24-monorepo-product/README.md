@@ -14,12 +14,13 @@ plus a reviewer; the monorepo rules are what is new.
 
 - One attached repository that several products live in, and a factory
   scoped to one of them by prompt and by label, not by repository.
-- Package-scoped setup: the runner installs the product's workspace and its
-  dependencies, not the whole monorepo, with setup commands written so a
-  failure is a warning the agent can read rather than a failed sandbox.
-- Shared-impact verification: the implementer must run the tests of changed
-  packages and their dependents, and list every shared-package edit in the
-  pull request.
+- Package-scoped initial setup: the runner installs the product's workspace
+  and its dependencies, not the whole monorepo, with setup commands written
+  so a failure is a warning the agent can read rather than a failed sandbox.
+- Shared-impact verification: before checking a shared edit, the implementer
+  installs the whole workspace to prepare other affected products and their
+  dependencies, then runs tests and typechecks for changed packages and
+  their dependents and lists every shared-package edit in the pull request.
 - An explicit escalation rule: a diff that touches `packages/*` opens as a
   draft with review requested from the owning team, looked up in
   `CODEOWNERS` with a fallback named in a shared skill.
@@ -37,7 +38,7 @@ agents/
 automations/
   web-issue-labeled/automation.md   github/issue_labeled, filtered to factory-ready:web
 runners/
-  linux-web.yaml          4 vCPU / 8 GB, node:22-bookworm, installs apps/web only
+  linux-web.yaml          4 vCPU / 8 GB, node:22-bookworm, initial install scoped to apps/web
 skills/
   monorepo-ownership/SKILL.md   scope, owners, commands, escalation rule; read by every agent
 ```
@@ -101,15 +102,22 @@ the package-scoped part of the example:
   image starts as root, the sandbox runs as a non-root `agent` user with
   passwordless `sudo`.
 - `pnpm install --frozen-lockfile --filter "{apps/web}..."` installs the
-  product and the workspace packages it depends on, and nothing else. On a
-  large monorepo that is the difference between a setup that finishes and
-  one that hits the 30-minute limit.
+  product and the workspace packages it depends on, and nothing else. This
+  keeps initial setup efficient for product-only changes.
 
-Both commands end in `|| echo "Warning: ..." >&2`. A setup command that
-exits non-zero fails the whole sandbox before any agent can read the error,
-so a flaky registry would become a failed run with nothing to inspect; see
-the same rule in [`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr). A logged
-warning lets the implementer see it and rerun the install from the skill.
+If the diff touches `packages/*`, the implementer must then run
+`pnpm install --frozen-lockfile` successfully before tests or typechecks.
+This installs other affected products, such as `apps/admin`, and their
+dependencies; the scoped setup does not prepare them. Do not suppress a
+failure of this expanded install or skip a dependent's checks. Installing
+and checking another product does not permit editing it.
+
+Both runner setup commands end in `|| echo "Warning: ..." >&2`. A setup
+command that exits non-zero fails the whole sandbox before any agent can
+read the error, so a flaky registry would become a failed run with nothing
+to inspect; see the same rule in
+[`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr). A logged warning lets the
+implementer see it and rerun the install from the skill.
 Every setup command starts from `/workspace`, which is why the install
 changes into `/workspace/monorepo` first.
 
@@ -139,9 +147,11 @@ on the sandbox to add tools the image lacks.
 5. Replace the pnpm commands in `skills/monorepo-ownership/SKILL.md` and
    `runners/linux-web.yaml` if your workspace tool differs (npm or yarn
    workspaces, Nx, Turborepo, Bazel). Keep the shape: an install scoped to
-   the product and its dependencies, and a test command that selects
-   changed packages plus their dependents. If your default branch is not
-   `main`, change `[origin/main]` in the skill.
+   the product and its dependencies initially, an expanded install of
+   affected dependents and their dependency closure before shared-change
+   checks, and test and typecheck commands that select changed packages
+   plus their dependents. If your default branch is not `main`, change
+   `[origin/main]` in the skill.
 6. Swap the runner's `dockerImage` if the product does not build on Node
    22, and adjust `alias`; it becomes the factory's @-mention handle and
    its `factory:<alias>` label.
@@ -167,9 +177,11 @@ Label it `factory-ready:web`. What you should see:
 3. Because the diff touches `packages/*`, the pull request opens as a
    draft, carries `factory:Web`, and has review requested from
    `@acme/platform`. Its description has a "Shared packages" section naming
-   the file and why, and a verification section with the output of
-   `pnpm --filter "...[origin/main]" test` covering `api-client`, `web`,
-   and the other dependent, `admin`.
+   the file and why, and a verification section recording a successful
+   `pnpm install --frozen-lockfile` before
+   `pnpm --filter "...[origin/main]" test` and
+   `pnpm --filter "...[origin/main]" typecheck`, covering `api-client`,
+   `web`, and the other dependent, `admin`.
 4. The reviewer's findings go to the foreman; unambiguous ones come back as
    commits on the same branch.
 5. The foreman comments on the issue with the pull request link and says it
@@ -177,10 +189,11 @@ Label it `factory-ready:web`. What you should see:
    ready for review, and a human merges.
 
 If the issue needs no shared change, step 3 differs: the pull request opens
-ready for review, "Shared packages" says `none`, and only `apps/web` tests
-appear. If the issue describes work in `apps/admin`, or a change whose
-point is a shared package, the foreman posts one comment naming the
-directory and its owners and stops: no branch, no pull request.
+ready for review, "Shared packages" says `none`, the scoped install is
+enough, and only `apps/web` tests and typechecks appear. If the issue
+describes work in `apps/admin`, or a change whose point is a shared package,
+the foreman posts one comment naming the directory and its owners and
+stops: no branch, no pull request.
 
 ## Validate it
 
@@ -195,11 +208,12 @@ The validator checks the tree against Warp's schema. It does not check that
 the install succeeds or that `acme/platform` exists; only an applied
 definition and a real run show that. A first real run should prove three
 things, in this order: a small issue that stays inside `apps/web` ends in a
-ready-for-review pull request whose description shows only `apps/web`
-tests; an issue that needs a `packages/*` edit ends in a draft with the
-"Shared packages" section, a team review request, and the dependents'
-tests; and an issue labeled anything other than `factory-ready:web` starts
-nothing.
+ready-for-review pull request whose description shows the scoped install
+and only `apps/web` tests and typechecks; an issue that needs a `packages/*`
+edit ends in a draft with the "Shared packages" section, a team review
+request, and a successful expanded install followed by the dependents'
+tests and typechecks; and an issue labeled anything other than
+`factory-ready:web` starts nothing.
 
 ## Set it up with a prompt
 
@@ -212,18 +226,20 @@ placeholders first.
 Read https://github.com/warpdotdev/warp-factory-examples/tree/main/examples/24-monorepo-product
 and set up the same factory for my monorepo, OWNER/REPO. Keep its shape:
 one repository; a foreman that scopes every task to one product directory;
-an implementer that runs the tests of every affected workspace package and
-lists any shared-package edit in the pull request; a reviewer that checks
-that list against the diff; a runner whose setup installs only the
-product's workspace; and the escalation rule that a pull request touching
-shared packages opens as a draft with review requested from the owning
-team.
+an implementer that installs affected dependents and their dependencies
+before running tests and typechecks for a shared edit and lists any
+shared-package edit in the pull request; a reviewer that checks that list
+and verification against the diff; a runner whose initial setup installs
+only the product's workspace and its dependencies; and the escalation rule
+that a pull request touching shared packages opens as a draft with review
+requested from the owning team.
 
 Replace the placeholders: acme/monorepo with OWNER/REPO; apps/web with
 PRODUCT_DIR; packages/* with SHARED_PACKAGES_GLOB; acme/platform with the
 GitHub team that owns the shared packages (check CODEOWNERS first);
 factory-ready:web with the label I will apply; and the pnpm commands with
-the commands this repository uses to install one workspace and to test
+the commands this repository uses for the scoped initial install, the
+expanded install before shared-change checks, and tests and typechecks of
 changed packages plus their dependents. Validate the definition before you
 open a pull request, and tell me which labels, teams, and access I still
 have to create or grant.

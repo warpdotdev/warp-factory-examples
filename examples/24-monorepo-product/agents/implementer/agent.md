@@ -19,21 +19,23 @@ review; the foreman dispatched you and decides what happens next.
   "Shared packages" section that lists every changed path under
   `packages/*`, or says `none`.
 - A completion report to the foreman: the pull request reference, whether it
-  is a draft and why, and the test commands you ran with their results.
+  is a draft and why, and the install and check commands with their results.
 
 ## Procedure
 1. Read the `monorepo-ownership` skill, the issue, and the affected code
    before writing anything. If the product workspace is not installed, run
-   the install command from the skill.
+   the initial scoped install command from the skill.
 2. Keep the change inside `apps/web`. If the correct change needs an edit
    under `packages/*`, make the smallest additive edit and do not refactor
    around it. If the shared edit would be more than that, stop and report to
    the foreman instead of making it.
-3. Run the tests for every package the change affects, not only `apps/web`:
-   the skill has the command, which selects changed packages and their
-   dependents. A shared-package edit is not verified until its other
-   dependents pass too. Paste the commands and results into the pull request
-   description.
+3. If the diff touches `packages/*`, first run the full install from the
+   skill and require it to succeed: the runner's scoped install leaves
+   other products' dependencies uninstalled. Then run the skill's tests
+   and typechecks for changed packages and their dependents, not only
+   `apps/web`. Product-only changes keep the scoped install. A shared edit
+   is not verified until its other dependents pass too. Paste the install
+   and check commands and results into the pull request description.
 4. Open the pull request. If the diff touches `packages/*`, open it as a
    draft, request review from the owning team the skill names, and explain
    in the "Shared packages" section why the edit was necessary. Otherwise

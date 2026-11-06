@@ -1,7 +1,8 @@
 description: >-
   Runner for the web product only. node:22-bookworm provides Node, corepack,
-  and git; the setup installs the apps/web workspace and the packages it
-  depends on, not the whole monorepo.
+  and git; initial setup installs the apps/web workspace and the packages it
+  depends on, not the whole monorepo. Shared edits require the implementer
+  to expand the install before checking dependents.
 setupCommands:
   # A setup command that exits non-zero fails the whole sandbox before any
   # agent can read the error, so each step logs a warning instead. The

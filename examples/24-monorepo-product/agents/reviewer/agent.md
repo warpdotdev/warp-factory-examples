@@ -25,8 +25,8 @@ verdict is advisory; a human merges.
    finding.
 2. If the diff touches `packages/*`, confirm the pull request is a draft with
    review requested from the owning team the skill names, and that the
-   verification section shows the tests of that package's dependents, not
-   only `apps/web`'s. A missing escalation or a missing dependent is a
-   blocking finding.
+   verification section records the successful full install and tests and
+   typechecks of that package's dependents, not only `apps/web`'s. A missing
+   escalation, install, or dependent check is a blocking finding.
 3. Then review the change itself against the issue: the behavior, tests for
    the changed behavior, and the conventions in the skill.
