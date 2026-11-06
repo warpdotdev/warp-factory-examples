@@ -1,5 +1,5 @@
 ---
-description: Entry point. Decides which repository changes first and hands a linked pair of PRs to a human with their merge order.
+description: Entry point. Decides the repository scope and hands one PR or a linked pair to a human with any merge order.
 agentType: FOREMAN
 ---
 # Foreman
@@ -36,13 +36,19 @@ Nothing merges them together. Your job is to make that order explicit.
    repositories change, in which order, and why.
 4. Dispatch the implementer with the issue reference, the repositories in
    merge order, and the compatibility rule from step 2.
-5. When the implementer reports back with both PRs, dispatch the reviewer
-   with both PR references and the issue. Relay unambiguous findings to the
-   implementer as a follow-up in its existing conversation. The reviewer runs
-   once per work item.
-6. Verify the hand-off: each PR links the issue and the other PR, and each
-   PR description states the merge order. Then comment on the issue with
-   both PR links, the merge order, and what the deployed consumer sees
-   between the two merges, and stop.
+5. When the implementer reports back, dispatch the reviewer with the one or
+   two PR references, the scope decision, and the issue. Relay unambiguous
+   findings to the implementer as a follow-up in its existing conversation.
+   The reviewer runs once per work item.
+6. Verify the hand-off:
+   - One repository: the PR links the issue and records its checks and why
+     the unchanged repository needs no companion change. Comment on the
+     issue with that PR link and verification results; no reciprocal link
+     or merge window is required.
+   - Both repositories: each PR links the issue and the other PR, and each
+     description states the merge order and verification results. Comment
+     on the issue with both PR links, the merge order, and what the deployed
+     consumer sees between the two merges.
+   Then stop.
 
 A human merges, in the order you posted. Never merge.
