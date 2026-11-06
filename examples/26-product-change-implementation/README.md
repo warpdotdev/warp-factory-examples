@@ -89,8 +89,12 @@ signal so a first run has exactly one thing to check:
   implementation, put the answer in the spec file, then remove and re-add
   `spec-approved`. Re-adding the label fires the automation again, and the
   implementer continues on the same branch.
-- **Start over:** close the spec PR, fix the issue text, then remove and
-  re-add `factory-ready`.
+- **Start over:** close the spec PR and remove `spec-approved` from the issue
+  if present. Fix the issue text, then remove and re-add `factory-ready`.
+  Review the replacement spec before adding `spec-approved` again. The old
+  approval does not carry over: adding an already-present label emits no
+  new `issue_labeled` event. A human resets and approves; the factory never
+  changes `spec-approved` itself.
 
 There is no trigger for free-text replies in this example. To let a
 maintainer steer the factory with `@warp` comments instead, add the
@@ -106,6 +110,9 @@ maintainer steer the factory with `@warp` comments instead, add the
   worth): the foreman comments why and stops. No branch, no spec, no label.
 - `factory-ready` on an issue that already links an open spec PR: the
   foreman comments with the existing PR and stops.
+- `factory-ready` with no open spec PR but `spec-approved` still present:
+  the foreman asks a human to remove `spec-approved`, then remove and
+  re-add `factory-ready`, and stops without creating a replacement spec.
 - `spec-approved` on an issue with no open spec PR: the foreman comments
   that there is nothing to approve and stops.
 - A label added by a bot or by another automation: skipped by the default
@@ -394,6 +401,13 @@ Run it on a throwaway issue like the one above and confirm, in order:
 4. The factory never merged, never approved the PR, and never added
    `spec-approved`: the issue's timeline shows a person as the only actor
    on that label.
+5. Test a restart after approval: close the old spec PR, remove
+   `spec-approved`, update the issue, then remove and re-add `factory-ready`.
+   The replacement spec arrives in a draft PR and waits without
+   implementation. Review it, then add `spec-approved` again; only that
+   fresh human approval starts implementation on the replacement PR's
+   branch. Confirm the issue timeline shows a person removing and re-adding
+   the approval label.
 
 ## Set it up with a prompt
 
@@ -420,8 +434,9 @@ and set up the same factory for my repository <owner>/<repo>.
    step 2 of agents/reviewer/agent.md.
 5. Create the labels factory-ready and spec-approved in <owner>/<repo>.
 6. Validate the tree and open a pull request to my definition repository.
-   Do not change the human gates: the factory never adds spec-approved and
-   never merges.
+   Do not change the human gates: a person removes spec-approved before
+   restarting and adds it again only after reviewing the replacement spec.
+   The factory never changes spec-approved itself and never merges.
 Then help me run the first test: pick one small, user-visible change from
 my backlog, write the issue the way the example's sample issue is written,
 and tell me what to expect at each stage so I can compare it with the

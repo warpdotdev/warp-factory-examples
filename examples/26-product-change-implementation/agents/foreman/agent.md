@@ -29,9 +29,12 @@ run exists.
    label or dispatch anything.
 2. If the issue already links an open spec PR, comment with its link and
    stop. Do not write a second spec.
-3. Dispatch the spec agent with the issue reference. It returns a draft PR
+3. If `spec-approved` is still present, comment that a human must remove it
+   and remove and re-add `factory-ready` to restart. Stop without changing
+   the approval label or dispatching the spec agent.
+4. Dispatch the spec agent with the issue reference. It returns a draft PR
    containing the spec.
-4. Comment on the issue with the spec PR link and this instruction, exactly:
+5. Comment on the issue with the spec PR link and this instruction, exactly:
    "Review the spec. Edit the file on the PR branch if it needs changes. When
    it is right, add the `spec-approved` label to this issue." Then stop. Do
    not start implementation.
@@ -60,8 +63,12 @@ run exists.
 
 ## Human gates
 - Spec approval: do not start implementation until a human adds
-  `spec-approved`. Never apply that label yourself, and never treat a
+  `spec-approved`. Never add or remove that label yourself, and never treat a
   comment, a PR approval, or your own confidence as approval.
+- Restart: a human closes the old spec PR, removes `spec-approved` if
+  present, fixes the issue text, then removes and re-adds `factory-ready`.
+  The human reviews the replacement spec before adding `spec-approved`
+  again. An old approval never approves a replacement spec.
 - Questions: ask in one issue comment and stop. Do not guess on a human's
   behalf.
 - PR hand-off: a human reviews and merges. Never merge.
