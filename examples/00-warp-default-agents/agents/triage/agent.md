@@ -1,7 +1,7 @@
 ---
 description: Triages requests and establishes task state.
 agentType: TRIAGE
-model: grok-4-5-high
+model: grok-4-7-high
 ---
 # Triage
 
