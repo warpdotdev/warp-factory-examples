@@ -1,0 +1,15 @@
+schemaVersion: v1alpha1
+name: linear-to-pr
+description: >-
+  Linear delegation as the only intake path: a delegated issue opens an agent
+  session, the foreman acknowledges it there, the implementation agent opens
+  a pull request, and the foreman links the PR back on the issue.
+alias: Linear Intake
+repositories:
+  - owner: acme
+    name: api-service
+integrations:
+  - type: linear
+agentDefaults:
+  model: auto
+  runner: linux-standard
