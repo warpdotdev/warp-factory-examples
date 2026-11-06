@@ -76,6 +76,11 @@ triggers:
 - Agent sessions need the session creator's Linear user linked to a Warp
   account. Without that link, Linear shows an authentication prompt instead
   of starting work.
+- When Warp claims the session, an issue that is not already started,
+  completed, or canceled may move to the team's available started state
+  (for example, In Progress). This automatic claim-time transition is
+  separate from the foreman's prompt and can happen even if the foreman
+  later stops for missing acceptance criteria or scope.
 - Replies in the session continue the same run; they do not create a second
   work item. The factory's own Linear activity never triggers automations,
   so the foreman's acknowledgement cannot start a loop.
@@ -114,15 +119,17 @@ For the full list of events and keys, see
    from. Optionally change `agentDefaults.model` (any Warp Agent model ID).
 6. Adjust `alias`; it is the factory's display handle, and the dashboard
    labels it "Foreman name".
-7. The foreman leaves the issue's workflow state alone. To move the issue
-   when the PR opens, add the transition to step 5 of
+7. The foreman makes no additional workflow transition after Warp's
+   claim-time handling. To move the issue again when the PR opens, add the
+   transition to step 5 of
    `agents/foreman/agent.md` (for example "set the issue to In Review").
-   That change is prompt policy, not an enforced rule.
+   That change is prompt policy; it does not disable the automatic
+   claim-time transition.
 
 ## Sample task and expected output
 
 In a Linear team named `Platform` (with `teams: [Platform]` applied), create
-this issue and delegate it to the Warp app:
+this issue in Backlog or Todo and delegate it to the Warp app:
 
 ```text
 ENG-142  Reject unsupported currency codes on POST /invoices
@@ -150,9 +157,10 @@ What you should see:
    and lint commands that were run and their results.
 3. The pull request attached to ENG-142, and a final session message with
    the PR link and a one-line verification summary.
-4. ENG-142 still in the workflow state it was in when you delegated it, and
-   no merge. On the factory's Runs page, one foreman run with one child
-   implementation run.
+4. ENG-142 may have moved to the team's available started state (for
+   example, In Progress) when Warp claimed the session. The foreman makes
+   no additional workflow transition, and nothing is merged. On the
+   factory's Runs page, one foreman run with one child implementation run.
 
 Two variations show the foreman's stop conditions:
 
@@ -183,7 +191,7 @@ That deferral is the point: the validator proves the file shape and the
 event and filter names, and leaves the team name, the Linear connection,
 and repository reach to the apply.
 
-A first real run should prove three things the validator cannot:
+A first real run should prove four things the validator cannot:
 
 1. Routing: delegating an issue from your team creates a run on the
    factory's Runs page and an acknowledgement in the session.
@@ -191,6 +199,9 @@ A first real run should prove three things the validator cannot:
    verification evidence in its description.
 3. The negative case: delegating an issue from a team not in `teams` starts
    nothing in this factory.
+4. Workflow state: distinguish Warp's automatic claim-time transition from
+   the foreman making no additional transition, including when it stops
+   for missing acceptance criteria or scope.
 
 ## Set it up with a prompt
 
@@ -209,5 +220,7 @@ dockerImage with an image that has my stack's toolchain. Before applying,
 confirm Linear is connected to my Warp team and that only one automation
 routes Linear agent sessions to this factory. Validate the definition, then
 tell me how to delegate a first test issue and exactly what I should see in
-the issue's agent session and on the pull request.
+the issue's agent session and on the pull request. Explain Warp's automatic
+claim-time workflow transition; the foreman should make no additional
+transition and must not merge.
 ```

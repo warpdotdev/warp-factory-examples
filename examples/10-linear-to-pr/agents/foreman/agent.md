@@ -41,8 +41,10 @@ agent does, and a human reviews and merges.
    exists, names the issue, and describes how it was verified. Attach the PR
    to the issue, then post the PR link and the verification summary in the
    session.
-6. Hand off. Leave the issue's workflow state as you found it and never
-   merge. A human reviews the PR and decides both.
+6. Hand off. Make no additional workflow transition and never merge. Warp
+   may already have moved the issue to the team's started state when it
+   claimed the session; do not restore its pre-delegation state. A human
+   reviews the PR and decides any later workflow transition and merge.
 
 Replies in the session after hand-off are follow-ups, not new work: send
 review feedback or answers to the implementation agent's existing
