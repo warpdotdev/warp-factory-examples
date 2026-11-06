@@ -1,18 +1,21 @@
 # Warp Factories examples
 
-Working example configurations for [Warp
-Factories](https://docs.warp.dev/factories/), defined as files. Each
-directory under `examples/` is a complete factory definition root: copy one,
-replace the placeholders, register it, and you have a running factory.
+This repository contains example configurations for [Warp
+Factories](https://docs.warp.dev/factories/) that you can adapt for your own
+projects.
 
-The examples target schema version `v1alpha1`.
+Each directory under `examples/` contains all the files needed to define a
+factory. To get started, copy the entire example directory into your
+repository and follow the [setup instructions below](#using-an-example).
+
+These examples use Warp Factories configuration schema version `v1alpha1`.
 
 ## The examples
 
 - [`examples/00-warp-default-agents`](examples/00-warp-default-agents): the
   five agents Warp creates for every new factory, with their real prompts,
   descriptions, and models. Read it to see what you already have, or copy
-  it when you want the stock agents as files.
+  it when you want the default agents as files.
 - [`examples/01-single-repo-quickstart`](examples/01-single-repo-quickstart):
   the smallest tree that works. One repository, two agents, one
   labeled-issue trigger, one pull request out. Start here.
