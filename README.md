@@ -17,8 +17,9 @@ These examples use Warp Factories configuration schema version `v1alpha1`.
   descriptions, and models. Read it to see what you already have, or copy
   it when you want the default agents as files.
 - [`examples/01-single-repo-quickstart`](examples/01-single-repo-quickstart):
-  the smallest tree that works. One repository, two agents, one
-  labeled-issue trigger, one pull request out. Start here.
+  Start with this example to set up a factory for a single repository. A
+  foreman routes labeled GitHub issues to an implementation agent, which
+  opens a pull request with the changes.
 - [`examples/02-sdlc-issue-to-pr`](examples/02-sdlc-issue-to-pr): the full
   lifecycle. Intake from Slack, Linear, and GitHub; triage, spec,
   implementation, and review stages plus a custom agent; per-stage models
