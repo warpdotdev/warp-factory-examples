@@ -50,7 +50,7 @@ These examples use Warp Factories configuration schema version `v1alpha1`.
 
 1. Copy the entire example directory into your own GitHub repository. You
    can place it at the repository root or in a subdirectory.
-2. Complete the "Make it yours" checklist in the example's README. It
+2. Complete the "Customize the example" checklist in the example's README. It
    explains which placeholders to replace and any additional setup required.
 3. Commit and push the example files to GitHub.
 4. Create a factory in Warp using a

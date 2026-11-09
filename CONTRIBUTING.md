@@ -15,9 +15,9 @@
   the reader to create them first.
 - Placeholders are `acme/*` repositories by default. A placeholder outside
   that list is allowed only when it cannot be mistaken for a working value
-  (e.g. a name like `your-intake-channel`) and the example README's "Make
-  it yours" checklist names it directly. Every placeholder, and every
-  other prerequisite the committed files cannot satisfy on their own
+  (e.g. a name like `your-intake-channel`) and the example README's
+  "Customize the example" checklist names it directly. Every placeholder,
+  and every other prerequisite the committed files cannot satisfy on their own
   (connecting an integration, creating a secret, resolving a Linear team
   name), must appear in that checklist.
 - Keep prompts short and pedagogical. Teach the shape of a good stage prompt
@@ -74,6 +74,6 @@ Warp build, not by editing it here.
 ## Optional: confirm an example applies
 
 If your Warp team can register a GitHub-backed definition, copy the example
-into a real repository, work through its "Make it yours" checklist, register
-a factory pointing at it, and fire a cheap trigger. Not required to open a
-PR; note in the PR description whether you did it.
+into a real repository, work through its "Customize the example" checklist,
+register a factory pointing at it, and fire a cheap trigger. Not required
+to open a PR; note in the PR description whether you did it.

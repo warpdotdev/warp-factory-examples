@@ -59,7 +59,7 @@ oz secret create codex api-key OPENAI_API_KEY       # OpenAI API key
 Self-hosted workers can use `auth.source: workerEnvironment` instead, which
 reads credentials from the worker's environment and takes no `secretName`.
 
-## Make it yours
+## Customize the example
 
 1. Replace `acme/api-service` in `factory.yaml` and the automation.
 2. Pick your harness models: `model` inside a `harness` block uses the

@@ -42,7 +42,7 @@ two rules:
 
 Swap the image for whatever your repository builds with.
 
-## Make it yours
+## Customize the example
 
 1. Replace `acme/api-service` in `factory.yaml` and
    `automations/issue-labeled/automation.md` with a repository your Warp

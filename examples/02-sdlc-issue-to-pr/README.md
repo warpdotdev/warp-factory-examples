@@ -100,7 +100,7 @@ Widen these filters carefully. Dropping the `labels` key from the mention
 triggers makes any `@warp-factory` mention start work, and dropping
 `mentioned` as well would fire on every mention of anyone.
 
-## Make it yours
+## Customize the example
 
 1. Replace `acme/api-service`, `acme/webapp`, and `acme/ios-app` with
    repositories your installation can reach. `acme/api-service` and

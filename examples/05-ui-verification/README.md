@@ -31,7 +31,7 @@ runners/
   linux-app.yaml          4 vCPU / 8 GB, node:22-bookworm-slim
 ```
 
-## Make it yours
+## Customize the example
 
 1. Replace `acme/webapp` in `factory.yaml` and both automations.
 2. Swap the runner's `dockerImage` for whatever runs your app; the sandbox

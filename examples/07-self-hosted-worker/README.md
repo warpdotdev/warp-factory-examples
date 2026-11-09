@@ -36,7 +36,7 @@ runners/
   linux-worker.yaml       4 vCPU / 8 GB, linux/x86_64, ubuntu:24.04
 ```
 
-## Make it yours
+## Customize the example
 
 1. Replace `acme/api-service` in `factory.yaml` and
    `automations/issue-labeled/automation.md`.

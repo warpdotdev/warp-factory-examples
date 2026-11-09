@@ -26,7 +26,7 @@ runners/
   linux-small.yaml        2 vCPU / 4 GB, ubuntu:24.04
 ```
 
-## Make it yours
+## Customize the example
 
 1. Replace `acme/api-service` in `factory.yaml` and
    `automations/pr-opened/automation.md`.
