@@ -4,25 +4,25 @@ triggers:
     event: issue_mentioned
     filter:
       repos: [acme/api-service, acme/webapp]
-      mentioned: [warp-factory]
+      mentioned: [warp, warp-factory]
       labels: ["factory:Acme"]
   - provider: github
     event: pull_request_mentioned
     filter:
       repos: [acme/api-service, acme/webapp]
-      mentioned: [warp-factory]
+      mentioned: [warp, warp-factory]
       labels: ["factory:Acme"]
   - provider: github
     event: issue_assigned
     filter:
       repos: [acme/api-service, acme/webapp]
-      assignees: [warp-factory]
+      assignees: [warp, warp-factory]
       labels: ["factory:Acme"]
   - provider: github
     event: pull_request_assigned
     filter:
       repos: [acme/api-service, acme/webapp]
-      assignees: [warp-factory]
+      assignees: [warp, warp-factory]
       labels: ["factory:Acme"]
 ---
 The factory was mentioned on or assigned to a GitHub issue or pull request

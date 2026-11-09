@@ -86,15 +86,16 @@ start work. GitHub intake for iOS work isn't set up.
 Filter keys combine with AND. Each trigger combines a mention or assignment
 filter with a label filter:
 
-- `mentioned: [warp-factory]` and `assignees: [warp-factory]` restrict the
-  trigger to mentions of, and assignments to, `warp-factory`, which is Warp
-  Factories' own GitHub identity. It's a product constant, not a placeholder.
+- `mentioned: [warp, warp-factory]` and `assignees: [warp, warp-factory]`
+  restrict the trigger to the GitHub handles Warp Factories answers to.
+  The current handle is `warp`. The earlier handle, `warp-factory`, still
+  matches. Both are product constants, not placeholders.
   Without the `mentioned` key, `issue_mentioned` fires when anyone is
   @-mentioned in the repositories.
 - `labels: ["factory:Acme"]` is the factory's routing label,
   `factory:<alias>`. Because filters combine with AND, the label must be on
   the issue or pull request before a mention or assignment can trigger the
-  factory. A `@warp-factory` mention on an unlabeled item is silently
+  factory. A `@warp` mention on an unlabeled item is silently
   dropped, so apply the label when you open the item or before the first
   mention. After that, the foreman keeps the label on everything it touches,
   so later mentions and assignments keep matching.
@@ -106,7 +107,7 @@ merged. The same routing label limits the automation to factory pull requests
 instead of every merge in the repository.
 
 Widen these filters carefully. If you drop the `labels` key from the mention
-triggers, any `@warp-factory` mention starts work. If you also drop
+triggers, any `@warp` mention starts work. If you also drop
 `mentioned`, the trigger fires on every mention of anyone.
 
 ## Customize the example
@@ -141,10 +142,14 @@ triggers, any `@warp-factory` mention starts work. If you also drop
          teams: [Platform]
    ```
 
-   The `teams`, `projects`, and `states` filters take plain lists of names.
+   The `teams` and `projects` filters take plain lists of names.
    Warp resolves the names against Linear when you apply the definition, so
    add them only after you connect Linear. Otherwise, applying the definition
    fails on the unresolved name.
+
+   The `agent_session_created` event also accepts `labels`, `keywords`, and
+   `creator_ids`. It rejects a `states` filter. Use `states` with
+   `issue_state_changed` instead.
 
 ## Use Jira instead of Linear
 

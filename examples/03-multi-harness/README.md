@@ -11,8 +11,10 @@ factory works the same way as
 - `model: <id>` is shorthand for the Warp Agent harness. The `model` and
   `harness` fields are mutually exclusive everywhere. `agentDefaults` must
   declare one of them, and agents can declare neither and inherit the default.
-- Each agent can declare an explicit `harness` block with a `type` (`claude`,
-  `codex`, `gemini`, or `oz`) and a harness-native `model`. Set
+- Each agent can declare a `harness` block with a `type` and a harness-native
+  `model`. Use `oz` for the Warp Agent harness, `claude` or its alias
+  `claude-code` for Claude Code, and `codex` for Codex. The schema also accepts
+  `gemini` and `pi`. Set
   `reasoningLevel` only where the harness's catalog defines levels. Codex
   models take one, but current Claude models don't.
 - Harness authentication uses `auth.source: managedSecret` and a named team
@@ -40,30 +42,39 @@ runners/
 Harness and compute are independent. An agent picks a harness with `harness`
 and a machine with `runner`, and neither setting constrains the other.
 
-The supported platforms are `linux/x86_64`, `linux/aarch64`, and
-`macos/aarch64`. macOS supports only `aarch64`. When you switch a runner to
+The supported platforms are `linux/x86_64`, `linux/aarch64`,
+`macos/aarch64`, and `windows/x86_64`. macOS supports only `aarch64`, and
+Windows supports only `x86_64`. When you switch a runner to
 `aarch64`, make sure its `dockerImage` publishes an arm64 variant. The
 `ubuntu:24.04` image does.
 
 ## Create the required secrets
 
 The two harness `auth` blocks reference managed secrets by name. Before you
-apply this definition, create both secrets as typed harness API-key secrets.
-Don't create them as raw values, because applying the definition rejects a
+apply this definition, create both secrets as team-scoped harness API-key
+secrets. Don't create them as raw values, because applying the definition rejects a
 `raw_value` secret for harness authentication.
 
+Factory agents can select only team secrets. A `--personal` secret works
+only for your own ad hoc runs.
+
 ```bash
-oz secret create claude api-key ANTHROPIC_API_KEY   # Anthropic API key
-oz secret create codex api-key OPENAI_API_KEY       # OpenAI API key
+oz secret create claude api-key --team ANTHROPIC_API_KEY   # Anthropic API key
+oz secret create codex api-key --team OPENAI_API_KEY       # OpenAI API key
 ```
+
+The CLI prompts for each key without displaying it. For the web-app flow
+and other credential types, see
+[third-party harness authentication](https://docs.warp.dev/factories/harnesses/authentication/).
 
 Self-hosted workers can use `auth.source: workerEnvironment` instead. It reads
 credentials from the worker's environment and takes no `secretName`.
 
 ## Customize the example
 
-1. Confirm that your team has access to each harness you enable. Third-party
-   harnesses require a Build plan or higher.
+1. Confirm that your team has access to each harness you enable. Access
+   depends on your plan and workspace settings, and a team admin can disable
+   a harness. See the [harness docs](https://docs.warp.dev/factories/harnesses/).
 2. Create the Anthropic and OpenAI API-key secrets described in
    [Create the required secrets](#create-the-required-secrets).
 3. Replace `acme/api-service` in `factory.yaml` and

@@ -10,9 +10,11 @@ infrastructure.
 - `workerHost` on `agentDefaults` sends every run in this factory to the
   worker named `factory-worker`. Any agent or automation can override
   `workerHost` for its own runs.
-- The runner and worker platforms must match. Workers run only on Linux
-  `amd64` and `arm64`, and there are no macOS workers, so this factory's
-  runner is `linux/x86_64`.
+- The runner must match the worker backend's platform. This example uses the
+  managed worker's Docker backend, which runs Linux containers on a
+  `linux/amd64` or `linux/arm64` daemon. Its runner is `linux/x86_64`.
+  The worker binary itself runs on Linux, macOS, or Windows hosts.
+  The Kubernetes and Direct backends have their own requirements.
 - Warp resolves worker IDs when you apply the definition, as it does secret
   names and model IDs, so the example validates before the worker exists.
 
@@ -37,8 +39,9 @@ ID. The
 [self-hosting quickstart](https://docs.warp.dev/factories/self-hosting/quickstart/)
 explains how to start a worker and choose its `--worker-id`.
 
-Self-hosted execution is an Enterprise feature, and it must be enabled for
-your team.
+For the Docker, Kubernetes, and Direct backend requirements, see the
+[self-hosting overview](https://docs.warp.dev/factories/self-hosting/).
+Self-hosting requires an Enterprise plan and must be enabled for your team.
 
 ## Customize the example
 
@@ -46,7 +49,7 @@ your team.
 2. Replace `acme/api-service` in `factory.yaml` and
    `automations/issue-labeled/automation.md`.
 3. Set `workerHost` in `factory.yaml` to your worker's `--worker-id`.
-4. Set the runner's `arch` to match the worker: `x86_64` for `amd64` hosts and
-   `aarch64` for `arm64` hosts.
+4. Set the runner's `arch` to match the worker's Docker daemon platform.
+   Use `x86_64` for `linux/amd64` and `aarch64` for `linux/arm64`.
 5. Optionally, move a stage back to Warp-hosted compute by setting
    `workerHost: warp` on that agent.

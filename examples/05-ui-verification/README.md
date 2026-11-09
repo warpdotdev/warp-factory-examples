@@ -7,11 +7,13 @@ exercises the change, and posts evidence. When you label an issue
 
 ## What this example shows
 
-- Computer use is on by default for cloud agent runs, regardless of harness.
-  Every sandbox includes a bundled Chromium browser and the Playwright CLI, so
-  no factory-file field is required to enable it.
-- Only the computer-use model selection is specific to the Warp Agent
-  harness. It's the model that `model: auto` selects.
+- Computer use is a capability of the Warp Agent harness, which
+  `model: auto` selects in this example. Cloud runs on that harness include
+  a Chromium browser and the Playwright CLI in every sandbox. No
+  factory-file field is required to enable computer use.
+- Third-party harnesses don't integrate with Warp's computer-use tools.
+  The `computerUseModel` setting has no effect under them. A foreman on
+  another harness can still delegate to a verifier on the Warp Agent harness.
 - Labels trigger the factory, with one automation for each mode: verifying a
   pull request and reproducing an issue.
 - The deliverable is evidence. The agent saves the screenshots and recordings
