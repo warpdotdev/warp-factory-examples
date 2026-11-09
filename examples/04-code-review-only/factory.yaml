@@ -1,8 +1,8 @@
 schemaVersion: v1alpha1
 name: code-review-only
 description: >-
-  A single-agent factory that reviews pull requests: one reviewer, one
-  trigger, advisory findings posted on the PR.
+  This factory uses one agent and one trigger to review pull requests
+  and post advisory findings.
 alias: Reviewer
 repositories:
   - owner: acme

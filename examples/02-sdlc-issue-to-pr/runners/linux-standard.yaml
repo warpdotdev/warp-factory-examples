@@ -1,6 +1,6 @@
 description: >-
-  Default runner for the foreman, triage, spec, and review: stages that read
-  code and write prose.
+  This default runner supports the foreman, triage, spec, and review
+  agents, which read code and write prose.
 instanceShape:
   vcpus: 4
   memoryGb: 8

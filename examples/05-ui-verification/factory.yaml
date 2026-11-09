@@ -1,9 +1,9 @@
 schemaVersion: v1alpha1
 name: ui-verification
 description: >-
-  A single-agent factory that verifies UI behavior with computer use: label
-  a pull request or an issue, and the agent runs the app, drives it in a
-  browser, and posts visual evidence.
+  This factory uses one agent to verify UI behavior with computer use.
+  Label a pull request or issue to have the agent run the app, test it
+  in a browser, and post visual evidence.
 alias: Verifier
 repositories:
   - owner: acme

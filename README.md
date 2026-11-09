@@ -6,7 +6,7 @@ projects.
 
 Each directory under `examples/` contains all the files needed to define a
 factory. To get started, copy the entire example directory into your
-repository and follow the [setup instructions below](#using-an-example).
+repository and follow the [setup instructions below](#use-an-example).
 
 These examples use Warp Factories configuration schema version `v1alpha1`.
 
@@ -46,7 +46,7 @@ These examples use Warp Factories configuration schema version `v1alpha1`.
   how to select a self-hosted worker with `workerHost` and configure a runner
   that matches the worker's platform.
 
-## Using an example
+## Use an example
 
 1. Copy the entire example directory into your own GitHub repository. You
    can place it at the repository root or in a subdirectory.
@@ -60,9 +60,9 @@ These examples use Warp Factories configuration schema version `v1alpha1`.
 After setup, Warp syncs changes pushed to the configured branch once the
 `warp/factory-config` check passes.
 
-## Validating
+## Validate an example
 
-Check that a tree is a valid factory definition:
+Check that an example is a valid factory definition:
 
 ```bash
 python3 scripts/validate_factory_files.py examples/01-single-repo-quickstart

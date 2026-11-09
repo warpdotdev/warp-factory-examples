@@ -1,6 +1,6 @@
 description: >-
-  Runner for work routed to the self-hosted worker. The runner's platform
-  must match the worker's: workers run on Linux amd64 and arm64 only.
+  This runner supports work routed to the self-hosted worker. Its platform
+  must match the worker's platform. Workers support Linux amd64 and arm64 only.
 instanceShape:
   vcpus: 4
   memoryGb: 8

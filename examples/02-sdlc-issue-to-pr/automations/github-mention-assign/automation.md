@@ -27,6 +27,6 @@ triggers:
 ---
 The factory was mentioned on or assigned to a GitHub issue or pull request
 that carries this factory's routing label. Read the thread that triggered
-this run, run the addressing check, and follow the standard lifecycle. For
-pull request mentions, the usual request is to address review comments:
-dispatch implementation on the existing branch rather than opening new work.
+this run, check that the request is for this factory, and follow the standard
+lifecycle. Pull request mentions usually ask you to address review comments.
+Dispatch implementation on the existing branch rather than opening new work.

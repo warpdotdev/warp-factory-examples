@@ -1,7 +1,7 @@
 description: >-
-  arm64 runner for implementation, for repositories that build and test on
-  aarch64. Architecture is a runner choice and is independent of which
-  harness an agent runs on; the image must have an arm64 variant.
+  This arm64 runner supports implementation in repositories that build and
+  test on aarch64. The runner's architecture is independent of the agent's
+  harness. The image must provide an arm64 variant.
 instanceShape:
   vcpus: 4
   memoryGb: 8

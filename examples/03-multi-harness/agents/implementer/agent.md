@@ -18,7 +18,7 @@ and deliver it as a pull request that is ready for review.
 ## Procedure
 1. Read the issue and the referenced code before writing anything.
 2. Keep the change scoped to what the issue describes.
-3. Run the repository's tests and linters; include the evidence in the PR
-   description.
-4. Open the PR against the default branch, link the issue, and report the PR
-   reference back to the foreman.
+3. Run the repository's tests and linters.
+4. Include the results in the pull request description.
+5. Open the pull request against the default branch and link the issue.
+6. Report the pull request reference to the foreman.

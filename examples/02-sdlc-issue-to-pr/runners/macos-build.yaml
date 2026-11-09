@@ -1,7 +1,7 @@
 description: >-
-  macOS runner for the iOS app. Xcode builds cannot run on Linux, so this
-  stage needs a macOS sandbox: a VM rather than a container, which is why it
-  declares no dockerImage.
+  This macOS runner builds the iOS app. Xcode builds cannot run on Linux,
+  so this stage uses a macOS virtual machine rather than a container.
+  The runner therefore declares no dockerImage.
 instanceShape:
   vcpus: 6
   memoryGb: 14

@@ -1,4 +1,4 @@
-description: Default x86_64 runner for the foreman and the reviewer.
+description: Provides the default x86_64 compute for the foreman and reviewer.
 instanceShape:
   vcpus: 4
   memoryGb: 8

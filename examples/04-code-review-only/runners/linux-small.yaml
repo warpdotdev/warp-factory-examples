@@ -1,6 +1,6 @@
 description: >-
-  Small runner for code review. Review reads code and writes findings, so
-  no toolchain image is needed.
+  This small runner supports code review. The agent reads code and writes
+  findings, so it doesn't need an image with a language toolchain.
 instanceShape:
   vcpus: 2
   memoryGb: 4

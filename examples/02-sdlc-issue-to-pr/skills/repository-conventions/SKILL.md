@@ -1,16 +1,16 @@
 ---
 name: repository-conventions
-description: Shared conventions for branches, commits, tests, and PRs in the acme repositories. Use before creating branches, commits, or pull requests.
+description: Shared conventions for branches, commits, tests, and pull requests in the acme repositories. Use before creating branches, commits, or pull requests.
 ---
 
 # Repository conventions
 
-Replace this stub with your team's real conventions. Every agent in the
-factory can read this skill; keep it short and prescriptive.
+Replace this placeholder with your team's conventions. Every agent in the
+factory can read this skill. Keep it short and specific.
 
-- Branches: `factory/<work-item-id>-<slug>`.
-- Commits: imperative subject line; reference the work item.
-- Tests: changed behavior requires a test in the same PR. State the command
-  you ran and its result in the PR description.
-- PRs: link the work item, describe what changed and how it was verified.
-  Draft until CI is green.
+- Name branches `factory/<work-item-id>-<slug>`.
+- Use imperative commit subject lines and reference the work item.
+- Add a test for changed behavior in the same pull request. State the command
+  you ran and its result in the pull request description.
+- Link the work item in the pull request and describe what changed and how
+  it was verified. Keep the pull request in draft until CI passes.
