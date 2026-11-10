@@ -1,0 +1,13 @@
+schemaVersion: v1alpha1
+name: github-assigned-issue
+description: >-
+  Assignment-based GitHub intake: assigning a labeled issue to the factory's
+  GitHub identity starts one bounded implementation task that ends in a pull
+  request for human review.
+alias: Acme
+repositories:
+  - owner: acme
+    name: api-service
+agentDefaults:
+  model: auto
+  runner: linux-small
