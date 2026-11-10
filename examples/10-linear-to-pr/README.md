@@ -1,11 +1,8 @@
 # 10: Linear to PR
 
-A delegated Linear issue is the only way work enters this factory. Someone
-delegates an issue to the Warp app, or mentions it in a comment, and Linear
-opens an agent session; the session reaches this factory because the issue
-belongs to the team the automation filters on. The foreman acknowledges in
-the session, the implementation agent opens a pull request, and the foreman
-attaches the PR to the issue and posts the link back in the session. A human
+Delegate a Linear issue to Warp, or mention the app in an issue comment, to
+request a pull request. This example accepts agent sessions from one team,
+reports progress in the session, and attaches the PR to the issue. A human
 reviews and merges.
 
 ## What it demonstrates
@@ -146,8 +143,8 @@ Acceptance criteria:
 
 What you should see:
 
-1. Before anything happens in the repository, one acknowledgement in the
-   issue's agent session that restates the deliverable: "Picking this up:
+1. Before implementation, one acknowledgement in the issue's agent session
+   that restates the deliverable: "Picking this up:
    POST /invoices will return 400 `unsupported_currency` for anything other
    than USD, EUR, or GBP, with tests for both paths."
 2. On `acme/api-service`, a branch named like
