@@ -1,17 +1,14 @@
 # 11: Jira to PR
 
-Delegation from Jira: a teammate assigns or mentions Warp on a work item in
-a Jira Cloud project, Jira starts an agent session, the foreman routes it to
-the implementation agent, and the pull request link comes back to the work
-item. A human reviews and merges. The factory mechanics match
-[`01-single-repo-quickstart`](../01-single-repo-quickstart); only the intake
-path is new.
+Assign or mention Warp on a Jira Cloud work item to request a pull request.
+Progress appears in the agent session, and the result is linked on the work
+item. A human reviews and merges. This example replaces the intake in
+[`01-single-repo-quickstart`](../01-single-repo-quickstart) with Jira delegation.
 
 ## What it demonstrates
 
-- `jira` / `agent_session_created`, the one event through which all Jira
-  work reaches a factory. It fires when someone assigns or mentions Warp on
-  a work item; this example uses no label or status trigger.
+- `jira` / `agent_session_created` for assignments and mentions. This
+  example uses no label or status trigger.
 - `integrations` with `type: jira` in `factory.yaml`. A factory attaches
   Linear or Jira, not both.
 - `project_keys` as the scope control. A Jira session is offered to every
@@ -49,9 +46,8 @@ The automation declares no `agent:` field, so sessions go to the foreman.
 Its filter is one key:
 
 - `project_keys: [YOURKEY]`: only sessions on work items in that project
-  start a run. A session on a work item in any other project starts nothing
-  in this factory, and this factory posts nothing; the session simply has
-  no automation here to match.
+  start a run through this automation. Sessions in other projects do not
+  match; other automations or factories may still handle them.
 
 Within the project, every session matches. To require an opt-in instead,
 add a `labels` filter. It checks the work item's current labels when the
@@ -98,6 +94,8 @@ to Warp (see "Make it yours").
    connection from step 3 exists. This GitHub-backed definition is edited in
    files, not through dashboard project selection. Set the project scope in
    `automations/jira-agent-sessions/automation.md` with `project_keys`.
+   Reuse or narrow an existing Jira session automation instead of adding
+   another handler for the same sessions.
 5. Link accounts. Each teammate who will assign or mention Warp links their
    Atlassian account to Warp from their Jira personal settings (**Personal
    settings** > **Warp**). An unlinked account gets a prompt to connect
@@ -160,8 +158,9 @@ your copy of this directory; pushes sync the definition after the
 small work item: a session in the configured project starts a run under the
 automation, a PR with the key in its title appears in the attached
 repository, and the comment lands on the work item. Also assign Warp on a
-work item in a project outside the filter and confirm this factory starts
-nothing.
+work item in a project outside the filter and confirm this automation starts
+nothing. Reply to a clarification in the session and confirm it continues
+the same run. Check that no other automation or factory matches the trial.
 
 ## Set it up with a prompt
 
@@ -172,5 +171,21 @@ Paste this prompt into any of:
 - Factory MCP, from a coding agent [connected to it](https://docs.warp.dev/factories/factory-mcp/)
 
 ```text title="Set up Jira delegation for my repository"
-Read https://github.com/warpdotdev/warp-factory-examples/tree/main/examples/11-jira-to-pr and set up the same factory for me. Ask me which repository the factory should work on, which Jira Cloud project key it should serve, and where the definition files should live. Then add the example's tree there with these changes: replace acme/api-service in factory.yaml with my repository, replace YOURKEY in automations/jira-agent-sessions/automation.md with my project key, and pick a runner image in runners/linux-small.yaml that has my repository's toolchain. Validate the tree before you open a pull request with the definition. Finally, list what I still have to do by hand: install Warp for Jira on my Jira Cloud site and connect it to my workspace, declare Jira in factory.yaml and configure project_keys in the automation, and link my Atlassian account to Warp. Do not register the factory or change anything in Jira without asking me first.
+Read https://github.com/warpdotdev/warp-factory-examples/tree/main/examples/11-jira-to-pr
+and set up the same factory for me. Ask which repository it should work on,
+which Jira Cloud project key it should serve, and where the definition
+files should live.
+
+Replace acme/api-service in factory.yaml with my repository, YOURKEY in
+automations/jira-agent-sessions/automation.md with my project key, and the
+runner image with one that has my toolchain. Declare Jira in factory.yaml;
+configure project_keys in the automation, not dashboard project selection.
+Reuse or narrow an existing Jira session handler and preserve unrelated
+triggers. Validate the tree, then open a pull request with the definition.
+
+List the manual steps: install Warp for Jira on my Jira Cloud site, connect
+it to my workspace, and link each requester's Atlassian account to Warp.
+Give me matching-project, unmatched-project, and session-reply trials, and
+check for overlapping handlers. Do not register the factory or change
+anything in Jira without asking me first.
 ```
