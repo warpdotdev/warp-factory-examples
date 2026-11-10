@@ -95,10 +95,9 @@ to Warp (see "Make it yours").
 4. Attach Jira to this factory. The `integrations` entry in `factory.yaml`
    attaches Jira when the definition is applied; it does not install the
    app or connect the site, and the apply checks that the workspace
-   connection from step 3 exists. In the factory dashboard, **Settings** >
-   **Integrations** shows the attachment and is where you select the Jira
-   projects this factory works with; routing itself is decided by the
-   `project_keys` filter.
+   connection from step 3 exists. This GitHub-backed definition is edited in
+   files, not through dashboard project selection. Set the project scope in
+   `automations/jira-agent-sessions/automation.md` with `project_keys`.
 5. Link accounts. Each teammate who will assign or mention Warp links their
    Atlassian account to Warp from their Jira personal settings (**Personal
    settings** > **Warp**). An unlinked account gets a prompt to connect
@@ -173,5 +172,5 @@ Paste this prompt into any of:
 - Factory MCP, from a coding agent [connected to it](https://docs.warp.dev/factories/factory-mcp/)
 
 ```text title="Set up Jira delegation for my repository"
-Read https://github.com/warpdotdev/warp-factory-examples/tree/main/examples/11-jira-to-pr and set up the same factory for me. Ask me which repository the factory should work on, which Jira Cloud project key it should serve, and where the definition files should live. Then add the example's tree there with these changes: replace acme/api-service in factory.yaml with my repository, replace YOURKEY in automations/jira-agent-sessions/automation.md with my project key, and pick a runner image in runners/linux-small.yaml that has my repository's toolchain. Validate the tree before you open a pull request with the definition. Finally, list what I still have to do by hand: install Warp for Jira on my Jira Cloud site and connect it to my workspace, attach Jira to the factory and select the project, and link my Atlassian account to Warp. Do not register the factory or change anything in Jira without asking me first.
+Read https://github.com/warpdotdev/warp-factory-examples/tree/main/examples/11-jira-to-pr and set up the same factory for me. Ask me which repository the factory should work on, which Jira Cloud project key it should serve, and where the definition files should live. Then add the example's tree there with these changes: replace acme/api-service in factory.yaml with my repository, replace YOURKEY in automations/jira-agent-sessions/automation.md with my project key, and pick a runner image in runners/linux-small.yaml that has my repository's toolchain. Validate the tree before you open a pull request with the definition. Finally, list what I still have to do by hand: install Warp for Jira on my Jira Cloud site and connect it to my workspace, declare Jira in factory.yaml and configure project_keys in the automation, and link my Atlassian account to Warp. Do not register the factory or change anything in Jira without asking me first.
 ```
