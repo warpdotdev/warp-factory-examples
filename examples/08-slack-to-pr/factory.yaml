@@ -1,0 +1,16 @@
+schemaVersion: v1alpha1
+name: slack-to-pr
+description: >-
+  Work intake from Slack: an @-mention in one designated channel starts a
+  task, the foreman confirms the request in the thread, an implementation
+  agent opens a pull request, and the foreman reports the PR link back in
+  that same thread.
+alias: Intake
+repositories:
+  - owner: acme
+    name: api-service
+integrations:
+  - type: slack
+agentDefaults:
+  model: auto
+  runner: linux-small
