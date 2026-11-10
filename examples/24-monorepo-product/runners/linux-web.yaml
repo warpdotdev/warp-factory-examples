@@ -1,0 +1,20 @@
+description: >-
+  This runner supports the web product. The node:22-bookworm image provides
+  Node, corepack, and git. Initial setup installs apps/web and its workspace
+  dependencies, not the whole monorepo. For shared-package edits, the
+  implementer must expand the install before checking dependent packages.
+setupCommands:
+  # A setup command that exits non-zero fails the whole sandbox before any
+  # agent can read the error. These optional setup steps log warnings instead. The
+  # implementer reruns the install from the monorepo-ownership skill if the
+  # workspace is missing. Every command starts from /workspace.
+  - 'sudo corepack enable || echo "Warning: corepack enable failed; pnpm may not be on PATH" >&2'
+  - '(cd /workspace/monorepo && pnpm install --frozen-lockfile --filter "{apps/web}...") || echo "Warning: apps/web workspace install skipped" >&2'
+instanceShape:
+  vcpus: 4
+  memoryGb: 8
+platform:
+  os: linux
+  arch: x86_64
+  linux:
+    dockerImage: node:22-bookworm

@@ -45,6 +45,35 @@ These examples use Warp Factories configuration schema version `v1alpha1`.
   Run the quickstart factory on your own infrastructure. This example shows
   how to select a self-hosted worker with `workerHost` and configure a runner
   that matches the worker's platform.
+- [`examples/08-slack-to-pr`](examples/08-slack-to-pr):
+  Request code changes by mentioning the factory in a designated Slack
+  channel. The foreman confirms the request and returns progress, questions,
+  and the pull request link in the same thread.
+- [`examples/10-linear-to-pr`](examples/10-linear-to-pr):
+  Delegate Linear issues from one team to a factory. The agents report
+  progress in the agent session and attach the pull request to the issue
+  for human review.
+- [`examples/11-jira-to-pr`](examples/11-jira-to-pr):
+  Assign or mention Warp on a Jira Cloud work item to request a code change.
+  The factory limits intake by project and returns the pull request link
+  in the agent session and a work-item comment.
+- [`examples/12-github-assigned-issue`](examples/12-github-assigned-issue):
+  Start work by assigning a labeled GitHub issue to the factory. The foreman
+  checks the request's scope and returns a linked pull request for human
+  review. This example also explains when to use assignment instead of labels.
+- [`examples/24-monorepo-product`](examples/24-monorepo-product):
+  Scope a factory to one product in a monorepo and verify changes across
+  affected packages. Changes to shared packages require a draft pull request
+  and review from their owners.
+- [`examples/25-related-services`](examples/25-related-services):
+  Coordinate changes across an API and its consumer. The factory checks
+  contract compatibility and opens one pull request per changed repository,
+  with a provider-first merge order when both repositories change.
+- [`examples/26-product-change-implementation`](examples/26-product-change-implementation):
+  Take a small product change through specification, human approval,
+  implementation, and review on the same pull request. An illustrative
+  walkthrough shows the expected outputs and how to compare configuration
+  changes in separate trials.
 
 ## Use an example
 

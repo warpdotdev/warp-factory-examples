@@ -1,0 +1,15 @@
+schemaVersion: v1alpha1
+name: slack-to-pr
+description: >-
+  A mention in one designated Slack channel starts a task. The foreman
+  confirms the request, delegates implementation, and returns the pull
+  request link in the same thread.
+alias: Intake
+repositories:
+  - owner: acme
+    name: api-service
+integrations:
+  - type: slack
+agentDefaults:
+  model: auto
+  runner: linux-small

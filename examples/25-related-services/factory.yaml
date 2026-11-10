@@ -1,0 +1,15 @@
+schemaVersion: v1alpha1
+name: related-services
+description: >-
+  This factory coordinates a Go API and the web app that consumes it.
+  Contract changes produce linked pull requests, one per repository.
+  A human merges them in the documented order.
+alias: Services
+repositories:
+  - owner: acme
+    name: api-service
+  - owner: acme
+    name: webapp
+agentDefaults:
+  model: auto
+  runner: linux-services

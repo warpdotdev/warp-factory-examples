@@ -1,0 +1,12 @@
+schemaVersion: v1alpha1
+name: github-assigned-issue
+description: >-
+  Assigning a labeled GitHub issue to the factory starts one scoped
+  implementation task. The factory delivers a pull request for human review.
+alias: Acme
+repositories:
+  - owner: acme
+    name: api-service
+agentDefaults:
+  model: auto
+  runner: linux-small

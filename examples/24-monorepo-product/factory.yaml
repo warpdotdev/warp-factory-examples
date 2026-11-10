@@ -1,0 +1,13 @@
+schemaVersion: v1alpha1
+name: monorepo-product
+description: >-
+  This factory works on apps/web in a monorepo and tests every affected
+  workspace package. Changes under packages/* require a draft pull request
+  and review from the shared-package owners.
+alias: Web
+repositories:
+  - owner: acme
+    name: monorepo
+agentDefaults:
+  model: auto
+  runner: linux-web

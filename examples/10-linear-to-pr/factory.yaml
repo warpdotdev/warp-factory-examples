@@ -1,0 +1,15 @@
+schemaVersion: v1alpha1
+name: linear-to-pr
+description: >-
+  This factory accepts work through Linear agent sessions. The foreman
+  acknowledges the issue, delegates implementation, and attaches the
+  resulting pull request to the issue.
+alias: Linear Intake
+repositories:
+  - owner: acme
+    name: api-service
+integrations:
+  - type: linear
+agentDefaults:
+  model: auto
+  runner: linux-standard

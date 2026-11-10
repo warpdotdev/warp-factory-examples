@@ -1,0 +1,13 @@
+schemaVersion: v1alpha1
+name: product-change-implementation
+description: >-
+  This factory turns a labeled issue into a short specification in a draft
+  pull request. A human approves it with a second label before the factory
+  implements and reviews the change in the same pull request.
+alias: Webapp
+repositories:
+  - owner: acme
+    name: webapp
+agentDefaults:
+  model: auto
+  runner: linux-node

@@ -1,0 +1,19 @@
+description: >-
+  Both repositories use this runner. The warpdotdev/dev-go:1.23 image
+  provides Go 1.23 and Node 22. The API and web app each run their own
+  dependency setup command.
+setupCommands:
+  # Every attached repository is checked out under /workspace by name, and
+  # each command starts from /workspace. A setup command that exits non-zero
+  # fails the whole sandbox. These optional prefetches log warnings on failure.
+  # The implementer reruns dependency setup in each repository it changes.
+  - '(cd /workspace/api-service && go mod download) || echo "Warning: api-service prefetch skipped" >&2'
+  - '(cd /workspace/webapp && npm ci) || echo "Warning: webapp prefetch skipped" >&2'
+instanceShape:
+  vcpus: 4
+  memoryGb: 8
+platform:
+  os: linux
+  arch: x86_64
+  linux:
+    dockerImage: warpdotdev/dev-go:1.23
