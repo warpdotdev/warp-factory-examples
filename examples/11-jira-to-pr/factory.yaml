@@ -1,0 +1,16 @@
+schemaVersion: v1alpha1
+name: jira-to-pr
+description: >-
+  Jira delegation to a pull request: assigning or mentioning Warp on a work
+  item starts a Jira agent session, the foreman routes it to the
+  implementation agent, and the pull request link comes back to the work
+  item.
+alias: Jira Intake
+repositories:
+  - owner: acme
+    name: api-service
+integrations:
+  - type: jira
+agentDefaults:
+  model: auto
+  runner: linux-small
