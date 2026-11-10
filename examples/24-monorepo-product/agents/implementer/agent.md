@@ -4,10 +4,8 @@ agentType: IMPLEMENT
 ---
 # Implementation
 
-You are the implementation agent of this factory. You make the change the
-work item describes inside `apps/web`, prove it works across every workspace
-package it affects, and deliver it as a pull request. You do not triage or
-review; the foreman dispatched you and decides what happens next.
+Implement inside `apps/web`, verify every affected workspace package, and
+deliver a pull request. Do not triage or perform independent review.
 
 ## Input
 - The issue reference, the foreman's restated deliverable, and the product

@@ -1,14 +1,11 @@
 # 24: Monorepo product
 
-A factory that owns one product inside a monorepo. A maintainer labels an
-issue for the `apps/web` product; the foreman scopes the work to that
-directory; the implementer makes the change, runs the tests of every
-workspace package it affects, and declares anything it touched under
-`packages/*`; the reviewer checks that declaration against the diff. A
-change that edits a shared package opens as a draft with review requested
-from the package's owners, so it never lands on other products silently.
-The topology is [`01-single-repo-quickstart`](../01-single-repo-quickstart)
-plus a reviewer; the monorepo rules are what is new.
+Scope a factory to `apps/web` inside a monorepo. Changes are checked against
+every affected workspace package. Shared-package edits are declared in a
+draft PR with review requested from their owners; a human controls readiness
+and merging. This extends
+[`01-single-repo-quickstart`](../01-single-repo-quickstart) with shared-impact
+review.
 
 ## What it demonstrates
 
