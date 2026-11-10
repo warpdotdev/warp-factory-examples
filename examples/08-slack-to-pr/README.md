@@ -1,12 +1,9 @@
 # 08: Slack to PR
 
-Work intake from Slack. Someone @-mentions the factory in one designated
-channel; the foreman replies in that thread with the deliverable it
-understood, an implementation agent turns the request into a pull request,
-and the foreman posts the PR link back in the same thread. It is the
-[`01-single-repo-quickstart`](../01-single-repo-quickstart) topology with
-Slack as the only intake path: the point is the intake contract, not the
-lifecycle.
+Mention the factory in one Slack channel to request a code change. Progress,
+questions, and the pull request link stay in the same thread; a human reviews
+and merges. This example replaces the intake in
+[`01-single-repo-quickstart`](../01-single-repo-quickstart) with Slack mentions.
 
 ## What it demonstrates
 
@@ -58,12 +55,13 @@ The one automation subscribes to `slack` / `app_mention` and filters on
 
 What happens to Slack activity this definition does not match:
 
-- **A mention in any other channel** matches no automation here, so nothing
-  starts: no 👀 reaction, no reply, no work item. The 👀 the app adds to a
-  message is the first sign that a mention matched.
+- **A mention in any other channel** does not match this automation, so
+  this route adds no 👀 reaction, reply, or work item. Other automations may
+  still handle it.
 - **A direct message** is a `message_dm` event, which this definition does
-  not subscribe to, so it starts nothing. Add a `message_dm` automation, as
-  [`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr) does, if DMs should count.
+  not subscribe to, so this route starts nothing. Add a `message_dm`
+  automation like [`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr) if DMs
+  should count.
 - **A plain reply in a thread that already has a work item** can continue
   that work item without a new mention: Warp classifies whether the reply is
   meant for the factory, and the automation's filter is not consulted again.
@@ -96,6 +94,9 @@ them to connect one instead of starting work.
    entry in `factory.yaml` declares that the factory uses Slack; it does not
    connect it. Then invite the app to the intake channel. Private channels
    always need an invitation.
+   Inspect existing automations: reuse or narrow an `app_mention` handler,
+   and avoid a `message_posted` handler that also matches the same mentions.
+   Preserve unrelated triggers.
 3. Replace `your-intake-channel` in `automations/slack-intake/automation.md`
    with that channel's name. Do step 2 first: the name is resolved against
    the Slack connection when the definition is applied, and an unresolved
@@ -198,7 +199,9 @@ definition repository and replace these placeholders:
 - node:22-bookworm-slim in runners/linux-small.yaml -> <image with my toolchain>
 
 Keep the single-channel app_mention trigger, the foreman and implementer
-agents, and the one runner. Validate the definition before you finish, and
-list what I still have to do by hand: connect Slack to the factory, invite
+agents, and the one runner. Reuse or narrow existing handlers so a mention
+matches only one route, preserving unrelated triggers. Validate the
+definition and open a pull request without applying it.
+List what I still have to do by hand: connect Slack to the factory, invite
 the app to the channel, and have each requester link their Slack account.
 ```
