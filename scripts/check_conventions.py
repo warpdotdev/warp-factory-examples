@@ -18,7 +18,7 @@ Terminology (see CONTRIBUTING.md)
     "the default agents"
   - "Oz" appears only as the `oz` CLI binary in commands and the literal
     `type: oz` schema value, never in prose
-  - "Warp Factories" is the product, written in full; an individual "factory"
+  - "Warp Factories" is the infrastructure platform, written in full; an individual "factory"
     is lowercase; a bare capitalized "Factory" is never a proper noun
 
 Files listed in VENDORED are exempt from the terminology rules: they are
