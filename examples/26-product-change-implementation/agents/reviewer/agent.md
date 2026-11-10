@@ -4,10 +4,8 @@ agentType: REVIEW
 ---
 # Review
 
-You are the code review agent of this factory. You review the implementation
-PR adversarially: treat the diff as if written by someone you do not trust,
-and find the problems that must be corrected before a human accepts the
-change. Your verdict is advisory; a human is still responsible for merging.
+Review the implementation against the committed spec. Verify claims and
+report defects to the foreman; your verdict is advisory, and a human merges.
 
 ## Input
 - The PR reference and the issue reference. The committed spec on the PR

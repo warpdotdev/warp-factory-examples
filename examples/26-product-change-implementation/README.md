@@ -1,16 +1,15 @@
 # 26: Product-change implementation
 
-A single-repository, spec-gated factory for one small, user-visible change
-at a time. A maintainer labels an issue `factory-ready`; the foreman has the
-spec agent write a short spec in a draft PR and stops. A human reads the
-spec, edits it if needed, and adds the `spec-approved` label; only then
-does the foreman dispatch implementation and review, and hand the PR back on
-the issue. The README carries one complete trace, from issue text to review
-findings, so a team can compare its first runs against a known-good shape.
+A single-repository factory for small, user-visible changes. The
+`factory-ready` label requests a spec in a draft PR; a human reviews it and
+adds `spec-approved` before implementation starts on that same PR.
+The worked trace below shows the expected spec, implementation, review, and
+handoff. Its paths and check results are illustrative, not a recorded run.
 
 This is the worked example for the testing-and-tuning loop: run one small
-change, compare each artifact with the trace below, adjust one thing, and
-run it again. For intake from Slack or a tracker, or the triage stage, see
+change, compare its artifacts with the trace, then adjust one setting and
+start a fresh trial from the same recorded baseline. For intake from Slack
+or a tracker, or the triage stage, see
 [`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr); this example stays on one
 task trace on purpose.
 
@@ -230,7 +229,7 @@ and confirms it, so sharing takes one click.
 3. `ShareDialog.test.tsx`: when `writeText` rejects, the button reads
    "Copy failed" and the field's text is selected.
 4. `ShareDialog.test.tsx`: the button is reachable with Tab and activates
-   with Enter.
+   with Enter and Space.
 5. `npm run lint`, `npm run typecheck`, and `npm test` pass.
 
 ## Assumptions
@@ -245,18 +244,19 @@ and confirms it, so sharing takes one click.
 - A "Copy link" action anywhere outside the share dialog.
 ```
 
-A first-run spec that is much longer than this is a sign the spec-detail
-knob needs turning (see "Tune it"). One that lacks the Assumptions section,
-or whose acceptance criteria do not name a test, is a sign the spec agent
-did not follow the skill.
+A much longer spec may need a shorter template (see "Tune it"). Check that
+unresolved choices appear under Assumptions for human approval and that
+each acceptance criterion names a test, command, or manual check. Omit
+Assumptions when there are none.
 
 ### 4. The approval
 
 A maintainer reads the spec on PR #131. Say they want a shorter
 confirmation: they edit `docs/specs/128-copy-link-button.md` on the branch,
-changing "2 seconds" to "1.5 seconds" in behaviors 3 and 4 and criterion 2,
-and commit. Then they add `spec-approved` to issue #128. The trace below
-keeps 2 seconds for simplicity.
+changing "2 seconds" to "1.5 seconds" in behaviors 3 and 4, criterion 2,
+and the duration assumption, then commit. They add `spec-approved` to issue
+#128. Implementation and review must now use the approved 1.5-second
+duration, not the original draft's 2 seconds.
 
 ### 5. What `spec-approved` produces
 
@@ -265,8 +265,8 @@ which works on `factory/128-copy-link-button`. The PR as first delivered:
 
 - Title changed to `Add a "Copy link" button to the share dialog (#128)`;
   marked ready for review.
-- Commits: the spec commit, then one implementation commit.
-- Files: `docs/specs/128-copy-link-button.md` (unchanged),
+- Commits: the draft spec, the human's spec revision, then implementation.
+- Files: `docs/specs/128-copy-link-button.md` (approved version retained),
   `src/components/ShareDialog.tsx` (about 40 lines added, 3 changed),
   `src/components/ShareDialog.test.tsx` (4 new test cases). No change to
   `package.json` or the lockfile.
@@ -280,11 +280,11 @@ which works on `factory/128-copy-link-button`. The PR as first delivered:
 
   ## Changes
   - `ShareDialog.tsx`: secondary `Button` after the URL input; label state
-    `idle | copied | failed` with a 2 s reset; `aria-live="polite"` on the
+    `idle | copied | failed` with a 1.5 s reset; `aria-live="polite"` on the
     label; selects the input text on failure.
   - `ShareDialog.test.tsx`: copies the exact value; confirms and resets
-    with fake timers; shows "Copy failed" on rejection; Tab and Enter
-    activate the button.
+    after 1.5 seconds with fake timers; shows "Copy failed" on rejection;
+    Tab reaches the button, and Enter and Space activate it.
 
   ## Verification
   - `npm run lint`: clean. `npm run typecheck`: clean.
@@ -296,8 +296,8 @@ The foreman then dispatches the reviewer on PR #131. The findings report
 the reviewer returns, in full:
 
 1. **Blocking, unambiguous.** `src/components/ShareDialog.tsx:52`: the
-   2-second reset is a `setTimeout` that nothing clears. Closing the dialog
-   within 2 seconds leaves a timer that sets state on an unmounted
+   1.5-second reset is a `setTimeout` that nothing clears. Unmounting the
+   dialog before it fires leaves a callback targeting an unmounted
    component. The spec's implementation notes require clearing it on
    unmount. Correction: keep the timer id in a ref and clear it in the
    effect cleanup.
@@ -307,9 +307,8 @@ the reviewer returns, in full:
    after the rejected write, assert the input's `selectionStart` is 0 and
    `selectionEnd` is the value's length.
 3. **Should-fix, judgment call.** `src/components/ShareDialog.tsx:41`:
-   `navigator.clipboard` is undefined on plain-HTTP origins and in some
-   embedded webviews, so the call throws before the `catch` and the user
-   sees nothing. The spec covers a rejected write, not an absent API.
+   the implementation does not define behavior when `navigator.clipboard`
+   is unavailable. The spec covers a rejected write, not an absent API.
    Options: treat an absent API like a failed write (show "Copy failed",
    select the text), or hide the button when the API is absent. A product
    decision.
@@ -319,13 +318,13 @@ Verdict: human decision needed.
 The foreman sends findings 1 and 2 to the implementer as one follow-up.
 The implementer pushes a second commit that clears the timer in the effect
 cleanup and extends the rejection test, re-runs the three checks, and
-updates the Verification section (28 passed). The foreman posts finding 3
-on PR #131 as a comment-only review, neither approving nor requesting
-changes; confirms `factory:Webapp` is on the issue and the PR; and comments
-on the issue:
+updates the Verification section (27 passed; an assertion was added, not a
+test case). The foreman posts finding 3 on PR #131 as a comment-only review,
+neither approving nor requesting changes; confirms `factory:Webapp` is on
+the issue and the PR; and comments on the issue:
 
 > PR ready for review: acme/webapp#131. Verified with `npm run lint`,
-> `npm run typecheck`, and `npm test` (28 passed, 4 new). Review found two
+> `npm run typecheck`, and `npm test` (27 passed, 4 new). Review found two
 > issues, both fixed on the branch: an uncleared reset timer, and a
 > rejection test that did not check the text selection. One question is
 > open on the PR for you: what the button should do when the clipboard API
@@ -349,28 +348,34 @@ with no reproduction and to work that spans another repository.
 
 ### Tune it
 
-After a first run, teams most often adjust three things. Change one at a
-time, then re-run the same issue and compare the artifacts with the trace.
+Change one setting at a time. Record the requirements, starting commit,
+configuration, output, and per-stage cost of the baseline trial. For each
+comparison, use a separate test issue and a new branch and PR starting at
+that commit, with no implementation commits from earlier trials. Review
+the new spec and approve it separately. Do not merge trial output.
+
+Closing a PR or reapplying a label continues or restarts existing work; it
+does not create an independent comparison. Check the new branch's baseline
+and diff. Repeat unchanged settings before attributing a difference to tuning.
 
 1. **Spec detail level:** `agents/spec/skills/spec-format/SKILL.md`. Specs
-   too thin (the implementer made a product decision the spec should have
-   made): add a required section or require a code snippet for each
-   decision. Specs too heavy for one-file changes: trim the template, or
-   loosen the "Scale to the change" rule so Implementation notes become
-   optional.
+   too thin: require unresolved behavior to be surfaced for approval and
+   acceptance criteria with executable checks. Specs too heavy for
+   one-file changes: trim the template, or loosen the "Scale to the change"
+   rule so Implementation notes become optional.
 2. **Implementer model:** the `model:` line in
-   `agents/implementer/agent.md`, currently `auto-genius`. Set `auto` or
-   `auto-efficient` to lower cost on simple changes, or any Warp Agent
-   model ID. Changing `agentDefaults.model` in `factory.yaml` moves all four
-   stages at once. Compare candidates on the same issue with
+   `agents/implementer/agent.md`, currently `auto-genius`. Compare `auto`,
+   `auto-efficient`, or another supported Warp Agent model on simple changes.
+   Change this agent's model, not `agentDefaults.model`, which affects every
+   agent inheriting it. Compare candidates on the same task with
    [benchmarks](https://docs.warp.dev/factories/benchmarks/) before
    adopting one.
 3. **Reviewer strictness:** the "Strictness" section of
    `agents/reviewer/agent.md`. Too many revision rounds: narrow what
-   blocks, or stop the reviewer from re-running checks in step 2. Too few
-   findings: add the failure modes your reviews keep catching by hand. To
-   reduce shared blind spots, give the reviewer its own `model:` that
-   differs from the implementer's.
+   blocks without removing correctness checks. Too few findings: add the
+   failure modes your reviews keep catching by hand. You can compare a
+   reviewer-specific `model:` in repeated fixed-baseline trials; a
+   different model alone does not establish review quality.
 
 Each stage is a separate run on the factory's
 [Runs page](https://docs.warp.dev/factories/factory-dashboard/#inspect-runs);

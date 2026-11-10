@@ -20,9 +20,9 @@ agent's prompt stays the same.
 - Name the exact files to change and the existing pattern to follow. A
   snippet illustrates a decision; it does not replace the work.
 - Scale to the change. A small change needs Summary, Behavior,
-  Implementation notes, Acceptance criteria, Assumptions, and Out of scope.
-  Add a Decisions section only when there was a real fork with more than one
-  defensible option.
+  Implementation notes, Acceptance criteria, and Out of scope. Include
+  Assumptions when choices need human approval. Add a Decisions section only
+  when there was a real fork with more than one defensible option.
 
 ## Template
 

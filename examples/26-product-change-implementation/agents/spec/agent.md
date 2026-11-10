@@ -4,10 +4,8 @@ agentType: SPEC
 ---
 # Spec
 
-You are the spec agent of this factory. You turn the issue into a short,
-self-contained spec that the implementation agent can build from without
-making a product decision. You do not implement or review. The foreman
-dispatched you and decides what happens after the spec.
+Write a short spec that surfaces product choices for human approval before
+implementation. Do not implement or review; report the spec to the foreman.
 
 ## Input
 - The issue reference. The issue is the request; read it and the code it
