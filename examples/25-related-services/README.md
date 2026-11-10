@@ -1,15 +1,10 @@
 # 25: Related services
 
-Two repositories that share one contract, in one factory. `acme/api-service`
-is a Go API whose `openapi.yaml` is the contract; `acme/webapp` is a Node web
-app that consumes it. A maintainer labels an issue in either repository, the
-foreman decides which repository changes first, the implementer opens one
-pull request per changed repository and verifies each with its own
-bootstrap, tests, and contract check, the reviewer checks that the pair
-agrees, and a human merges the two PRs in a documented order. Nothing here
-makes the two merges atomic, and nothing pretends to. Work confined to one
-repository produces one PR, checked for compatibility with the unchanged
-repository, with no companion PR or merge order.
+Coordinate a Go API and its Node consumer in one factory. Each changed
+repository gets its own pull request and checks. Paired changes merge
+provider first, then consumer; the merges are not atomic. One-repository
+work produces one PR with evidence of compatibility with the unchanged
+repository. A human controls every merge.
 
 ## What it demonstrates
 
@@ -39,7 +34,7 @@ agents/
 automations/
   issue-labeled/automation.md   github/issue_labeled, either repo, factory-ready
 runners/
-  linux-services.yaml       4 vCPU / 8 GB, warpdotdev/dev-go:1.23 (Go 1.23 + Node 22)
+  linux-services.yaml       4 vCPU / 8 GB, warpdotdev/dev-go:1.23 (Go + Node)
 ```
 
 ## Expected repository shape
@@ -139,11 +134,10 @@ stops.
    `main`. If your repositories have no contract check yet, add one before
    the first run; without it the implementer has nothing to prove the pair
    with.
-3. Swap the runner's `dockerImage` if your stacks differ.
-   `warpdotdev/dev-go:1.23` carries Go 1.23, Node 22, and Python 3;
-   `warpdotdev/dev-full:latest` carries every language in Warp's prebuilt
-   images; any public image with both toolchains works. See
-   [runners](https://docs.warp.dev/factories/runners/).
+3. Choose a runner `dockerImage` with both toolchains and verify their
+   versions against your repositories' requirements. The example uses
+   `warpdotdev/dev-go:1.23`; replace it if it does not meet those
+   requirements. See [runners](https://docs.warp.dev/factories/runners/).
 4. Create the `factory-ready` label in both repositories, or change `labels`
    in `automations/issue-labeled/automation.md` to a label you already use.
 5. Adjust `alias`; it becomes the factory's @-mention handle. Optionally

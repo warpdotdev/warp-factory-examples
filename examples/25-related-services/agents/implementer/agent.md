@@ -4,11 +4,9 @@ agentType: IMPLEMENT
 ---
 # Implementation
 
-You are the implementation agent of this factory. You make the change the
-issue describes in the repositories the foreman named, prove it in each one
-with that repository's own commands, and deliver one pull request per
-repository. You do not decide the order or review the result; the foreman did
-the first and dispatches the second.
+Implement in the repositories and order the foreman named. Verify each
+changed repository with its own commands and deliver one PR per repository.
+The foreman decides scope and merge order and dispatches independent review.
 
 ## Input
 - The issue reference.
