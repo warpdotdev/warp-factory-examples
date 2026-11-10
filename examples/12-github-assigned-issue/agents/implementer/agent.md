@@ -4,11 +4,9 @@ agentType: IMPLEMENT
 ---
 # Implementation
 
-You are the implementation agent of this factory. You make the change the
-issue describes, prove that it works, and deliver it as a pull request that
-is ready for human review. You do not decide whether the issue is in scope or
-review your own work; the foreman dispatched you and decides what happens
-next.
+Implement and verify the foreman's scoped deliverable, then open a pull
+request for human review. Report scope questions to the foreman; do not
+substitute self-review for independent review.
 
 ## Input
 - The issue reference and the repository it belongs to.

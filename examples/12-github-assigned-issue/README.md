@@ -1,11 +1,9 @@
 # 12: GitHub assigned issue
 
-Assignment as the intake signal. A maintainer assigns a labeled issue to the
-factory's GitHub identity; the foreman checks that the issue is a bounded
-implementation task; the implementation agent opens a pull request; a human
-reviews and merges. The factory mechanics match
-[`01-single-repo-quickstart`](../01-single-repo-quickstart). What changes is
-the trigger and the three filters that keep it scoped.
+Assign a labeled GitHub issue to the factory to request one bounded change.
+The result is a pull request linked on the issue; a human reviews and merges.
+This example replaces the readiness-label trigger in
+[`01-single-repo-quickstart`](../01-single-repo-quickstart) with assignment.
 
 ## What it demonstrates
 
@@ -13,8 +11,8 @@ the trigger and the three filters that keep it scoped.
   repository, the factory's own GitHub identity, and the factory's routing
   label.
 - Why `assignees` lists two handles, `warp` and `warp-factory`.
-- AND semantics across filter keys: an assignment that misses any one of the
-  three filters starts nothing, and nothing says so.
+- AND semantics across filter keys: an assignment that misses a filter
+  starts no run through this automation and posts no explanation.
 - A foreman prompt built around a scope check, because an assignment carries
   no message: the issue text is the whole request.
 - When to prefer assignment-based intake over the label-based intake in
@@ -46,11 +44,8 @@ all three match:
   must agree.
 - `assignees: [warp, warp-factory]`: the identity scope. `assignees` matches
   the login that was just assigned, not the issue's whole assignee list.
-  `warp` is the GitHub handle Warp Factories answers to today;
-  `warp-factory` is the handle it answered to before, kept so older habits
-  and older issues keep routing. Warp accepts either, and the automation the
-  setup wizard seeds lists both; listing both here keeps the file explicit
-  about what it answers to. Assigning any other login matches nothing.
+  Keep the current `warp` and earlier `warp-factory` logins. Assigning
+  another login does not match.
 - `labels: ["factory:Acme"]`: the routing label, `factory:<alias>`. Warp
   creates this label with the factory, and the foreman keeps it on
   everything it touches. Because filters combine with AND, the label must
@@ -90,28 +85,39 @@ for every key this event accepts.
 
 ## Assignment or label?
 
-Both `01` and this example end in the same place. They differ in what a
-maintainer does to start work and what that action means to the rest of the
-team.
-
 Label-based intake ([`01-single-repo-quickstart`](../01-single-repo-quickstart),
 `issue_labeled` with `factory-ready`) makes readiness the signal. The label
-can be applied during triage, in bulk, or by any process that already
-labels issues, and the assignee field stays free for the human who owns the
-outcome. Prefer it when a readiness state already exists in your process and
-work should start as soon as an issue qualifies.
+can be applied during triage or bulk processing, leaving the assignee field
+for the human responsible for the outcome.
 
-Assignment-based intake makes ownership the signal. Assigning the factory is
-the same gesture as assigning a teammate: it shows up in the same assignee
-field, the same issue lists, and the same notifications, and the issue is
-visibly the factory's until a human takes it back. The routing label still
-gates it, so a stray assignment cannot start work on an issue nobody marked
-for the factory. Prefer it when one person decides per issue who does the
-work, when your team already works from assignee queues, or when the factory
-should behave like a named engineer rather than a background process.
+Assignment-based intake starts when a maintainer assigns the factory.
+The routing label must already be present. Prefer it when your team
+dispatches work from an assignee queue.
 
-Running both in one factory is possible, but give each its own label so an
-issue qualifies for only one of them.
+Inspect existing automations before adding either route. Reuse or narrow
+setup-seeded handlers and preserve their unrelated triggers. Different
+labels alone do not prevent an issue from matching both paths. If you keep
+both, use these `labels` matchers alongside their existing filters:
+
+Label-based `issue_labeled` route:
+
+```yaml
+labels:
+  in: [factory-ready]
+  not_in: ["factory:Acme"]
+```
+
+Assignment-based `issue_assigned` route:
+
+```yaml
+labels:
+  in: ["factory:Acme"]
+  not_in: [factory-ready]
+```
+
+Append to existing exclusions rather than replacing them. An issue carrying
+both labels matches neither path. The committed assignment-only automation
+does not require this dual-route adaptation.
 
 ## Make it yours
 
@@ -126,10 +132,11 @@ issue qualifies for only one of them.
 3. Leave `assignees: [warp, warp-factory]` as it is. Then confirm the
    identity is assignable: open any issue in the repository and check that
    `warp` is offered in the assignee picker. GitHub only offers accounts
-   that can access the repository. If `warp` is missing, the factory's
-   GitHub identity cannot be assigned there yet; work through
-   [Connect GitHub to your factory](https://docs.warp.dev/factories/integrations/github/)
-   before relying on this trigger.
+   eligible for assignment. App installation and account assignability are
+   separate requirements. If `warp` is missing, ask an administrator to
+   check [GitHub's assignment requirements](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/assigning-issues-and-pull-requests-to-other-github-users),
+   or use label-based intake. Do not grant write access solely to enable
+   assignment.
 4. Whoever assigns the issue needs a GitHub account connected to Warp and
    membership in the factory's Warp team. The run is attributed to that
    account.
@@ -156,7 +163,8 @@ A maintainer assigns the issue to `warp`. In order, you should see:
 2. A comment on #42 from the factory restating the deliverable, along the
    lines of: "Deliverable: `POST /invoices` rejects `currency` values not in
    `src/money/currencies.ts` with 400 and `{"error": "unsupported_currency"}`,
-   and uppercases lowercase codes. Evidence: three new tests pass."
+   and uppercases lowercase codes. Verification: tests for valid, unknown,
+   and lowercase codes must pass."
 3. A branch `factory/issue-42-unsupported-currency` and a pull request
    against the default branch, carrying the `factory:Acme` label, with
    `Closes #42` and the test output in its description.
@@ -202,6 +210,11 @@ The first real run should prove three things:
 3. The out-of-scope path: assigning `warp` to a labeled issue that asks a
    question produces one comment and no branch.
 
+If both routes are configured, also prepare an issue with both labels
+before assigning the factory: neither route should handle that assignment.
+Reapply the readiness label while the routing label remains; the label
+route must not handle it either. Check for other matching automations.
+
 Pick the first issue deliberately: something a reviewer can verify in
 minutes, with acceptance criteria written down.
 
@@ -225,9 +238,16 @@ github/issue_assigned automation, one Linux runner. Replace:
 - the runner's dockerImage with an image that has my toolchain
 
 Keep assignees: [warp, warp-factory] exactly as it is.
+Reuse or narrow existing assignment handlers instead of adding duplicates;
+preserve unrelated triggers. If readiness-label intake is also enabled,
+exclude its readiness label from the assignment route and the routing
+label from the readiness route. Preserve existing exclusions.
 
 Validate the result with scripts/validate_factory_files.py from the
 warp-factory-examples repository before applying it. Then give me the
 exact steps to test it: one labeled issue assigned to warp that should
-start work, and one unlabeled issue that should not.
+start work, one unlabeled issue that should not, and, when both routes are
+enabled, an issue carrying both labels that neither route should handle.
+List manual access steps separately; do not grant extra permissions or
+apply the definition without my approval.
 ```
