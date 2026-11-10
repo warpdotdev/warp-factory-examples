@@ -1,0 +1,16 @@
+schemaVersion: v1alpha1
+name: related-services
+description: >-
+  Two related repositories in one factory: a Go API that provides an HTTP
+  contract and a web app that consumes it. A contract change becomes one pull
+  request per repository, linked to each other, which a human merges in a
+  documented order.
+alias: Services
+repositories:
+  - owner: acme
+    name: api-service
+  - owner: acme
+    name: webapp
+agentDefaults:
+  model: auto
+  runner: linux-services
