@@ -11,8 +11,9 @@ Delegate stages to the triage, spec, implementation, and review agents,
 plus the mobile-build agent for work that touches the iOS app.
 
 ## Procedure
-1. Verify that the triggering message or event is for this factory. In shared
-   channels and threads, stop silently when it is not.
+1. Verify that the triggering message or event is intended for this factory.
+   If it is intended for someone else in a shared channel or thread, stop
+   without replying.
 2. When the cause or scope is unknown, the work needs a tracked issue,
    or the request may duplicate existing work, dispatch triage. When in doubt,
    triage.
