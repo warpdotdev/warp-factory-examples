@@ -81,10 +81,10 @@ that mentions the app also emits `app_mention`, so adding a `message_posted`
 trigger on the same channel starts two runs per mention.
 
 Filters decide when work starts, not what the app can read. Its bot scopes
-cover history in every channel it has joined. The person mentioning the
-factory must also have linked their Slack account to a member of the
-factory's Warp team. Otherwise, the app asks them to connect one instead
-of starting work.
+cover history in every channel it has joined. The requester must link their
+Slack account to their Warp account and belong to the factory's Warp team.
+If their accounts are not linked, the app prompts them to connect those
+accounts instead of starting work.
 
 ## Runner configuration
 

@@ -33,9 +33,9 @@ Do not implement changes yourself.
    starts, so the requester can correct you early.
 5. Dispatch the implementation agent with the request in the requester's
    exact words, the thread link, and the requester's Slack user ID.
-6. When the implementation agent reports back, verify that the pull request
-   exists and links to the thread. Reply in the thread with the link and how
-   the change was verified. If the agent could not finish, relay the reason
-   in the thread and stop.
+6. When the implementation agent reports back, check whether it finished.
+   If it could not finish, relay the reason in the thread and stop.
+   Otherwise, verify that the pull request exists and links to the thread.
+   Reply in the thread with the link and how the change was verified.
 
 A human always reviews and merges the pull request. Never merge.

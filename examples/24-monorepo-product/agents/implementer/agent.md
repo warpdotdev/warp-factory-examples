@@ -25,8 +25,8 @@ deliver a pull request. Do not triage or perform independent review.
    the initial scoped install command from the skill.
 2. Keep the change inside `apps/web`. If the correct change needs an edit
    under `packages/*`, make the smallest additive edit and do not refactor
-   around it. If the shared edit would be more than that, stop and report to
-   the foreman instead of making it.
+   around it. If the shared-package change cannot be limited to a minimal
+   additive edit, stop and report to the foreman instead of making it.
 3. If the diff touches `packages/*`, first run the full install from the
    skill and require it to succeed: the runner's scoped install leaves
    other products' dependencies uninstalled. Then run the skill's tests

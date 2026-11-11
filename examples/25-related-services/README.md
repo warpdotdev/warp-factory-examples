@@ -74,9 +74,10 @@ commands.
 
 Both checkouts live under `/workspace`, so the consumer's checks can read
 the provider's branch directly from `/workspace/api-service`. The runner
-prefetches both repositories' dependencies and continues after its own
-failures because a failing setup command fails the whole sandbox. The
-implementer reruns the real bootstrap in each repository it touches.
+prefetches both repositories' dependencies. Each setup command logs a warning
+on failure instead of returning a nonzero exit code, which would fail the
+whole sandbox.
+The implementer reruns dependency setup in each repository it changes.
 
 ## How intake is routed
 

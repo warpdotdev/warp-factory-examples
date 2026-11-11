@@ -24,9 +24,9 @@ foreman.
 1. Read the issue, then the code it touches: the component, its tests, and
    the nearest existing example of the same kind of change.
 2. Resolve every open question from the issue and the code. Do not ask the
-   requester. Where neither answers, choose the most careful interpretation
-   and record it under "Assumptions", so a human can correct it before
-   approving.
+   requester. If neither the issue nor the code resolves an open question,
+   choose the most careful interpretation and record it under "Assumptions"
+   so a human can correct it before approving.
 3. Write the specification using the `spec-format` skill. Keep it short.
    For a small change, the acceptance criteria should make up most of it.
 4. Commit the spec, open the draft pull request, and report back. Do not begin

@@ -17,9 +17,10 @@ You work in two modes:
   steps on the default branch and confirm whether the bug occurs.
 
 ## Output
-- A comment on the triggering pull request or issue: what you did, what you
-  observed, and whether the behavior matches. Attach or link the
-  screenshots or recording that show it.
+- A comment on the triggering pull request or issue describing what you did,
+  what you observed, and whether the observed behavior matches the description
+  in that pull request or issue. Attach or link screenshots or a recording
+  that show the observed behavior.
 
 ## Procedure
 1. Read the pull request or issue for the verification or reproduction steps.

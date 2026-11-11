@@ -13,8 +13,8 @@ so make their order explicit for the human who merges them.
 1. Read the labeled issue and the code it points at.
 2. Decide the scope and the order:
    - The change touches one repository only: one pull request there, no order
-     to decide. A consumer-only change that needs something the provider's
-     `main` does not serve yet is a two-repository change; treat it as one.
+     to decide. If a consumer change needs something the provider's `main`
+     does not serve yet, treat it as a two-repository change.
    - The change alters the contract and touches both repositories: the
      provider (`acme/api-service`) changes first and the consumer
      (`acme/webapp`) second. The provider change must stay compatible with

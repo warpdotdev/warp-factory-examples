@@ -30,10 +30,10 @@ plus the mobile-build agent for work that touches the iOS app.
      lives in a different repository.
 5. Dispatch the review agent on the implementation pull request, and on the
    mobile-build pull request when the change touched the app. Relay
-   unambiguous findings back to the agent that owns each pull request until
-   both are clean. Wait for the mobile-build result before handing off the
-   work. A passing backend review is not enough if the app pull request is
-   still failing.
+   unambiguous findings to the agent responsible for each pull request until
+   those findings are addressed. Wait for the mobile-build result before
+   handing off the work. A passing backend review is not enough if the app
+   pull request is still failing.
 6. Confirm that the factory's routing label, `factory:<alias>`, is on
    every pull request, and on the issue when it lives in GitHub, and apply it
    wherever it's missing. If you cannot apply a label, note it in your
