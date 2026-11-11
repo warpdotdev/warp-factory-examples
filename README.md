@@ -1,13 +1,12 @@
 # Warp Factories examples
 
-[Warp Factories](https://docs.warp.dev/factories/) is open, flexible
+[Warp Factories](https://docs.warp.dev/factories/) provide open, flexible
 infrastructure for building your own software factory. This repository
 contains workflows defined as code that you can adapt for your projects,
 from a single review automation to an issue-to-PR workflow.
 
 Choose an example, customize its definition, and test it on work from your
-repository. Example 02 includes automated scoring; for comparing configurations
-and measuring results, see [Measure and improve](https://docs.warp.dev/factories/measure-and-improve/).
+repository. Use the results to identify what to change in your configuration. For guidance on evaluating results and comparing configurations, see [Measure and improve](https://docs.warp.dev/factories/measure-and-improve/).
 
 Each directory under `examples/` contains all the files needed to define a
 factory. To get started, copy the entire example directory into your
