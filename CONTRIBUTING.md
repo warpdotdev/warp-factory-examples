@@ -28,8 +28,8 @@
 <!-- terminology-allow-begin -->
 - Match the product's terminology; the
   [docs](https://docs.warp.dev/factories/) are the source of truth.
-  - The five agents Warp creates are **the default agents**, including a
-    **foreman**. Describe their configured responsibilities, not an AI team,
+  - The five agents Warp creates are the default agents, including a
+    foreman. Describe their configured responsibilities, not an AI team,
     workforce, or set of teammates. Retain shipped role names.
   - The built-in harness is **the Warp Agent harness**. The name "Oz"
     appears only as the `oz` CLI binary in shell commands and the literal
@@ -49,6 +49,11 @@ and [writing guide](https://github.com/warpdotdev/docs/blob/main/AGENTS.md).
 These govern framing, names, and voice; this repository owns its file format
 and validation. Do not copy docs-site MDX conventions into examples or use
 positioning as evidence of shipped behavior.
+
+Keep generic agents and default roles lowercase and unbolded in prose and
+list lead terms. Preserve proper feature names and literal interface spelling.
+Quote non-clickable field labels; keep bold for clickable UI controls and
+feature-list lead terms that are not agent names or field labels.
 
 ## Before opening a PR
 
