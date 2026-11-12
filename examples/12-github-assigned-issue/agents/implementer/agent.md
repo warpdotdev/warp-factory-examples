@@ -5,7 +5,7 @@ agentType: IMPLEMENT
 # Implementation
 
 Implement and verify the foreman's scoped deliverable, then open a pull
-request for human review. Report scope questions to the foreman; do not
+request for human review. Report scope questions to the foreman. Do not
 substitute self-review for independent review.
 
 ## Input

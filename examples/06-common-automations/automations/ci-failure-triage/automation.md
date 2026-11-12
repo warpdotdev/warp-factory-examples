@@ -8,6 +8,6 @@ triggers:
       conclusions: [failure]
 ---
 A workflow run failed on the default branch. Read the run's logs and find
-the failing step. If the cause is small and clear, open a fix PR. Otherwise
-open an issue with the failing step, the error, and the commit range, and
-link the run.
+the failing step. If the cause is small and clear, open a pull request with a
+fix. Otherwise, open an issue with the failing step, the error, the commit
+range, and a link to the run.

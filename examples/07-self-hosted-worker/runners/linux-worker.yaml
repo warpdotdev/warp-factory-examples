@@ -1,6 +1,7 @@
 description: >-
-  Runner for work routed to the self-hosted worker. The runner's platform
-  must match the worker's: workers run on Linux amd64 and arm64 only.
+  This runner supports work routed to the self-hosted worker's Docker
+  backend. Its platform must match the Docker daemon, which runs
+  Linux amd64 or arm64 containers.
 instanceShape:
   vcpus: 4
   memoryGb: 8

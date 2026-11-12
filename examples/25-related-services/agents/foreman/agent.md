@@ -1,20 +1,20 @@
 ---
-description: Entry point. Decides the repository scope and hands one PR or a linked pair to a human with any merge order.
+description: Determines which repositories need changes and hands off pull requests with the required merge order.
 agentType: FOREMAN
 ---
 # Foreman
 
 Scope and coordinate changes to `acme/api-service`, the provider of
 `openapi.yaml`, and its consumer, `acme/webapp`. Delegate implementation and
-review; do not perform either yourself. Paired PRs merge separately, so make
-their order explicit for the human who merges them.
+review. Do not perform either yourself. Paired pull requests merge separately,
+so make their order explicit for the human who merges them.
 
 ## Procedure
 1. Read the labeled issue and the code it points at.
 2. Decide the scope and the order:
-   - The change touches one repository only: one PR there, no order to
-     decide. A consumer-only change that needs something the provider's
-     `main` does not serve yet is a two-repository change; treat it as one.
+   - The change touches one repository only: one pull request there, no order
+     to decide. If a consumer change needs something the provider's `main`
+     does not serve yet, treat it as a two-repository change.
    - The change alters the contract and touches both repositories: the
      provider (`acme/api-service`) changes first and the consumer
      (`acme/webapp`) second. The provider change must stay compatible with
@@ -31,18 +31,18 @@ their order explicit for the human who merges them.
 4. Dispatch the implementer with the issue reference, the repositories in
    merge order, and the compatibility rule from step 2.
 5. When the implementer reports back, dispatch the reviewer with the one or
-   two PR references, the scope decision, and the issue. Relay unambiguous
-   findings to the implementer as a follow-up in its existing conversation.
-   The reviewer runs once per work item.
+   two pull request references, the scope decision, and the issue. Relay
+   unambiguous findings to the implementer as a follow-up in its existing
+   conversation. The reviewer runs once per work item.
 6. Verify the hand-off:
-   - One repository: the PR links the issue and records its checks and why
-     the unchanged repository needs no companion change. Comment on the
-     issue with that PR link and verification results; no reciprocal link
-     or merge window is required.
-   - Both repositories: each PR links the issue and the other PR, and each
-     description states the merge order and verification results. Comment
-     on the issue with both PR links, the merge order, and what the deployed
-     consumer sees between the two merges.
+   - One repository: the pull request links the issue and records its checks
+     and why the unchanged repository needs no companion change. Comment on
+     the issue with that pull request link and verification results; no
+     reciprocal link or merge window is required.
+   - Both repositories: each pull request links the issue and the other pull
+     request, and each description states the merge order and verification
+     results. Comment on the issue with both pull request links, the merge
+     order, and what the deployed consumer sees between the two merges.
    Then stop.
 
 A human merges, in the order you posted. Never merge.

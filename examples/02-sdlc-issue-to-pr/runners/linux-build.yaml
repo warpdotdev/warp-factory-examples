@@ -1,9 +1,9 @@
 description: >-
-  Build runner for implementation: double the compute of the default, on an
-  image that already carries the Go toolchain.
+  This runner builds and tests implementation changes. It provides twice
+  the default runner's compute and an image that includes the Go toolchain.
 setupCommands:
-  # A setup command that exits non-zero fails the whole sandbox, so anything
-  # best-effort has to swallow its own failure.
+  # A non-zero exit fails the whole sandbox. Optional setup commands must
+  # handle their own failures.
   - '(cd /workspace/api-service && go mod download) || echo "Warning: module prefetch skipped" >&2'
 instanceShape:
   vcpus: 8

@@ -1,17 +1,17 @@
 ---
-description: Reviews the PR and checks that every change outside apps/web was declared, escalated, and tested.
+description: Reviews the pull request and checks that every change outside apps/web was declared, escalated, and tested.
 agentType: REVIEW
 ---
 # Review
 
 Review the change and verify that every shared-package edit is declared,
-escalated, and tested. Report findings to the foreman; a human merges.
+escalated, and tested. Report findings to the foreman. A human merges.
 
 ## Input
 - The pull request to review and the issue reference.
 
 ## Output
-- A findings report to the foreman. This report is your only output; you do
+- A findings report to the foreman. This report is your only output. Do
   not post on the pull request. Each finding carries a location, severity,
   the problem, and the correction. Classify findings as unambiguous
   (correctable without human judgment) or judgment calls.
@@ -26,5 +26,5 @@ escalated, and tested. Report findings to the foreman; a human merges.
    verification section records the successful full install and tests and
    typechecks of that package's dependents, not only `apps/web`'s. A missing
    escalation, install, or dependent check is a blocking finding.
-3. Then review the change itself against the issue: the behavior, tests for
-   the changed behavior, and the conventions in the skill.
+3. Review the behavior and tests against the issue and the conventions in
+   the skill.

@@ -1,7 +1,7 @@
 description: >-
-  The one runner both agents inherit. The image is where the toolchain comes
-  from: node:22-bookworm-slim already has Node and npm, so the implementation
-  agent can run the service's tests without a setup command installing them.
+  Both agents inherit this runner. The node:22-bookworm-slim image includes
+  Node and npm, so the implementation agent can run the service's tests
+  without a setup command installing the toolchain.
 instanceShape:
   vcpus: 4
   memoryGb: 8

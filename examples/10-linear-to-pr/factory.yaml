@@ -1,9 +1,9 @@
 schemaVersion: v1alpha1
 name: linear-to-pr
 description: >-
-  Linear delegation as the only intake path: a delegated issue opens an agent
-  session, the foreman acknowledges it there, the implementation agent opens
-  a pull request, and the foreman links the PR back on the issue.
+  This factory accepts work through Linear agent sessions. The foreman
+  acknowledges the issue, delegates implementation, and attaches the
+  resulting pull request to the issue.
 alias: Linear Intake
 repositories:
   - owner: acme

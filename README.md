@@ -1,58 +1,101 @@
 # Warp Factories examples
 
-Working example configurations for [Warp
-Factories](https://docs.warp.dev/factories/), defined as files. Each
-directory under `examples/` is a complete factory definition root: copy one,
-replace the placeholders, register it, and you have a running factory.
+[Warp Factories](https://docs.warp.dev/factories/) provide open, flexible
+infrastructure for building your own software factory. This repository
+contains workflows defined as code that you can adapt for your projects,
+from a single review automation to an issue-to-PR workflow.
 
-The examples target schema version `v1alpha1`.
+Choose an example, customize its definition, and test it on work from your
+repository. Use the results to identify what to change in your configuration. For guidance on evaluating results and comparing configurations, see [Measure and improve](https://docs.warp.dev/factories/measure-and-improve/).
+
+Each directory under `examples/` contains all the files needed to define a
+factory. To get started, copy the entire example directory into your
+repository and follow the [setup instructions below](#use-an-example).
+
+These examples use Warp Factories configuration schema version `v1alpha1`.
 
 ## The examples
 
-- [`examples/00-warp-default-agents`](examples/00-warp-default-agents): the
-  five agents Warp creates for every new factory, with their real prompts,
-  descriptions, and models. Read it to see what you already have, or copy
-  it when you want the stock agents as files.
+- [`examples/00-warp-default-agents`](examples/00-warp-default-agents):
+  Explore the five default agents Warp creates for every new factory,
+  including their prompts, descriptions, and models. Copy this example to
+  edit and version their configurations.
 - [`examples/01-single-repo-quickstart`](examples/01-single-repo-quickstart):
-  the smallest tree that works. One repository, two agents, one
-  labeled-issue trigger, one pull request out. Start here.
-- [`examples/02-sdlc-issue-to-pr`](examples/02-sdlc-issue-to-pr): the full
-  lifecycle. Intake from Slack, Linear, and GitHub; triage, spec,
-  implementation, and review stages plus a custom agent; per-stage models
-  and compute; scorers and skills.
-- [`examples/03-multi-harness`](examples/03-multi-harness): a different
-  harness per role. A foreman on the Warp Agent harness, a Claude Code
-  implementer, and a Codex reviewer, with managed-secret harness auth.
-- [`examples/04-code-review-only`](examples/04-code-review-only): a
-  single-agent factory. One reviewer that is also the foreman, one
-  pull-request trigger, advisory findings posted on the PR.
-- [`examples/05-ui-verification`](examples/05-ui-verification): computer
-  use in a factory. A single agent that runs the app, verifies labeled UI
-  behavior in a browser, and posts visual evidence.
-- [`examples/06-common-automations`](examples/06-common-automations): a
-  catalog of standing automations. CI failure triage, a weekly dependency
-  audit, a docs check on push, and Slack reaction intake, all on one agent.
+  Start with this example to set up a factory for a single repository. A
+  foreman routes labeled GitHub issues to an implementation agent, which
+  opens a pull request with the changes.
+- [`examples/02-sdlc-issue-to-pr`](examples/02-sdlc-issue-to-pr):
+  Take requests from Slack, Linear, and GitHub through triage,
+  specification, implementation, and review to produce pull requests for
+  human review. This example extends the default agents with a custom agent
+  and shows how to configure models, compute resources, skills, and automated
+  scoring.
+- [`examples/03-multi-harness`](examples/03-multi-harness):
+  Coordinate work with the Warp Agent harness, implement changes with
+  Claude Code, and review them with Codex. This example also shows how to
+  authenticate third-party harnesses with managed secrets.
+- [`examples/04-code-review-only`](examples/04-code-review-only):
+  Review newly opened pull requests and post findings for a human to
+  consider. A single agent serves as both the foreman and reviewer.
+- [`examples/05-ui-verification`](examples/05-ui-verification):
+  Check UI changes and reproduce reported bugs by having an agent run your
+  app in a browser. Labels on pull requests and issues trigger the checks,
+  and the agent posts links to screenshots and recordings.
+- [`examples/06-common-automations`](examples/06-common-automations):
+  Automate routine maintenance with one agent that triages CI failures,
+  audits dependencies weekly, checks documentation when code is pushed, and
+  responds to Slack reactions.
 - [`examples/07-self-hosted-worker`](examples/07-self-hosted-worker):
-  execution on your own infrastructure. The quickstart topology with
-  `workerHost` pointed at a managed self-hosted worker and a runner matched
-  to the worker's platform.
+  Run the quickstart factory on your own infrastructure. This example shows
+  how to select a self-hosted worker with `workerHost` and configure a runner
+  that matches the worker's platform.
+- [`examples/08-slack-to-pr`](examples/08-slack-to-pr):
+  Request code changes by mentioning the factory in a designated Slack
+  channel. The foreman confirms the request and returns progress, questions,
+  and the pull request link in the same thread.
+- [`examples/10-linear-to-pr`](examples/10-linear-to-pr):
+  Delegate Linear issues from one team to a factory. The agents report
+  progress in the agent session and attach the pull request to the issue
+  for human review.
+- [`examples/11-jira-to-pr`](examples/11-jira-to-pr):
+  Assign or mention Warp on a Jira Cloud work item to request a code change.
+  The factory limits intake by project and returns the pull request link
+  in the agent session and a work-item comment.
+- [`examples/12-github-assigned-issue`](examples/12-github-assigned-issue):
+  Start work by assigning a labeled GitHub issue to the factory. The foreman
+  checks the request's scope and returns a linked pull request for human
+  review. This example also explains when to use assignment instead of labels.
+- [`examples/24-monorepo-product`](examples/24-monorepo-product):
+  Scope a factory to one product in a monorepo and verify changes across
+  affected packages. Changes to shared packages require a draft pull request
+  and review from their owners.
+- [`examples/25-related-services`](examples/25-related-services):
+  Coordinate changes across an API and its consumer. The factory checks
+  contract compatibility and opens one pull request per changed repository,
+  with a provider-first merge order when both repositories change.
+- [`examples/26-product-change-implementation`](examples/26-product-change-implementation):
+  Take a small product change through specification, human approval,
+  implementation, and review on the same pull request. An illustrative
+  walkthrough shows the expected outputs and how to compare configuration
+  changes in separate trials.
 
-## Using an example
+## Use an example
 
-1. Copy the example directory into your own repository. Each example is
-   self-contained, and the registered root is the directory containing
-   `factory.yaml`, which does not need to be the repository root.
-2. Work through the "Make it yours" checklist in the example's README. It
-   lists every placeholder you must replace. Most placeholders are
-   `acme/*` repositories; a checklist entry names any other one directly,
-   and everything else in the trees is real.
-3. In Warp, create a factory with a GitHub-backed definition pointing at
-   your repository, branch, and directory. Pushes sync the definition after
-   the `warp/factory-config` check passes.
+1. Copy the entire example directory into your own GitHub repository. You
+   can place it at the repository root or in a subdirectory.
+2. Complete the "Customize the example" checklist in the example's README. It
+   explains which placeholders to replace and any additional setup required.
+3. Commit and push the example files to GitHub.
+4. Create a factory in Warp using a
+   [GitHub-backed definition](https://docs.warp.dev/factories/factory-as-code/#where-the-definition-lives).
+   Specify your repository, branch, and the directory containing `factory.yaml`.
 
-## Validating
+After setup, Warp syncs changes pushed to the configured branch once the
+`warp/factory-config` check passes.
 
-Check that a tree is a valid factory definition:
+## Validate an example
+
+Check that an example is a valid factory definition:
 
 ```bash
 python3 scripts/validate_factory_files.py examples/01-single-repo-quickstart

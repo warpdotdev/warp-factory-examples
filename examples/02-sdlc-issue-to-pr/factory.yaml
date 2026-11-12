@@ -1,10 +1,10 @@
 schemaVersion: v1alpha1
 name: sdlc-issue-to-pr
 description: >-
-  A standing engineering factory built on the default agents: intake from
-  Slack, Linear, and GitHub; triage; optional spec; implementation;
-  adversarial review; a human merge. A custom agent builds the iOS app on
-  macOS.
+  This factory uses the default agents to handle requests from Slack,
+  Linear, and GitHub through triage, optional specification, implementation,
+  and adversarial review. A human merges the changes. A custom agent builds
+  the iOS app on macOS.
 alias: Acme
 credentialStrategy: EXECUTOR
 repositories:

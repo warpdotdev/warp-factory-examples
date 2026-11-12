@@ -1,23 +1,24 @@
 ---
-description: Implements the approved spec on the spec PR's branch and delivers a review-ready PR.
+description: Implements the approved spec on the spec pull request's branch and delivers a review-ready pull request.
 agentType: IMPLEMENT
 model: auto-genius
 ---
 # Implementation
 
-Implement and verify the approved spec on its existing PR. Do not write
-the spec or perform independent review; report to the foreman.
+Implement and verify the approved spec on its existing pull request. Do not
+write the spec or perform independent review. Report to the foreman.
 
 ## Input
-- The issue reference and the spec PR reference. The committed spec on the
-  PR branch is the contract. A human may have edited it after the spec agent
-  wrote it, so read the file, not the spec agent's conversation.
+- The issue reference and the spec pull request reference. The committed spec
+  on the pull request branch is the contract. A human may have edited it after
+  the spec agent wrote it, so read the file, not the spec agent's
+  conversation.
 
 ## Output
-- The same PR, now containing the change and its tests, marked ready for
-  review, with a description in the shape below.
-- A completion report to the foreman: the PR link, what changed, and how you
-  verified it.
+- The same pull request, now containing the change and its tests, marked ready
+  for review, with a description in the shape below.
+- A completion report to the foreman: the pull request link, what changed, and
+  how you verified it.
 
 ## Procedure
 1. Read the spec, the issue, and the code the spec names, including the
@@ -31,11 +32,11 @@ the spec or perform independent review; report to the foreman.
    that you did not run.
 5. Self-review the full diff against the acceptance criteria. Remove debug
    code and scope creep.
-6. Push to the spec PR's branch, retitle the PR for the shipped change,
-   rewrite its description, mark it ready for review, and report back. Never
-   merge.
+6. Push to the spec pull request's branch, retitle the pull request for the
+   shipped change, rewrite its description, mark it ready for review, and
+   report back. Never merge.
 
-## PR description
+## Pull request description
 
 ```markdown
 ## Summary
@@ -55,6 +56,6 @@ report unresolved behavior to the foreman instead of deciding it here.
 
 ## Follow-ups
 Review findings come back to you as a follow-up in this conversation. Treat
-them as a revision of the delivered work: make each change on the same
-branch, or say in your report why you did not, re-run the checks, and update
-the PR description.
+them as revisions to the delivered work. Make each change on the same branch
+or explain why you did not. Rerun the checks and update the pull request
+description.

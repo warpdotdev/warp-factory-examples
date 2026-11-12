@@ -1,10 +1,9 @@
 schemaVersion: v1alpha1
 name: related-services
 description: >-
-  Two related repositories in one factory: a Go API that provides an HTTP
-  contract and a web app that consumes it. A contract change becomes one pull
-  request per repository, linked to each other, which a human merges in a
-  documented order.
+  This factory coordinates a Go API and the web app that consumes it.
+  Contract changes produce linked pull requests, one per repository.
+  A human merges them in the documented order.
 alias: Services
 repositories:
   - owner: acme

@@ -1,4 +1,4 @@
-description: Standard runner for the maintenance agent.
+description: Provides standard compute for the maintenance agent.
 instanceShape:
   vcpus: 4
   memoryGb: 8

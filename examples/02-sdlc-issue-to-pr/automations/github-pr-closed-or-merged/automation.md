@@ -11,8 +11,8 @@ triggers:
       repos: [acme/api-service, acme/webapp, acme/ios-app]
       labels: ["factory:Acme"]
 ---
-A factory-labeled pull request was closed or merged. Inspect the PR
-description for links to work items. When the PR was merged, move each
-linked Linear issue to its completed state and close the loop on the factory
-task that produced the PR. When the PR was closed without merging, report
-that on the linked issue instead; do not mark anything done.
+A pull request with this factory's routing label was closed or merged.
+Inspect its description for links to work items. If it was merged, move each
+linked Linear issue to its completed state and complete the factory task that
+produced the pull request. If it was closed without merging, report that on
+the linked issue instead. Do not mark anything done.

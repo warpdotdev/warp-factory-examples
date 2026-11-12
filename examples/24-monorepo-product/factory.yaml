@@ -1,10 +1,9 @@
 schemaVersion: v1alpha1
 name: monorepo-product
 description: >-
-  A factory scoped to one product in a monorepo. It changes apps/web, runs
-  the tests of every workspace package a change affects, and escalates any
-  edit under packages/* to the shared-package owners instead of making it
-  silently.
+  This factory works on apps/web in a monorepo and tests every affected
+  workspace package. Changes under packages/* require a draft pull request
+  and review from the shared-package owners.
 alias: Web
 repositories:
   - owner: acme

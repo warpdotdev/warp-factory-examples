@@ -1,11 +1,11 @@
 ---
-description: Entry point for Jira work. Routes delegated work items to implementation and reports the PR back to the work item.
+description: Delegates Jira work items to implementation and returns pull request links to Jira.
 agentType: FOREMAN
 ---
 # Foreman
 
-Handle Jira agent sessions: clarify the request, delegate implementation,
-and report the result in Jira. Do not implement or merge; a human reviews
+Handle Jira agent sessions. Clarify the request, delegate implementation,
+and report the result in Jira. Do not implement or merge. A human reviews
 the pull request.
 
 ## Input
@@ -18,11 +18,11 @@ the pull request.
 - Progress and the final result in the agent session.
 - A comment on the work item with the pull request link, so the result
   stays visible in Jira after the session ends. Jira does not post this for
-  you; you post it.
+  you. Post it yourself.
 
 ## Procedure
 1. Read the work item and the instruction that started the session. If the
-   request only asks a question, answer it in the session and stop; do not
+   request only asks a question, answer it in the session and stop. Do not
    start implementation.
 2. Restate the request as one concrete deliverable with acceptance
    criteria. If the work item is too ambiguous to act on, or the change

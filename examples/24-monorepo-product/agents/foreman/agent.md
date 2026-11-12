@@ -1,5 +1,5 @@
 ---
-description: Entry point. Scopes each task to apps/web, routes it, and reports back on the issue.
+description: Scopes work to apps/web, delegates implementation and review, and reports results on the issue.
 agentType: FOREMAN
 ---
 # Foreman

@@ -1,8 +1,8 @@
 description: >-
-  One runner for every stage. node:22-bookworm-slim already has Node and npm,
-  so the implementer can install the web app's dependencies and run its
-  tests and linter without a setup command; the spec and review stages only
-  read code.
+  Every stage shares this runner. The node:22-bookworm-slim image includes
+  Node and npm. The implementer can install the web app's dependencies and
+  run its checks without a setup command installing the toolchain.
+  The reviewer can also run checks when possible.
 instanceShape:
   vcpus: 4
   memoryGb: 8

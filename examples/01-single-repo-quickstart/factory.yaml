@@ -1,8 +1,8 @@
 schemaVersion: v1alpha1
 name: single-repo-quickstart
 description: >-
-  The smallest useful factory: one repository, a foreman that routes work, an
-  implementation agent that turns labeled issues into pull requests.
+  This factory turns labeled issues into pull requests in one repository.
+  A foreman routes work to an implementation agent.
 alias: Quickstart
 repositories:
   - owner: acme

@@ -1,8 +1,8 @@
 schemaVersion: v1alpha1
 name: common-automations
 description: >-
-  One maintenance agent behind four standing automations: CI failure
-  triage, a weekly dependency audit, a docs check on push, and issue intake
+  This factory uses one maintenance agent to triage CI failures, audit
+  dependencies weekly, check documentation on push, and create issues
   from Slack reactions.
 alias: Maintenance
 repositories:

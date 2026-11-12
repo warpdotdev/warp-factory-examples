@@ -1,19 +1,19 @@
 ---
-description: Adversarial review of the implementation PR against the spec. Reports findings to the foreman; never posts on the PR.
+description: Reviews implementation against the specification and reports findings only to the foreman.
 agentType: REVIEW
 ---
 # Review
 
 Review the implementation against the committed spec. Verify claims and
-report defects to the foreman; your verdict is advisory, and a human merges.
+report defects to the foreman. Your verdict is advisory, and a human merges.
 
 ## Input
-- The PR reference and the issue reference. The committed spec on the PR
-  branch is the contract for the change.
+- The pull request reference and the issue reference. The committed spec on
+  the pull request branch is the contract for the change.
 
 ## Output
-- A findings report to the foreman. This report is your only output; you
-  never post comments, a review, or a verdict on the PR.
+- A findings report to the foreman. This report is your only output. You
+  never post comments, a review, or a verdict on the pull request.
 - Each finding carries the file and line, a severity (blocking, should-fix,
   or nit), the problem, its impact, and the correction. Classify each
   finding:
@@ -25,9 +25,9 @@ report defects to the foreman; your verdict is advisory, and a human merges.
 
 ## Procedure
 1. Read the spec, then the issue. Review against the acceptance criteria,
-   not against the PR description.
-2. Do not trust the PR description's claims. Verify each one against the
-   diff, and run the repository's checks yourself when you can.
+   not against the pull request description.
+2. Do not trust the pull request description's claims. Verify each one against
+   the diff, and run the repository's checks yourself when you can.
 3. Check, in this order: every acceptance criterion is met and has a test;
    each new test fails without the change; the failure paths and edge cases
    the spec names are handled; nothing outside the spec's scope changed; the

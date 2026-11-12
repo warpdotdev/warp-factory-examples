@@ -1,26 +1,25 @@
 # 05: UI verification
 
-A single-agent factory that checks UI behavior visually. Label a pull
-request `needs-ui-check` and the agent runs the app, exercises the change
-in a browser, and posts evidence. Label an issue `needs-repro` and it
-tries to reproduce the reported bug the same way.
+This example is a single-agent factory that checks UI behavior in a browser.
+When you label a pull request `needs-ui-check`, the agent runs the app,
+exercises the change, and posts evidence. When you label an issue
+`needs-repro`, the agent tries to reproduce the reported bug the same way.
 
-## What it demonstrates
+## What this example shows
 
-- Computer use is a capability of the Warp Agent harness, which is what
-  `model: auto` selects here. Cloud runs on that harness get a bundled
-  Chromium browser and the Playwright CLI in every sandbox, and no
-  factory-file field turns it on. Third-party harnesses don't integrate
-  with Warp's computer-use tools, and the `computerUseModel` setting is
-  inert under them; a foreman on another harness can still delegate to a
-  verifier on the Warp Agent harness.
-- A single-agent factory triggered by labels, with one automation per mode:
-  verify a PR, reproduce an issue.
-- Evidence as the deliverable: the screenshots and recordings the agent
-  captures are saved on its run, and the agent links them from the comment
-  it posts.
+- Computer use is a capability of the Warp Agent harness, which
+  `model: auto` selects in this example. Cloud runs on that harness include
+  a Chromium browser and the Playwright CLI in every sandbox. No
+  factory-file field is required to enable computer use.
+- Third-party harnesses don't integrate with Warp's computer-use tools.
+  The `computerUseModel` setting has no effect under them. A foreman on
+  another harness can still delegate to a verifier on the Warp Agent harness.
+- Labels trigger the factory, with one automation for each mode: verifying a
+  pull request and reproducing an issue.
+- The deliverable is evidence. The agent saves the screenshots and recordings
+  it captures on its run, and it links them from the comment it posts.
 
-## Tree
+## Directory structure
 
 ```
 factory.yaml
@@ -33,11 +32,12 @@ runners/
   linux-app.yaml          4 vCPU / 8 GB, node:22-bookworm-slim
 ```
 
-## Make it yours
+## Customize the example
 
 1. Replace `acme/webapp` in `factory.yaml` and both automations.
-2. Swap the runner's `dockerImage` for whatever runs your app; the sandbox
-   provides the browser regardless of image.
-3. Rename the labels to whatever your team uses, and make sure the app's
-   run commands are documented in the repository so the agent can find
+2. Replace the runner's `dockerImage` with an image that can run your app. The
+   sandbox provides the browser regardless of the image.
+3. Replace the `needs-ui-check` label in `pr-needs-ui-check` and the
+   `needs-repro` label in `issue-needs-repro` with the labels your team uses.
+4. Document the app's run commands in the repository so the agent can find
    them.

@@ -1,8 +1,8 @@
 description: >-
-  Small runner for a single Node service. The image is where the toolchain
-  comes from: node:22-bookworm-slim already has Node and npm, so no setup
-  command has to install them. Swap the image for whatever your repository
-  builds with.
+  This small runner supports a single Node service. The
+  node:22-bookworm-slim image includes Node and npm, so setup commands
+  don't need to install them. Replace the image if your repository uses a
+  different toolchain.
 instanceShape:
   vcpus: 2
   memoryGb: 4

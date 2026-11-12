@@ -8,5 +8,5 @@ triggers:
       paths: ["api/**"]
 ---
 A push to the default branch changed files under `api/`. Check whether the
-documentation still matches the changed code. If it drifted, open a docs
-PR; if it matches, do nothing.
+documentation still matches the changed code. If it doesn't, open a
+documentation pull request. If it matches, do nothing.

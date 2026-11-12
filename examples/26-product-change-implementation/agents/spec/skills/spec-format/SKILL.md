@@ -1,20 +1,20 @@
 ---
 name: spec-format
-description: The spec template for this factory and how much detail a spec carries. Use when writing or revising a spec.
+description: Defines the specification template and detail level for this factory. Use when writing or revising a specification.
 ---
 
 # Spec format
 
-Only the spec agent can read this skill; it lives under
+Only the spec agent can read this skill because it lives under
 `agents/spec/skills/`. This file sets the factory's spec detail level. To
-make specs longer or shorter, edit the rules and the template here; the spec
-agent's prompt stays the same.
+make specifications longer or shorter, edit the rules and template here.
+The spec agent's prompt stays the same.
 
 ## Rules
 
-- Short sentences, active voice, one instruction per sentence. No vague
-  qualifiers ("as needed", "appropriately", "etc.").
-- Lists over prose.
+- Write short sentences in active voice, with one instruction per sentence.
+  Avoid vague qualifiers such as "as needed", "appropriately", and "etc.".
+- Prefer lists over prose.
 - Every acceptance criterion says how it is checked: a test file and case, a
   command, or a manual step.
 - Name the exact files to change and the existing pattern to follow. A
@@ -22,7 +22,7 @@ agent's prompt stays the same.
 - Scale to the change. A small change needs Summary, Behavior,
   Implementation notes, Acceptance criteria, and Out of scope. Include
   Assumptions when choices need human approval. Add a Decisions section only
-  when there was a real fork with more than one defensible option.
+  when there was a choice between multiple defensible options.
 
 ## Template
 

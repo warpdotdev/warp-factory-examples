@@ -15,9 +15,9 @@
   the reader to create them first.
 - Placeholders are `acme/*` repositories by default. A placeholder outside
   that list is allowed only when it cannot be mistaken for a working value
-  (e.g. a name like `your-intake-channel`) and the example README's "Make
-  it yours" checklist names it directly. Every placeholder, and every
-  other prerequisite the committed files cannot satisfy on their own
+  (e.g. a name like `your-intake-channel`) and the example README's
+  "Customize the example" checklist names it directly. Every placeholder,
+  and every other prerequisite the committed files cannot satisfy on their own
   (connecting an integration, creating a secret, resolving a Linear team
   name), must appear in that checklist.
 - Keep prompts short and pedagogical. Teach the shape of a good stage prompt
@@ -28,17 +28,32 @@
 <!-- terminology-allow-begin -->
 - Match the product's terminology; the
   [docs](https://docs.warp.dev/factories/) are the source of truth.
-  - The five agents Warp creates are **the default agents** (a team of
-    default agents, with a **foreman**). Not a "roster", not an "agent set".
+  - The five agents Warp creates are the default agents, including a
+    foreman. Describe their configured responsibilities, not an AI team,
+    workforce, or set of teammates. Retain shipped role names.
   - The built-in harness is **the Warp Agent harness**. The name "Oz"
     appears only as the `oz` CLI binary in shell commands and the literal
     `type: oz` schema value in YAML. Do not use it in prose.
-  - **Warp Factories** is the product and is always written in full. An
-    individual **factory** is a lowercase common noun. Verbatim product
+  - **Warp Factories** is the infrastructure platform and is always written
+    in full. An individual **factory** is a lowercase common noun describing
+    the workflows a customer configures, not a team of agents. Verbatim product
     strings are quoted as they ship even when they break the rule (the
     setup wizard renders "<Factory name> Foreman Agent").
   - Files copied verbatim from elsewhere are exempt; see below.
 <!-- terminology-allow-end -->
+
+For copy changes, read the docs repository's
+[positioning guidance](https://github.com/warpdotdev/docs/blob/main/.agents/rules/warp-positioning.md),
+[glossary](https://github.com/warpdotdev/docs/blob/main/.agents/references/terminology.md),
+and [writing guide](https://github.com/warpdotdev/docs/blob/main/AGENTS.md).
+These govern framing, names, and voice; this repository owns its file format
+and validation. Do not copy docs-site MDX conventions into examples or use
+positioning as evidence of shipped behavior.
+
+Keep generic agents and default roles lowercase and unbolded in prose and
+list lead terms. Preserve proper feature names and literal interface spelling.
+Quote non-clickable field labels; keep bold for clickable UI controls and
+feature-list lead terms that are not agent names or field labels.
 
 ## Before opening a PR
 
@@ -74,6 +89,6 @@ Warp build, not by editing it here.
 ## Optional: confirm an example applies
 
 If your Warp team can register a GitHub-backed definition, copy the example
-into a real repository, work through its "Make it yours" checklist, register
-a factory pointing at it, and fire a cheap trigger. Not required to open a
-PR; note in the PR description whether you did it.
+into a real repository, work through its "Customize the example" checklist,
+register a factory pointing at it, and fire a cheap trigger. Not required
+to open a PR; note in the PR description whether you did it.

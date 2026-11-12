@@ -1,5 +1,5 @@
 description: >-
-  Runner that can build and serve the web app: the image provides the Node
+  This runner builds and serves the web app. The image provides the Node
   toolchain, and the computer-use sandbox provides the browser.
 instanceShape:
   vcpus: 4

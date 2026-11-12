@@ -1,28 +1,33 @@
-# 02: Issue to PR
+# 02: Issue to pull request
 
-A standing engineering factory: work arrives from Slack, Linear, or
-GitHub, and the foreman triages it, specs it when it is ambiguous,
-implements it, reviews it adversarially, and hands a review-ready PR to a
-human. It mirrors the default agents and default automations the product's
-setup wizard creates, as files you can read and edit, and extends them
-with one custom agent.
+This example is a complete engineering factory that takes requests from
+Slack, Linear, and GitHub through triage, specification when needed, and
+implementation. A separate agent reviews the changes before the factory
+hands the pull request to a human.
 
-## What it demonstrates
+The example recreates the default agents and automations that Warp sets up
+for a new factory, as files you can read and edit. It also adds one custom
+agent.
 
-- All five default agents (`FOREMAN`, `TRIAGE`, `SPEC`, `IMPLEMENT`,
-  `REVIEW`) with per-agent `model` overrides, plus a `CUSTOM` agent for work
-  the default agents don't cover. Review runs on a different model than
-  implementation so the two don't share blind spots.
-- Per-stage compute: three runners that differ by size, image, and
-  operating system, selected per agent. See "Runners" below.
-- Multi-source intake from Slack, Linear, and GitHub, plus a follow-up
-  automation for closed or merged PRs. The tree below lists each
-  automation's trigger.
-- The `integrations` array (`slack`, `linear`) and a multi-repository scope.
-- Skill scoping: factory-wide (`skills/`) and agent-scoped
-  (`agents/<name>/skills/`).
+## What this example shows
 
-## Tree
+- All five default agents (`FOREMAN`, `TRIAGE`, `SPEC`, `IMPLEMENT`, and
+  `REVIEW`) appear, along with a `CUSTOM` agent for work the default agents
+  don't cover. The `triage` and `reviewer` agents override the default
+  `model`. The reviewer uses a different model than the implementer to reduce
+  shared blind spots.
+- Three runners differ by size, image, and operating system, and each agent
+  can select the one that suits its stage. See
+  [Runner configuration](#runner-configuration).
+- Requests come in from Slack, Linear, and GitHub, and a follow-up automation
+  handles closed or merged pull requests. The directory structure below lists
+  each automation's trigger.
+- The `integrations` list declares `slack` and `linear`, and the factory
+  covers multiple repositories.
+- Skills under `skills/` are available to every agent. Skills under
+  `agents/<name>/skills/` are available only to that agent.
+
+## Directory structure
 
 ```
 factory.yaml
@@ -51,72 +56,83 @@ skills/
   repository-conventions/SKILL.md   shared by every agent
 ```
 
-## Runners
+## Runner configuration
 
-Compute is a per-agent choice. This factory uses three runners because its
-stages need different things:
+Each agent chooses its own compute. This factory uses three runners because
+its stages have different needs:
 
-- `linux-standard` (4 vCPU / 8 GB, `ubuntu:24.04`): the `agentDefaults`
-  runner, inherited by the foreman, triage, spec, and review. These stages
-  read code and write prose.
-- `linux-build` (8 vCPU / 16 GB, `golang:1.24-bookworm`): implementation,
-  which compiles and runs tests. The image provides the toolchain. Use
-  `setupCommands` only for what the image lacks, and write them defensively:
-  a setup command that exits non-zero fails the whole sandbox.
-- `macos-build` (6 vCPU / 14 GB, `macos/aarch64`): the `mobile-build` agent.
-  macOS sandboxes are VMs, not containers, so this runner declares no
-  `dockerImage`; it takes an optional `mac.version` instead and accepts only
-  a fixed set of shapes. macOS is `aarch64`-only.
+- `linux-standard` (4 vCPU / 8 GB, `ubuntu:24.04`) is the `agentDefaults`
+  runner, which the foreman, triage, spec, and review agents inherit. These
+  stages read code and write prose.
+- `linux-build` (8 vCPU / 16 GB, `golang:1.24-bookworm`) runs implementation,
+  which compiles code and runs tests. The image provides the toolchain, so use
+  `setupCommands` only for what the image lacks, and write them defensively.
+  A setup command that exits non-zero fails the whole sandbox.
+- `macos-build` (6 vCPU / 14 GB, `macos/aarch64`) runs the `mobile-build`
+  agent. macOS sandboxes are virtual machines, not containers, so this runner
+  declares no `dockerImage`. It takes an optional `mac.version` instead and
+  accepts only a fixed set of shapes. macOS is `aarch64`-only.
 
 Linux shapes must be powers of two. A runner named by an agent overrides the
-one in `agentDefaults`.
+runner in `agentDefaults`.
 
 ## How GitHub intake is routed
 
-The mention and assignment automation mirrors the wizard's seeded defaults
-and watches only `acme/api-service` and `acme/webapp`. Nothing in this
-example files GitHub issues or PRs directly against `acme/ios-app`, so
-GitHub intake for iOS work is not wired up. Filter keys combine with AND:
+The mention and assignment automation mirrors the default automation that
+Warp creates during setup. It watches only `acme/api-service` and
+`acme/webapp`, so GitHub mentions and assignments in `acme/ios-app` don't
+start work. GitHub intake for iOS work isn't set up.
 
-- `mentioned: [warp, warp-factory]` / `assignees: [warp, warp-factory]`:
-  the GitHub handles Warp Factories answers to. `warp` is the current
-  handle and `warp-factory` is the earlier one, which still matches; both
-  are product constants, not placeholders. Without this key,
-  `issue_mentioned` fires when anyone is @-mentioned in the repos.
-- `labels: ["factory:Acme"]`: the factory's routing label,
-  `factory:<alias>`. Because filters combine with AND, the label has to be
-  on the issue or PR before a mention or assignment trigger can fire; a
-  `@warp` mention on an unlabeled item is silently dropped. Apply
-  the label yourself when you open the item, or before the first mention.
-  After that, the foreman keeps the label on everything it touches, so later
-  mentions and assignments keep matching.
+Filter keys combine with AND. Each trigger combines a mention or assignment
+filter with a label filter:
 
-The closed-or-merged follow-up automation is scoped wider, to
-`acme/api-service`, `acme/webapp`, and `acme/ios-app`: mobile-build's PRs
+- `mentioned: [warp, warp-factory]` and `assignees: [warp, warp-factory]`
+  restrict the trigger to the GitHub handles Warp Factories answers to.
+  The current handle is `warp`. The earlier handle, `warp-factory`, still
+  matches. Both are product constants, not placeholders.
+  Without the `mentioned` key, `issue_mentioned` fires when anyone is
+  @-mentioned in the repositories.
+- `labels: ["factory:Acme"]` is the factory's routing label,
+  `factory:<alias>`. Because filters combine with AND, the label must be on
+  the issue or pull request before a mention or assignment can trigger the
+  factory. A `@warp` mention on an unlabeled item is silently
+  dropped, so apply the label when you open the item or before the first
+  mention. After that, the foreman keeps the label on everything it touches,
+  so later mentions and assignments keep matching.
+
+The closed-or-merged follow-up automation watches `acme/api-service`,
+`acme/webapp`, and `acme/ios-app`. The `mobile-build` agent's pull requests
 land in `acme/ios-app` and need the same follow-up when they are closed or
-merged. The same routing label limits it to factory PRs instead of every
-merge in the repository.
+merged. The same routing label limits the automation to factory pull requests
+instead of every merge in the repository.
 
-Widen these filters carefully. Dropping the `labels` key from the mention
-triggers makes any `@warp` mention start work, and dropping `mentioned` as
-well would fire on every mention of anyone.
+Widen these filters carefully. If you drop the `labels` key from the mention
+triggers, any `@warp` mention starts work. If you also drop
+`mentioned`, the trigger fires on every mention of anyone.
 
-## Make it yours
+## Customize the example
 
-1. Replace `acme/api-service`, `acme/webapp`, and `acme/ios-app` with
-   repositories your installation can reach. `acme/api-service` and
-   `acme/webapp` appear in `factory.yaml`, both GitHub automations, and
-   (`api-service` only) the `linux-build` setup command; `acme/ios-app`
-   appears in `factory.yaml`, `agents/foreman/agent.md`,
+1. Replace `acme/api-service` and `acme/webapp` with repositories that your
+   installation can access. They appear in `factory.yaml` and in both GitHub
+   automations. The repository name `api-service` also appears in the
+   `linux-build` setup command.
+2. Replace `acme/ios-app` with a repository that your installation can
+   access. It appears in `factory.yaml`, `agents/foreman/agent.md`,
    `agents/mobile-build/agent.md`, and the `github-pr-closed-or-merged`
-   automation, but not the mention automation. If you have no macOS work,
-   delete `agents/mobile-build/`, `runners/macos-build.yaml`, and the
-   `ios-app` entry (including from `github-pr-closed-or-merged`) together.
-2. Connect Slack and Linear to your Warp team; the `integrations` list only
-   declares that this factory uses them.
-3. Replace the two skill stubs with your real conventions.
-4. Narrow intake as needed. Filters combine with AND, and an absent field is
-   a wildcard. For example, to route only one Linear team:
+   automation, but not in the `github-mention-assign` automation.
+3. If you don't have macOS work, delete `agents/mobile-build/` and
+   `runners/macos-build.yaml`, and remove the `ios-app` entry from
+   `factory.yaml` and from the `github-pr-closed-or-merged` automation. Make
+   all of these changes together.
+4. Connect Slack to your Warp team.
+5. Connect Linear to your Warp team. The `integrations` list declares which
+   integrations the factory uses, but doesn't connect them.
+6. Replace the two skill stubs, `skills/repository-conventions/SKILL.md` and
+   `agents/implementer/skills/testing-standards/SKILL.md`, with your real
+   conventions.
+7. Optionally, narrow intake. Filters combine with AND, and an absent field
+   matches everything. For example, to route only one Linear team, add a
+   `filter` to the trigger:
 
    ```yaml
    triggers:
@@ -126,25 +142,31 @@ well would fire on every mention of anyone.
          teams: [Platform]
    ```
 
-   `teams` and `projects` take plain name lists that the server resolves
-   against Linear when the definition is applied, so add them only after
-   Linear is connected, or the apply will fail on the unresolved name.
-   `agent_session_created` also accepts `labels`, `keywords`, and
-   `creator_ids`; a `states` filter is rejected on this event and belongs
-   on `issue_state_changed` instead.
+   The `teams` and `projects` filters take plain lists of names.
+   Warp resolves the names against Linear when you apply the definition, so
+   add them only after you connect Linear. Otherwise, applying the definition
+   fails on the unresolved name.
 
-## Using Jira instead of Linear
+   The `agent_session_created` event also accepts `labels`, `keywords`, and
+   `creator_ids`. It rejects a `states` filter. Use `states` with
+   `issue_state_changed` instead.
 
-A factory can attach Linear or Jira, not both. To swap, change the
-integration to `- type: jira`, replace `automations/linear-agent-sessions`
-with a `jira` / `agent_session_created` trigger (filters use `project_keys`
-rather than team names), and reword the triage prompt's Linear references.
+## Use Jira instead of Linear
 
-## Other trigger shapes
+A factory can attach Linear or Jira, but not both. To use Jira instead of
+Linear:
 
-Intake is a set of triggers, so a factory can be pointed at other event
-shapes without changing its agents. For example, to review pull requests
-humans open, rather than only factory PRs, route them straight to the
+1. Change the integration in `factory.yaml` to `- type: jira`.
+2. Replace `automations/linear-agent-sessions` with an automation that uses
+   the `jira` provider and the `agent_session_created` event. Jira filters use
+   `project_keys` instead of team names.
+3. Update the Linear references in the triage prompt.
+
+## Configure additional triggers
+
+Intake is defined by triggers, so you can point a factory at other kinds of
+events without changing its agents. For example, to review pull requests that
+humans open, and not only factory pull requests, route them directly to the
 reviewer with the automation's `agent:` field:
 
 ```yaml
@@ -159,11 +181,11 @@ triggers:
         not_in: [wip]
 ```
 
-`pull_request_synchronized` fires on every push to an open PR, and
-`pull_request_opened` fires for drafts too, so the opt-out label is the
-practical volume control. An automation fires once per delivery even when
-several of its triggers match the same event.
+The `pull_request_synchronized` event fires on every push to an open pull
+request, and `pull_request_opened` fires for drafts too, so an opt-out label
+is the practical way to control volume. An automation fires once per
+delivery, even when several of its triggers match the same event.
 
-For recurring work with no human-facing intake, such as a dependency sweep,
-see the cron automation in
+For recurring work that doesn't start from a human request, such as a
+dependency sweep, see the cron automation in
 [`06-common-automations`](../06-common-automations).

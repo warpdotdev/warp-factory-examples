@@ -10,4 +10,4 @@ triggers:
 ---
 A pull request was opened against the default branch. If it is a draft,
 stop silently. Otherwise review it and post your findings and verdict on
-the PR.
+the pull request.
