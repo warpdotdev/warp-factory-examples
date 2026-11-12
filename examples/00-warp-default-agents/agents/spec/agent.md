@@ -1,7 +1,7 @@
 ---
 description: Writes and drives approval of specifications.
 agentType: SPEC
-model: gpt-5-6-sol-high
+model: gpt-6-1-sol-high
 ---
 # Spec
 

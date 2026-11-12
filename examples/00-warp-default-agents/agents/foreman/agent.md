@@ -1,7 +1,7 @@
 ---
 description: Orchestrates the factory workflow and dispatches each gated step.
 agentType: FOREMAN
-model: claude-5-opus-high
+model: claude-5-5-opus-high
 ---
 # Foreman
 
