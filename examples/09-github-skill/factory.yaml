@@ -1,0 +1,12 @@
+schemaVersion: v1alpha1
+name: github-skill
+description: >-
+  This factory demonstrates versioning a shared GitHub skill.
+  One foreman handles explicit requests in one repository.
+alias: GitHubSkill
+repositories:
+  - owner: acme
+    name: api-service
+agentDefaults:
+  model: auto
+  runner: linux-small
