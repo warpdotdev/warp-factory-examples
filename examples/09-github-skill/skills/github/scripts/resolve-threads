@@ -29,10 +29,10 @@ Arguments:
   --commit-url    Full URL of the revision commit (alternative to --commit-sha;
                   use when you already have the complete URL).  If both are
                   given, --commit-url takes precedence.
-  --footer        Footer line linking to the session and run (e.g.
-                  "[Open session](...) · [View in factory](...)").
+  --footer        Footer line linking to the root run (e.g.
+                  "[View in factory](...)").
                   Appended to every resolved thread's reply.
-                  Pass an empty string when neither link is available.
+                  Pass an empty string when the link is unavailable.
 
 Exits 0 on success (including when --thread-ids resolves to an empty list).
 Exits nonzero on hard errors (gh not installed, API failure, unknown thread ID).
@@ -185,8 +185,8 @@ def main(argv=None):
         "--footer",
         required=True,
         help=(
-            "Footer line linking to the session and run, appended to the reply "
-            "posted on every resolved thread. May be empty when neither link is available."
+            "Footer line linking to the root run, appended to the reply "
+            "posted on every resolved thread. May be empty when the link is unavailable."
         ),
     )
     args = parser.parse_args(argv)
