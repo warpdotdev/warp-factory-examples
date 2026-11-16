@@ -149,6 +149,39 @@ class CheckConventionsTest(unittest.TestCase):
                     result = run_checker(root)
                     self.assertEqual(result.returncode, 1, f"{label}: {result.stdout}")
 
+    def test_github_snapshot_exemption_is_limited_to_exact_path(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            example = write_clean_example(root).rename(
+                root / "examples" / "09-github-skill"
+            )
+            snapshot = example / "skills" / "github" / "SKILL.md"
+            snapshot.parent.mkdir(parents=True)
+            snapshot.write_text("Each Factory uses this historical skill.\n")
+            result = run_checker(root)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+            sibling = example / "skills" / "custom" / "SKILL.md"
+            sibling.parent.mkdir()
+            sibling.write_text(snapshot.read_text())
+            result = run_checker(root)
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn(str(sibling.relative_to(root)), result.stdout)
+            self.assertNotIn(str(snapshot.relative_to(root)), result.stdout)
+
+    def test_github_snapshot_still_gets_structure_checks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            example = write_clean_example(root).rename(
+                root / "examples" / "09-github-skill"
+            )
+            snapshot = example / "skills" / "github" / "SKILL.md"
+            snapshot.parent.mkdir(parents=True)
+            snapshot.write_text("runner: missing-runner\n")
+            result = run_checker(root)
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn("missing-runner", result.stdout)
+
     def test_allowed_oz_usages_do_not_fire(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

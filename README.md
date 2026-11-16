@@ -53,6 +53,10 @@ These examples use Warp Factories configuration schema version `v1alpha1`.
   Request code changes by mentioning the factory in a designated Slack
   channel. The foreman confirms the request and returns progress, questions,
   and the pull request link in the same thread.
+- [`examples/09-github-skill`](examples/09-github-skill):
+  Version a shared GitHub skill and review its updates separately from the
+  factory configuration. The starting point is an exact historical default
+  skill from before managed GitHub MCP support.
 - [`examples/10-linear-to-pr`](examples/10-linear-to-pr):
   Delegate Linear issues from one team to a factory. The agents report
   progress in the agent session and attach the pull request to the issue

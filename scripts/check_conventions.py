@@ -50,7 +50,10 @@ DEFAULT_ROOT = Path(__file__).resolve().parent.parent
 
 # Verbatim copies of upstream files. Exempt from terminology rules; see
 # CONTRIBUTING.md ("Before opening a PR").
-VENDORED = {"scripts/validate_factory_files.py"}
+VENDORED = {
+    "scripts/validate_factory_files.py",
+    "examples/09-github-skill/skills/github/SKILL.md",
+}
 
 # This checker and its tests have to name the banned terms in order to ban
 # them and to prove the rules fire, so they are exempt from the terminology
