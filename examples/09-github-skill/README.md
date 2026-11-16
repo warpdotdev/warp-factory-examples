@@ -66,8 +66,7 @@ the runtime.
   mechanics do not require a stacked-PR workflow or authorize merging.
 
 The update uses the shared default, not a particular factory's automatic
-approval or reviewer policy. The helper's footer documentation also follows
-the default's root-run link format; its GitHub operations remain CLI-only.
+approval or reviewer policy. The legacy helper is unchanged from the baseline.
 
 ## Customize the example
 
@@ -105,8 +104,8 @@ testing writes. Parser validation does not test any of these behaviors.
 
 ## Snapshot provenance
 
-`skills/github/SKILL.md` and `skills/github/scripts/resolve-threads` are
-unchanged copies from `logic/factorysource/defaults/skills/github/` in
+`skills/github/SKILL.md` is an unchanged copy from
+`logic/factorysource/defaults/skills/github/SKILL.md` in
 `warpdotdev/warp-server` at commit
 `bbd2b4f0f0e6751dbf97cf3222bb1f5dae942475`. File modes are also preserved.
 The skill's Git blob is `f4bb836fd452b39aebf6e6560ef3c2615eb2423a`.
@@ -114,18 +113,20 @@ The skill's Git blob is `f4bb836fd452b39aebf6e6560ef3c2615eb2423a`.
 The baseline copied the same paths from
 `249c621bc8f0e001bcffd8413d63f5b26f539249`, with skill blob
 `ea7f0d6e436bc596fe11f8d423b7c801f5ec4013`.
+`skills/github/scripts/resolve-threads` still matches that baseline exactly.
 
 Maintainers with access to that source repository can check the copies.
 From this repository's root, set `WARP_SERVER` to a local checkout that
-contains the pinned commit, then run:
+contains both pinned commits, then run:
 
 ```bash
-SOURCE_REF=bbd2b4f0f0e6751dbf97cf3222bb1f5dae942475
+SKILL_REF=bbd2b4f0f0e6751dbf97cf3222bb1f5dae942475
+BASELINE_REF=249c621bc8f0e001bcffd8413d63f5b26f539249
 SOURCE_DIR=logic/factorysource/defaults/skills/github
-for file in SKILL.md scripts/resolve-threads; do
-  git -C "$WARP_SERVER" show "$SOURCE_REF:$SOURCE_DIR/$file" \
-    | cmp - "examples/09-github-skill/skills/github/$file" || break
-done
+git -C "$WARP_SERVER" show "$SKILL_REF:$SOURCE_DIR/SKILL.md" \
+  | cmp - examples/09-github-skill/skills/github/SKILL.md
+git -C "$WARP_SERVER" show "$BASELINE_REF:$SOURCE_DIR/scripts/resolve-threads" \
+  | cmp - examples/09-github-skill/skills/github/scripts/resolve-threads
 ```
 
 No output means both files match. This checks content, not runtime behavior.
