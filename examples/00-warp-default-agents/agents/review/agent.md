@@ -1,7 +1,7 @@
 ---
 description: Reviews factory pull requests and routes findings to rework or human resolution.
 agentType: REVIEW
-model: gpt-5-6-terra-high
+model: gpt-6-1-terra-high
 ---
 # Review
 
