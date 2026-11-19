@@ -381,7 +381,7 @@ plus one committed spec file.
 1. Follow [the shared repository preparation](../sdlc-issue-to-pr#prepare-the-two-repositories).
    Use a fresh fork or the same unchanged `blueprint-demo` baseline. Acquire
    the definition and helper at
-   [81205a3c5a43e20cc6bd95b64bd8d3f7f098cdbb](https://github.com/warpdotdev/warp-factory-examples/tree/81205a3c5a43e20cc6bd95b64bd8d3f7f098cdbb).
+   [35c885c5116e6b9a72e03e8f9cee0074cc1e622e](https://github.com/warpdotdev/warp-factory-examples/tree/35c885c5116e6b9a72e03e8f9cee0074cc1e622e).
    Copy `examples/product-change-implementation/.` into a separate empty
    definition repository instead of `sdlc-issue-to-pr`.
 2. Complete [Customize the example](#customize-the-example). Set the one work

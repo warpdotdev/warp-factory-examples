@@ -251,7 +251,7 @@ MCP](https://docs.warp.dev/factories/factory-mcp/):
 
 ```text title="Set up assignment-based GitHub intake"
 Read the example at
-https://github.com/warpdotdev/warp-factory-examples/tree/main/examples/github-assigned-issue
+https://github.com/warpdotdev/warp-factory-examples/tree/35c885c5116e6b9a72e03e8f9cee0074cc1e622e/examples/github-assigned-issue
 and set up the same factory for my repository OWNER/REPO.
 
 Keep the tree's shape: one foreman, one implementation agent, one

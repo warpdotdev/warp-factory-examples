@@ -217,7 +217,7 @@ Fill in the four values first.
 
 ```text title="Set up Slack intake for my repository"
 Read the example at
-https://github.com/warpdotdev/warp-factory-examples/tree/main/examples/slack-to-pr
+https://github.com/warpdotdev/warp-factory-examples/tree/35c885c5116e6b9a72e03e8f9cee0074cc1e622e/examples/slack-to-pr
 and set up the same factory for my repository. Copy its tree into my
 definition repository and replace these placeholders:
 
