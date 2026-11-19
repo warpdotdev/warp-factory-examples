@@ -1,0 +1,40 @@
+schemaVersion: v1alpha1
+name: blueprint-revision-loop
+description: Check an existing release note or draft one, then revise until it meets the request.
+repositories: []
+agentDefaults:
+  model: auto
+blueprint:
+  worker: foreman
+  start:
+    to:
+      - stage: check
+        when: The request supplies an existing release-note draft.
+      - stage: draft
+        when: The request asks for a release note and supplies the facts to include.
+  stages:
+    draft:
+      worker: foreman
+      inputs: Supplied release facts, the current draft if any, and requested corrections.
+      prompt: |
+        Write or revise one release note of at most 40 words. Describe the
+        user-visible change using only the supplied facts. Correct every
+        finding from check without inventing claims. Keep the note in this
+        conversation; do not publish it.
+      outputs: The current release-note text.
+      to: check
+    check:
+      worker: foreman
+      inputs: The current draft and supplied release facts.
+      prompt: |
+        Compare the current draft with the supplied facts and the 40-word
+        limit. List unsupported claims and corrections, or return the final
+        note with its word count when no correction is needed. If a required
+        fact is missing, identify it instead of inventing it. This is a
+        self-check in the same conversation, not independent review.
+      outputs: Corrections, a missing-fact question, or the final note and word count.
+      to:
+        - stage: draft
+          when: Corrections are needed and the supplied facts are enough to make them.
+        - stage: end
+          when: check reports no corrections or missing facts, and the current note is at most 40 words.

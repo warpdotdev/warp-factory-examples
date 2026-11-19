@@ -22,3 +22,8 @@ and deliver it as a pull request that is ready for review.
 4. Include the results in the pull request description.
 5. Open the pull request against the default branch and link the issue.
 6. Report the pull request reference to the foreman.
+
+Execute only the stage dispatched from `factory.yaml`. Return its declared
+outputs to the foreman; do not choose the next stage. Relay questions through
+the foreman and pause dependent work. Make revisions on the existing branch
+and PR. Report the delivered head and actual check results.

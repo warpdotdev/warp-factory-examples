@@ -48,6 +48,17 @@ from pathlib import Path
 
 DEFAULT_ROOT = Path(__file__).resolve().parent.parent
 
+BLUEPRINT_EXAMPLES = {
+    "02-sdlc-issue-to-pr",
+    "03-multi-harness",
+    "13-blueprint-linear",
+    "14-blueprint-revision-loop",
+    "15-blueprint-human-gate",
+    "24-monorepo-product",
+    "25-related-services",
+    "26-product-change-implementation",
+}
+
 # Verbatim copies of upstream files. Exempt from terminology rules; see
 # CONTRIBUTING.md ("Before opening a PR").
 VENDORED = {
@@ -94,6 +105,11 @@ def example_dirs(root: Path) -> list[Path]:
 def check_structure(root: Path, problems: list[str]) -> None:
     for example in example_dirs(root):
         rel = example.relative_to(root)
+        if example.name in BLUEPRINT_EXAMPLES:
+            if not re.search(r"^blueprint:\s*$", (example / "factory.yaml").read_text(), re.M):
+                problems.append(f"{rel}: this example requires a top-level blueprint")
+            if not list((example / "agents").glob("*/agent.md")):
+                problems.append(f"{rel}: retain the agents/<name>/agent.md layout")
         runners = {p.stem for p in (example / "runners").glob("*.yaml")}
         agents = {p.name for p in (example / "agents").iterdir() if p.is_dir()} if (
             example / "agents"

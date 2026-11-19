@@ -13,3 +13,89 @@ repositories:
 agentDefaults:
   model: auto
   runner: linux-services
+blueprint:
+  worker: foreman
+  start:
+    to: scope
+  stages:
+    scope:
+      worker: foreman
+      inputs: |
+        Labeled issue, linked PRs, provider contract, and consumer usage.
+      outputs: |
+        Changed repositories in order, compatibility rule, existing PRs, or scope rejection.
+      prompt: |
+        Read the issue and affected code. Choose provider-only, consumer-only, or
+        paired additive scope. If the consumer needs a contract absent from the
+        provider's current default branch, scope both repositories. Paired work
+        changes the provider first and must preserve the deployed consumer.
+        Decline breaking contracts or unattached repositories with one explanatory
+        issue comment before any branch. Ask about ambiguous scope and wait.
+        Post the accepted repository list, order, and reason on the issue.
+      to:
+        - stage: end
+          when: Scope is rejected.
+        - stage: implement
+          when: Scope is accepted for one repository or an additive pair.
+    implement:
+      worker: implementer
+      inputs: |
+        Issue, ordered repository list, compatibility rule, and existing PRs.
+      outputs: |
+        One PR and head per changed repository, compatibility evidence, exact checks, and scope mismatches.
+      prompt: |
+        Follow the implementation procedure in your worker file. Create only one
+        PR per changed repository. For a pair, implement provider first, link both
+        PRs, and state human merge order. For one repository, explain why no
+        companion change is needed. Probe the consumer against the provider's
+        current default branch, then restore and regenerate from the vendored
+        schema and rerun the normal checks regardless of probe result. Report
+        scope mismatches rather than inventing a provider PR or breaking change.
+      to:
+        - stage: scope
+          when: Implementation discovers a scope or compatibility mismatch.
+        - stage: review
+          when: The scoped PR set and check results are available.
+    review:
+      worker: reviewer
+      inputs: |
+        Scoped PR set and current heads, issue, repository order, and compatibility rule.
+      outputs: |
+        Reviewed SHA per PR, advisory contract findings, and resolved human decisions.
+      prompt: |
+        Perform one advisory contract-consistency pass using your worker's
+        checklist. Do not expand into style review, rerun tests, or claim a
+        live-service integration test. Return findings only to the foreman.
+        Relay judgment calls through the foreman and wait for a decision.
+      to:
+        - stage: correct
+          when: Unambiguous actionable contract findings remain.
+        - stage: handoff
+          when: No actionable contract findings remain.
+    correct:
+      worker: implementer
+      inputs: |
+        Contract findings, human decisions, reviewed SHAs, and existing PRs.
+      outputs: |
+        Corrected heads per repository, changes, exact checks, and remaining limits.
+      prompt: |
+        Continue in the existing implementation conversation. Correct findings
+        on each existing branch and PR. Repeat affected repository and contract
+        checks, including restoration after a consumer probe. Report each new
+        head and what changed. This workflow has no second independent review;
+        do not claim these revised heads were reviewed.
+      to: handoff
+    handoff:
+      worker: foreman
+      inputs: |
+        PR set, reviewed SHAs, current heads, corrections, checks, and limits.
+      outputs: |
+        Issue report with explicit PR states, review coverage, compatibility, and human merge order.
+      prompt: |
+        For one repository, link its PR, checks, and why the other needs no change.
+        For a pair, require reciprocal links, checks, provider-first merge order,
+        and what the deployed consumer sees between merges. Name each reviewed
+        SHA and current head. If corrected, say the revised head was not
+        independently re-reviewed. Disclose failed or missing checks.
+        Finish after handoff. A human merges.
+      to: end

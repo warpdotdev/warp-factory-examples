@@ -29,3 +29,8 @@ specification.
 3. Open the draft pull request and request review from the humans the foreman
    names.
 4. Do not begin implementation. A human approves the spec first.
+
+Execute only the stage dispatched from `factory.yaml`. Return its declared
+outputs to the foreman; do not choose the next stage. Relay questions through
+the foreman and pause dependent work. Revise the spec on the existing branch
+and PR. Report its committed revision and actual check results.

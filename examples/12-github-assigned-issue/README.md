@@ -275,3 +275,6 @@ enabled, an issue carrying both labels that neither route should handle.
 List manual access steps separately; do not grant extra permissions or
 apply the definition without my approval.
 ```
+
+For triage, committed-spec approval, and independent review of revisions, see
+[`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr).

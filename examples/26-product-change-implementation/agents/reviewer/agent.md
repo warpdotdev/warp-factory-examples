@@ -40,3 +40,8 @@ report defects to the foreman. Your verdict is advisory, and a human merges.
 - Do not block on style the repository's linter accepts.
 - Nits never cause a revision round. List them at the end of the report for
   the human.
+
+Execute only the stage dispatched from `factory.yaml`. Return its declared
+outputs to the foreman; do not choose the next stage. Relay questions through
+the foreman and pause dependent work. Report the reviewed head and the actual
+check evidence. Review revisions on the existing PR.

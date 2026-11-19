@@ -23,11 +23,15 @@ foreman.
 ## Procedure
 1. Read the issue, then the code it touches: the component, its tests, and
    the nearest existing example of the same kind of change.
-2. Resolve every open question from the issue and the code. Do not ask the
-   requester. If neither the issue nor the code resolves an open question,
-   choose the most careful interpretation and record it under "Assumptions"
-   so a human can correct it before approving.
+2. Identify unresolved choices in the issue and code. Record proposed choices
+   under "Assumptions" for human approval. Relay blocking questions through the
+   foreman and pause dependent work. Never approve an assumption yourself.
 3. Write the specification using the `spec-format` skill. Keep it short.
    For a small change, the acceptance criteria should make up most of it.
 4. Commit the spec, open the draft pull request, and report back. Do not begin
    implementation. A human approves the specification first.
+
+Execute only the stage dispatched from `factory.yaml`. Return its declared
+outputs to the foreman; do not choose the next stage. Relay questions through
+the foreman and pause dependent work. Revise the spec on the existing branch
+and PR. Report its committed revision and actual check results.

@@ -2,7 +2,7 @@ schemaVersion: v1alpha1
 name: product-change-implementation
 description: >-
   This factory turns a labeled issue into a short specification in a draft
-  pull request. A human approves it with a second label before the factory
+  pull request. A human approves the committed spec before the factory
   implements and reviews the change in the same pull request.
 alias: Webapp
 repositories:
@@ -11,3 +11,120 @@ repositories:
 agentDefaults:
   model: auto
   runner: linux-node
+blueprint:
+  worker: foreman
+  start:
+    to: intake
+  stages:
+    intake:
+      worker: foreman
+      inputs: |
+        Labeled issue or filtered mention, linked spec PR, and existing task conversation.
+      outputs: |
+        Scope decision, existing PR, current spec revision, and pending matching gate or revision request.
+      prompt: |
+        Scope small user-visible changes to acme/webapp and one PR. Also permit
+        the bounded documentation setup exercise in this example's README.
+        Reject questions, unreproduced bugs, and multi-repository work with an
+        explanation before any branch. Apply factory:<alias> to in-scope work
+        before asking for an answer. Read linked artifacts and the conversation:
+        factory-ready with an open spec PR links it instead of creating another.
+        A mention continues the matching task and stage. An approval-shaped
+        comment with no pending matching spec authorizes nothing and creates no
+        work. A closed PR invalidates its approval; a replacement needs fresh
+        approval. A legacy spec-approved label is never an approval signal.
+      to:
+        - stage: end
+          when: Scope is rejected, an existing open spec was only relinked, or a mention has no matching pending work.
+        - stage: spec
+          when: A new in-scope issue needs a spec, or the current spec requires revision.
+        - stage: implement
+          when: A same-contract revision is requested for an already approved spec on its open PR.
+    spec:
+      worker: spec
+      inputs: |
+        Issue, existing spec PR when present, human edits, and requested spec changes.
+      outputs: |
+        Spec PR, committed path and revision, assumptions, and spec-review answer with approved revision.
+      prompt: |
+        Read the issue, affected code, and any human edits. Use spec-format.
+        Commit docs/specs/<issue-number>-<slug>.md on factory/<issue-number>-<slug>
+        in a draft PR. Keep it human-editable. Revisions reuse that PR and branch.
+        Record careful assumptions for approval; relay blocking questions through
+        the foreman instead of deciding for a person. Do not implement.
+      gates:
+        spec-review:
+          prompt: |
+            In the original issue, link the open draft PR, spec file, and committed
+            revision. Ask a human to reply there with a new @warp mention,
+            identifying approval of that revision, requested changes, or cancellation.
+            If the human edits the file, read it again and confirm which revision
+            the answer approves. Request approval again for a revised spec.
+          outputs: |
+            Explicit human approval of the current committed spec on the open PR,
+            requested changes, or explicit cancellation, with the referenced
+            revision. Old approval, a stale label, bot comment, unrelated answer,
+            question, or reviewer confidence does not approve the spec.
+      to:
+        - stage: spec
+          when: spec-review requests changes.
+        - stage: end
+          when: spec-review explicitly cancels the work.
+        - stage: implement
+          when: spec-review explicitly approves the current committed revision.
+    implement:
+      worker: implementer
+      inputs: |
+        Issue, open spec PR, approved path and revision including human edits, and actionable findings.
+      outputs: |
+        Same draft PR, head SHA, changes, actual checks, and any contract question or blocker.
+      prompt: |
+        Read the approved committed file, not the spec agent's conversation.
+        Implement on that PR's existing branch. Follow repository patterns, add
+        meaningful tests, run documented checks, and self-review against the spec.
+        Retitle and update the same PR but keep it draft. Report the delivered
+        head and exact results. Relay ambiguity through the foreman and pause
+        dependent work; a contract change needs a revised approved spec.
+      to:
+        - stage: spec
+          when: A human decision requires a contract change.
+        - stage: review
+          when: The implementation result and its checks or explicit blockers are reported.
+    review:
+      worker: reviewer
+      inputs: |
+        Current PR head, issue, approved committed spec, and previous findings.
+      outputs: |
+        Reviewed SHA, evidence, actionable findings, and human-decision answer when needed.
+      prompt: |
+        Independently review the current head against the approved file and
+        acceptance criteria. Verify claims from the diff and checks. Report
+        findings only to the foreman, separating corrections from judgment calls.
+        Re-review every actionable revision. Nits alone do not cause a revision.
+      gates:
+        human-decision:
+          when: A judgment call needs a product or technical decision.
+          prompt: |
+            Relay the finding, options, and consequences through the foreman in the original issue.
+          outputs: |
+            A contract change, an unambiguous correction, or explicit acceptance of a nonblocking finding.
+      to:
+        - stage: spec
+          when: The human decision changes the contract.
+        - stage: implement
+          when: Unambiguous actionable findings remain.
+        - stage: handoff
+          when: The current head is reviewed or a blocked result is explicitly disclosed.
+    handoff:
+      worker: foreman
+      inputs: |
+        Spec path and approved revision, PR, current and reviewed heads, checks, findings, and limits.
+      outputs: |
+        Issue report with the draft PR, review coverage, actual verification, and remaining questions.
+      prompt: |
+        Confirm factory:<alias> on the issue and PR; disclose label failures.
+        Accept only a reviewed head or an explicitly disclosed blocked result.
+        Report the spec, PR, actual checks, findings, and remaining questions.
+        Keep the PR draft. A person decides readiness and merge.
+        Finish after handoff without merging the PR.
+      to: end

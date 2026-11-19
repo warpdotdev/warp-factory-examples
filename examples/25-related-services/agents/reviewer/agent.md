@@ -26,7 +26,7 @@ For one pull request:
    provider's current `main`, and its probe against that schema passed.
 3. Confirm the pull request links the issue, explains why no companion change
    is needed, and records the repository's own checks and contract-check
-   results. For a consumer pull request, require passing positive checks after
+   results. For a consumer pull request, require passing normal checks after
    the probe and a final generated client matching the vendored schema. Do not
    require a second pull request, reciprocal links, or a merge window.
 
@@ -42,6 +42,11 @@ For two pull requests:
 3. Confirm each pull request description links the issue and the other pull
    request, states the merge order, and carries the contract-check results,
    including the consumer's result against the provider's current `main`
-   schema and passing positive checks after regeneration from the vendored
+   schema and passing normal checks after regeneration from the vendored
    schema. Confirm the final generated client matches that schema, not the
    probe schema.
+
+Execute only the stage dispatched from `factory.yaml`. Return its declared
+outputs to the foreman; do not choose the next stage. Relay questions through
+the foreman and pause dependent work. Report the reviewed head and the actual
+check evidence for the existing PRs. This workflow has one advisory review.

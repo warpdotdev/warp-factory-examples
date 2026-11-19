@@ -1,0 +1,42 @@
+schemaVersion: v1alpha1
+name: blueprint-human-gate
+description: Ask a person to choose an incident update's audience before writing it.
+repositories: []
+agentDefaults:
+  model: auto
+blueprint:
+  worker: foreman
+  start:
+    to: prepare
+  stages:
+    prepare:
+      worker: foreman
+      inputs: Incident facts supplied in the request.
+      prompt: |
+        Summarize the supplied incident facts without drafting the update.
+        Prepare to ask whether the update is for customers or the internal
+        incident channel. Do not choose the audience for the requester.
+      outputs: The supplied facts and the audience-choice answer.
+      gates:
+        audience-choice:
+          prompt: |
+            Show the facts in the originating conversation. Ask the requester
+            to choose customers, the internal incident channel, or cancellation.
+          outputs: |
+            An explicit choice of customers or the internal incident channel,
+            or explicit cancellation. A question or unrelated reply is not a choice.
+      to:
+        - stage: end
+          when: audience-choice explicitly cancels the update.
+        - stage: write
+          when: audience-choice selects customers or the internal incident channel.
+    write:
+      worker: foreman
+      inputs: The supplied facts and explicit audience choice.
+      prompt: |
+        Write a short incident update for the selected audience using only
+        the supplied facts. For customers, describe impact and recovery
+        without internal component names. For the internal incident channel,
+        retain the component names. Return text here; do not publish it.
+      outputs: The update text and its intended audience in the originating conversation.
+      to: end

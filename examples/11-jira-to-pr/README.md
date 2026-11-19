@@ -222,3 +222,6 @@ Give me matching-project, unmatched-project, and session-reply trials, and
 check for overlapping handlers. Do not register the factory or change
 anything in Jira without asking me first.
 ```
+
+For triage, committed-spec approval, and independent review of revisions, see
+[`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr).

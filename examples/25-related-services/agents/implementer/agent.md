@@ -68,3 +68,8 @@ against the provider's current `origin/main`.
 
 Keep each change scoped to the issue. If the provider change cannot stay
 additive, stop and report to the foreman instead of opening pull requests.
+
+Execute only the stage dispatched from `factory.yaml`. Return its declared
+outputs to the foreman; do not choose the next stage. Relay questions through
+the foreman and pause dependent work. Make revisions on the existing branch
+and PR. Report the delivered head and actual check results.

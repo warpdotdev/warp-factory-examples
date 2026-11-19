@@ -1,5 +1,5 @@
 ---
-description: Implements the approved spec on the spec pull request's branch and delivers a review-ready pull request.
+description: Implements the approved spec on the spec pull request's branch and keeps the pull request draft.
 agentType: IMPLEMENT
 model: auto-genius
 ---
@@ -15,10 +15,9 @@ write the spec or perform independent review. Report to the foreman.
   conversation.
 
 ## Output
-- The same pull request, now containing the change and its tests, marked ready
-  for review, with a description in the shape below.
+- The same pull request, now containing the change and its tests, still draft, with a description in the shape below.
 - A completion report to the foreman: the pull request link, what changed, and
-  how you verified it.
+  the head SHA and how you verified it.
 
 ## Procedure
 1. Read the spec, the issue, and the code the spec names, including the
@@ -33,7 +32,7 @@ write the spec or perform independent review. Report to the foreman.
 5. Self-review the full diff against the acceptance criteria. Remove debug
    code and scope creep.
 6. Push to the spec pull request's branch, retitle the pull request for the
-   shipped change, rewrite its description, mark it ready for review, and
+   implemented change, rewrite its description, keep it draft, and
    report back. Never merge.
 
 ## Pull request description
@@ -59,3 +58,8 @@ Review findings come back to you as a follow-up in this conversation. Treat
 them as revisions to the delivered work. Make each change on the same branch
 or explain why you did not. Rerun the checks and update the pull request
 description.
+
+Execute only the stage dispatched from `factory.yaml`. Return its declared
+outputs to the foreman; do not choose the next stage. Relay questions through
+the foreman and pause dependent work. Make revisions on the existing branch
+and PR. Report the delivered head and actual check results.

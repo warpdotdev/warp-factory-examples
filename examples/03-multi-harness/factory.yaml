@@ -11,3 +11,61 @@ repositories:
 agentDefaults:
   model: auto
   runner: linux-standard
+blueprint:
+  worker: foreman
+  start:
+    to: intake
+  stages:
+    intake:
+      worker: foreman
+      inputs: |
+        Triggering request and existing issue or PR.
+      outputs: |
+        Intended recipient, scoped issue, existing PR, and missing prerequisites.
+      prompt: |
+        Check that the request is for this factory. Read linked work and confirm
+        the scoped issue and required harness credentials. Relay missing inputs
+        or questions to the requester and pause; do not substitute a harness.
+      to:
+        - stage: end
+          when: The request is not for this factory.
+        - stage: implement
+          when: The scoped inputs and required credentials are available.
+    implement:
+      worker: implementer
+      inputs: |
+        Scoped issue, existing branch and PR when present, and actionable findings.
+      outputs: |
+        PR, delivered head, changes, exact checks and results, and blockers.
+      prompt: |
+        Implement the issue on Claude Code using repository conventions. Reuse
+        the same branch and PR on revision. Run the repository's tests and
+        linters, record results in the PR, and report the head. Relay questions
+        through the foreman and pause affected work. Do not independently review.
+      to: review
+    review:
+      worker: reviewer
+      inputs: |
+        PR, current head, issue, and previous findings.
+      outputs: |
+        Reviewed head, evidence, unambiguous findings, and unresolved human decisions.
+      prompt: |
+        Review the current diff on Codex. Report file and line, impact, and a
+        correction for each finding. Relay judgment calls through the foreman
+        and wait for the answer. Re-review revisions. Never approve or merge.
+      to:
+        - stage: implement
+          when: Unambiguous actionable findings remain.
+        - stage: handoff
+          when: No actionable findings remain.
+    handoff:
+      worker: foreman
+      inputs: |
+        PR, delivered and reviewed heads, checks, findings, and limits.
+      outputs: |
+        Final report in the original conversation with explicit PR state.
+      prompt: |
+        Return the PR, checks, review evidence, and unresolved limits where the
+        request originated. Report credential or check failures as blockers.
+        A human merges; ending this workflow means handoff, not merge.
+      to: end

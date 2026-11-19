@@ -6,6 +6,13 @@ provider first, then consumer. The merges are not atomic. One-repository
 work produces one pull request with evidence of compatibility with the
 unchanged repository. A human controls every merge.
 
+The Blueprint in `factory.yaml` routes `scope` → `implement` → `review`.
+It runs one advisory contract review per work item. Actionable findings go
+through `correct` on the existing implementation conversation and PRs, then
+`handoff` without a second review. With no actionable findings, review goes
+straight to handoff. The foreman reports each reviewed SHA and current head
+and identifies corrected heads that were not independently re-reviewed.
+
 ## What this example shows
 
 - Both repositories listed in `repositories` are checked out under
@@ -20,7 +27,7 @@ unchanged repository. A human controls every merge.
   no pair-only requirements.
 - The implementer runs a contract check in each repository, including the
   consumer's check against the provider's current `main`. It then
-  regenerates the client and runs positive checks using the vendored schema.
+  regenerates the client from the vendored schema and reruns the normal checks.
 - The reviewer checks only contract consistency, for one pull request or a
   pair.
 - A `factory-ready` label on an issue in either repository starts work.
@@ -68,7 +75,7 @@ commands.
   points it at another schema, which is how the implementer checks the
   consumer against the provider's current `main`. This probe overwrites the
   generated client, so the implementer regenerates from the vendored schema
-  and reruns the positive checks before publishing, even if the probe fails.
+  and reruns the normal checks before publishing, even if the probe fails.
 
 ## Runner configuration
 
@@ -136,7 +143,7 @@ stops.
 2. Replace `acme/api-service` (provider) and `acme/webapp` (consumer) with
    repositories your Warp team's GitHub installation can reach. They appear
    in `factory.yaml`, `automations/issue-labeled/automation.md`,
-   `runners/linux-services.yaml`, `agents/foreman/agent.md`,
+   the Blueprint prompts, `runners/linux-services.yaml`, `agents/foreman/agent.md`,
    `agents/implementer/agent.md`, and `agents/reviewer/agent.md`. Keep the
    roles distinct. The provider owns the contract.
 3. Replace the prefetch commands in `runners/linux-services.yaml`.
@@ -176,9 +183,6 @@ containing `factory.yaml`, as described in
 [Use an example](../../README.md#use-an-example). Register it before
 creating test issues.
 
-Use the sample below to compare the factory's output with the expected
-behavior. Then run the checks under [First-run checks](#first-run-checks).
-
 ### Sample task and expected output
 
 A maintainer opens `acme/webapp#118`, "Show fulfillment status on the orders
@@ -189,8 +193,8 @@ page", with this body.
 > (`pending`, `shipped`, or `delivered`) to each order in `GET /orders`, and
 > render it as a column in the orders table.
 
-The maintainer labels it `factory-ready`. You should see the following
-results.
+The maintainer labels it `factory-ready`. The following output is
+illustrative; compare your run's actual artifacts and checks with it.
 
 1. The foreman comments on #118 that this changes the contract.
    `api-service` provides `status` and `webapp` consumes it, so the API
@@ -218,6 +222,7 @@ results.
    enum also has `delivered`" is unambiguous and goes back to the
    implementer, which fixes it on the same branch.
 5. The foreman posts a final comment on #118 with both pull request links, the
+   reviewed SHAs, revised heads, corrections not independently re-reviewed,
    merge order, and the note that the deployed web app ignores `status` until
    its pull request merges.
 6. A human merges `[1/2]`, waits for it to land, and merges `[2/2]`.
@@ -226,7 +231,7 @@ For a consumer-only task, such as "Sort the orders table by order ID" using an
 existing API field, the foreman dispatches only `webapp`. The implementer
 leaves the vendored schema unchanged and opens one pull request without
 `[n/2]` or a "Linked PR" section. Its Verification section records the normal
-checks, a passing probe against provider `main`, and passing positive checks
+checks, a passing probe against provider `main`, and passing normal checks
 after regenerating from the vendored schema. The reviewer checks compatibility
 with the unchanged API and the foreman posts the one pull request link and
 results. There is no provider pull request or merge window. A provider-only
@@ -260,12 +265,13 @@ pull request or merge window.
 ## Set up with an agent
 
 <!-- terminology-allow-begin -->
-Paste this into your factory's foreman, the factory web composer, or a
-coding agent connected through Factory MCP.
+Replace the uppercase placeholders, then send this to your foreman through
+**New Chat** in the factory dashboard or to a coding agent connected through
+[Factory MCP](https://docs.warp.dev/factories/factory-mcp/).
 <!-- terminology-allow-end -->
 
 ```text title="Set up a related-services factory"
-Read https://github.com/warpdotdev/warp-factory-examples/tree/main/examples/25-related-services
+Read https://github.com/warpdotdev/warp-factory-examples/tree/81205a3c5a43e20cc6bd95b64bd8d3f7f098cdbb/examples/25-related-services
 and set up the same factory for my repositories. My provider repository is
 OWNER/PROVIDER; it owns the API contract. My consumer repository is
 OWNER/CONSUMER. Replace acme/api-service and acme/webapp everywhere they
@@ -277,7 +283,10 @@ change, the provider changes first and only additively, the two pull requests
 link both ways, and a human follows the posted merge order. One-repository
 work produces only one PR, verified against the unchanged repository, without
 a companion PR or merge window. Always regenerate the consumer client from
-its vendored schema and rerun positive checks after the provider-main probe.
+its vendored schema and rerun the normal checks after the provider-main probe.
+Keep the single advisory contract review. Correct unambiguous findings on the
+same PRs without a second review. Report reviewed SHAs and current heads,
+including corrections that were not independently re-reviewed. Never merge.
 Before you finish, list anything you could not do yourself: connecting GitHub,
 creating the factory-ready label in both repositories, and registering the
 definition.
