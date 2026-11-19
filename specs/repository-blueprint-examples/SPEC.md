@@ -6,7 +6,7 @@ Audit every example. Move the five multi-stage workflows to explicit Blueprints.
 
 - Work item: [docs #1045](https://github.com/warpdotdev/docs/issues/1045).
 - Requester: `hongyi-chen`.
-- Status: scope interview complete; approval of this committed specification is pending.
+- Status: approved by the requester at commit `960160b2d9d4c7d22fcf8e36d4363452e6a49cd4`.
 - Delivery: exactly two draft PRs, one in this repository and one in `warpdotdev/docs`.
 - Implementation reuses this specification's branch and PR. Do not create a third spec-only PR.
 - This specification expands the old example-02-only scope. It does not reopen or replace the merged docs work.
@@ -24,7 +24,7 @@ The [written answer](https://warpdev.slack.com/archives/C09BVK0PL3Y/p17951100004
 3. Add practical exercises to the existing 02 and 26 READMEs. Do not add an application fixture or another example directory.
 4. Include directly related docs corrections in a separate draft PR. Do not redo merged guides.
 
-These decisions approve the interview scope, not this unwritten-at-the-time specification. They do not authorize live configuration application, publication, or merge. Written approval of the committed specification remains required.
+These decisions approved the interview scope, not the then-unwritten specification. The requester subsequently answered “yes approved” to the approval request for committed specification `960160b2d9d4c7d22fcf8e36d4363452e6a49cd4`. See the [written approval](https://warpdev.slack.com/archives/C09BVK0PL3Y/p1795110569201039) and [approval record](https://github.com/warpdotdev/docs/issues/1045#issuecomment-7017292689). Approval covers this specification only. It does not authorize live configuration application, publication, or merge.
 
 ## Evidence and audit baseline
 
