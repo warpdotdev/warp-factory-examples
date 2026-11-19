@@ -235,7 +235,7 @@ MCP](https://docs.warp.dev/factories/factory-mcp/), after filling in the two
 angle-bracket values:
 
 ```text title="Set up Linear delegation to PR for my repository"
-Read https://github.com/warpdotdev/warp-factory-examples/tree/35c885c5116e6b9a72e03e8f9cee0074cc1e622e/examples/linear-to-pr
+Read https://github.com/warpdotdev/warp-factory-examples/tree/6087289dd40cdffe86ea37a7392b18fcad76aed4/examples/linear-to-pr
 and set up the same factory for my repository <owner/repo>, whose issues
 live in the Linear team <team name>. Keep the tree shape: one foreman, one
 implementation agent, one `linear` / `agent_session_created` automation

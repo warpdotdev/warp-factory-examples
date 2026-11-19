@@ -204,7 +204,7 @@ Use one of these options to give an agent the setup prompt below.
 <!-- terminology-allow-end -->
 
 ```text title="Set up Jira delegation for my repository"
-Read https://github.com/warpdotdev/warp-factory-examples/tree/35c885c5116e6b9a72e03e8f9cee0074cc1e622e/examples/jira-to-pr
+Read https://github.com/warpdotdev/warp-factory-examples/tree/6087289dd40cdffe86ea37a7392b18fcad76aed4/examples/jira-to-pr
 and set up the same factory for me. Ask which repository it should work on,
 which Jira Cloud project key it should serve, and where the definition
 files should live.
