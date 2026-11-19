@@ -372,6 +372,77 @@ Use a throwaway issue and record the actual results, not only run status.
 7. Observe a failed required check. Handoff must name the failure, not report
    the change as verified. The factory never approves or merges a PR.
 
+## Exercise: edit a committed spec
+
+Use a separate disposable issue to document helper unit tests. No React app
+or application fixture is needed. The final work diff is `CONTRIBUTING.md`
+plus one committed spec file.
+
+1. Follow [the shared repository preparation](../02-sdlc-issue-to-pr#prepare-the-two-repositories).
+   Use a fresh fork or the same unchanged `blueprint-demo` baseline. Acquire
+   the definition and helper at
+   [fc01e32555a0a7922b54da5a5f2c4bdc50296912](https://github.com/warpdotdev/warp-factory-examples/tree/fc01e32555a0a7922b54da5a5f2c4bdc50296912).
+   Copy `examples/26-product-change-implementation/.` into a separate empty
+   definition repository instead of example 02.
+2. Complete [Customize the example](#customize-the-example). Set the one work
+   repository to your fork, `alias: blueprint-spec-demo`, and the mention
+   filter's routing label to `factory:blueprint-spec-demo`. Preserve both
+   handles and the `factory-ready` label filter.
+3. Set `runners/linux-node.yaml` to `python:3.12-bookworm`. There are no
+   application setup commands to keep. Confirm `git --version` and
+   `python3 --version` in the actual runtime. In the `implement` and `review`
+   prompts, name the two Python commands below as checks for this exercise.
+   Keep worker/model settings, `agents/spec/skills/spec-format/SKILL.md`,
+   both automations, and the native gates.
+4. Validate the entire substituted definition with the helper acquired at
+   that same revision. Use the [validation command and authorization
+   boundary](../02-sdlc-issue-to-pr#validate-then-apply-only-with-authorization).
+   Commit it. Apply only with separate authorization to a disposable
+   GitHub-backed factory. Confirm the applied revision, automations,
+   `blueprint-demo` checkout and PR base before sending work.
+5. Open a new issue titled `Document helper unit tests` in the work fork:
+
+   ```text
+   Document these commands in CONTRIBUTING.md:
+   python3 scripts/test_check_conventions.py -v
+   python3 scripts/test_verify_default_agents.py -v
+   Keep implementation changes in CONTRIBUTING.md; the committed spec is the
+   only other allowed file. Run both commands and report their actual results.
+   Open a draft PR and wait for my approval of its committed spec before
+   implementation. Do not merge.
+   ```
+
+6. Apply `factory-ready`. Expect one spec-only draft PR and a `spec-review`
+   ask in the original issue naming the spec path and committed revision.
+   Implementation must remain blocked.
+7. On that same PR branch, edit and commit the spec file to require an explicit
+   distinction between helper unit tests and server validation. In the original
+   issue, reply with a new `@warp` mention, the spec PR link, and the edited
+   commit SHA: `Approve the current spec at this revision, including my
+   helper-test versus server-validation requirement. Keep the PR draft.
+   Do not merge.` If the gate asks which revision you mean, answer it.
+8. Confirm implementation reads that edited file and uses the existing
+   branch and PR. Run the two commands locally if you want to compare reported
+   results. Test counts are observations, not promises to put in the docs.
+   Inspect the independent review's head SHA.
+9. In the same issue, post: `@warp Revise the same PR to distinguish these
+   helper unit tests from the separate pinned-default snapshot check,
+   scripts/verify_default_agents.py. Keep implementation in CONTRIBUTING.md,
+   rerun both helper tests, and do not merge.`
+10. Confirm another independent review covers the revised head and the same
+    PR contains only `CONTRIBUTING.md` and the spec file. Leave it draft and
+    unmerged. Record the spec revision, both implementation heads, checks,
+    and run links.
+
+Use [the shared recovery steps](../02-sdlc-issue-to-pr#recover-a-blocked-exercise)
+for access, validation, nonmatching intake, stale approval, closed specs, failed
+checks, or human waits. A legacy `spec-approved` label or an approval without a
+pending matching spec never starts implementation.
+
+Availability, complete substituted-definition application, runner toolchain,
+and live setup-to-same-PR-revision evidence remain holds until actually tested.
+A parser pass or the illustrative trace cannot establish those results.
+
 ## Tune the factory
 
 Change one setting at a time. Record the requirements, starting commit,
