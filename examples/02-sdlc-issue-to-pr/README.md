@@ -5,9 +5,18 @@ Slack, Linear, and GitHub through triage, specification when needed, and
 implementation. A separate agent reviews the changes before the factory
 hands the pull request to a human.
 
-The example recreates the default agents and automations that Warp sets up
-for a new factory, as files you can read and edit. It also adds one custom
-agent.
+The inline Blueprint in `factory.yaml` owns the workflow. The worker files
+retain the default roles plus a mobile worker and their execution settings.
+For the historical default-agent snapshot, see
+[`00-warp-default-agents`](../00-warp-default-agents).
+
+The stages are `intake`, `triage`, `spec`, `implement`, `mobile-build`,
+`review`, `handoff`, and `completion`. Planning takes priority when explicitly
+requested or when work is large or ambiguous. `spec-review` waits for approval,
+changes, or cancellation of a committed spec revision. Review can open
+`human-decision`; revisions return to the responsible worker and independent
+review. `handoff-decision` waits for a revision, merge or closure information,
+or cancellation. Completion inspects every required PR; closed is not merged.
 
 ## What this example shows
 
@@ -44,7 +53,7 @@ automations/
   slack-dms/             slack/message_dm
   linear-agent-sessions/ linear/agent_session_created
   github-mention-assign/ github issue+PR mentioned/assigned
-  github-pr-closed-or-merged/  merged → complete work items
+  github-pr-closed-or-merged/  inspect the full linked PR set
 runners/
   linux-standard.yaml    4 vCPU / 8 GB, ubuntu:24.04
   linux-build.yaml       8 vCPU / 16 GB, golang:1.24-bookworm
@@ -117,15 +126,20 @@ triggers, any `@warp` mention starts work. If you also drop
    automations. The repository name `api-service` also appears in the
    `linux-build` setup command.
 2. Replace `acme/ios-app` with a repository that your installation can
-   access. It appears in `factory.yaml`, `agents/foreman/agent.md`,
+   access. It appears in `factory.yaml` (repository and mobile stage),
    `agents/mobile-build/agent.md`, and the `github-pr-closed-or-merged`
    automation, but not in the `github-mention-assign` automation.
 3. If you don't have macOS work, delete `agents/mobile-build/` and
    `runners/macos-build.yaml`, and remove the `ios-app` entry from
    `factory.yaml` and from the `github-pr-closed-or-merged` automation. Make
-   all of these changes together.
-4. Connect Slack to your Warp team.
-5. Connect Linear to your Warp team. The `integrations` list declares which
+   all of these changes together. Also remove the `mobile-build` stage and
+   every route, input, output, and instruction that names mobile work.
+   Route non-mobile implementation directly to `review`; remove mobile-only
+   branches from intake, triage, spec, review, and handoff.
+4. Connect Slack to your Warp team, or remove its integration declaration and
+   both Slack automations together.
+5. Connect Linear to your Warp team, or remove its declaration and automation
+   together for GitHub-only work. The `integrations` list declares which
    integrations the factory uses, but doesn't connect them.
 6. Replace the two skill stubs, `skills/repository-conventions/SKILL.md` and
    `agents/implementer/skills/testing-standards/SKILL.md`, with your real
@@ -160,31 +174,15 @@ Linear:
 2. Replace `automations/linear-agent-sessions` with an automation that uses
    the `jira` provider and the `agent_session_created` event. Jira filters use
    `project_keys` instead of team names.
-3. Update the Linear references in the triage prompt.
+3. Update tracker references in the `triage` stage and its worker prompt.
 
 ## Configure additional triggers
 
-Intake is defined by triggers, so you can point a factory at other kinds of
-events without changing its agents. For example, to review pull requests that
-humans open, and not only factory pull requests, route them directly to the
-reviewer with the automation's `agent:` field:
-
-```yaml
-agent: reviewer
-triggers:
-  - provider: github
-    event: pull_request_opened
-    filter:
-      repos: [acme/api-service]
-      base_branches: [main]
-      labels:
-        not_in: [wip]
-```
-
-The `pull_request_synchronized` event fires on every push to an open pull
-request, and `pull_request_opened` fires for drafts too, so an opt-out label
-is the practical way to control volume. An automation fires once per
-delivery, even when several of its triggers match the same event.
+For human-authored PRs that need only advisory review, use
+[`04-code-review-only`](../04-code-review-only). Do not send them through this
+implementation lifecycle. An automation fires once per delivery even if
+several of its triggers match; that does not prove deduplication of distinct
+deliveries.
 
 For recurring work that doesn't start from a human request, such as a
 dependency sweep, see the cron automation in

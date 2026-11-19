@@ -275,3 +275,7 @@ enabled, an issue carrying both labels that neither route should handle.
 List manual access steps separately; do not grant extra permissions or
 apply the definition without my approval.
 ```
+
+For a complete workflow with explicit Blueprint stages, approval gates, and
+independent review of revisions, see
+[`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr).

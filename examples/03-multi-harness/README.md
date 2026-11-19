@@ -2,9 +2,11 @@
 
 This example uses a different harness for each role. The foreman runs on the
 Warp Agent harness and routes work, a Claude Code agent implements changes,
-and a Codex agent reviews them. Apart from the harness configuration, the
-factory works the same way as
-[`01-single-repo-quickstart`](../01-single-repo-quickstart).
+and a Codex agent reviews them. The
+Blueprint in `factory.yaml` routes `intake` → `implement` → `review` →
+`handoff`. Actionable findings return to implementation on the same PR and
+then to independent review. Questions pause the affected stage. Ending means
+handoff, not merge. The worker files retain their separate harnesses and runners.
 
 ## What this example shows
 

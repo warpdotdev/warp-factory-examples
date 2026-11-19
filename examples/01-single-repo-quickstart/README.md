@@ -69,3 +69,7 @@ After setup, Warp syncs changes pushed to the configured branch once the
 2. Set `alias` to the handle that people use to @-mention the foreman.
 3. Replace the runner's `dockerImage` with an image for your stack.
 4. Optionally, change `agentDefaults.model` to any Warp Agent model ID.
+
+For a complete workflow with explicit Blueprint stages, approval gates, and
+independent review of revisions, see
+[`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr).

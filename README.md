@@ -14,6 +14,20 @@ repository and follow the [setup instructions below](#use-an-example).
 
 These examples use Warp Factories configuration schema version `v1alpha1`.
 
+Examples 02, 03, 24, 25, and 26 define explicit
+[Blueprints](https://docs.warp.dev/factories/blueprints/) in `factory.yaml`.
+Their stages choose workers, procedures, ordered routes, and human gates.
+The files under `agents/` still configure how those workers execute: role,
+model or harness, runner, and skills. The other examples keep their focused
+workflows; 00 and 09 preserve historical snapshots.
+
+Try [planning and revising one PR](examples/02-sdlc-issue-to-pr#exercise-plan-and-revise-one-pr)
+or [editing a committed spec before approval](examples/26-product-change-implementation#exercise-edit-a-committed-spec)
+in a disposable fork. Public availability, team access, application, and the
+live setup-to-revision flows still need verification before these draft
+Blueprint exercises can be treated as runnable. Parser success alone does not
+clear those holds.
+
 ## The examples
 
 - [`examples/00-warp-default-agents`](examples/00-warp-default-agents):
@@ -104,6 +118,16 @@ Check that an example is a valid factory definition:
 ```bash
 python3 scripts/validate_factory_files.py examples/01-single-repo-quickstart
 ```
+
+The helper requires Python 3 and network access to Warp's validation service.
+Exit 0 means the parser checked the tree without diagnostics; state-dependent
+apply checks did not run. Exit 1 reports diagnostics. Exit 2 means validation
+did not run and is not a pass. A rejected ambient credential is retried once
+without it because the parser endpoint needs no credential.
+
+Existing work keeps its selected Blueprint. After applying a definition
+change, start a separate task to test the new workflow. Reapplying an intake
+label or closing a PR does not create an independent comparison trial.
 
 ## Layout rules
 

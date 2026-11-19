@@ -222,3 +222,7 @@ Give me matching-project, unmatched-project, and session-reply trials, and
 check for overlapping handlers. Do not register the factory or change
 anything in Jira without asking me first.
 ```
+
+For a complete workflow with explicit Blueprint stages, approval gates, and
+independent review of revisions, see
+[`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr).

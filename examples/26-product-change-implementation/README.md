@@ -1,125 +1,94 @@
 # 26: Product-change implementation
 
-This single-repository factory implements small, user-visible changes. The
-`factory-ready` label requests a spec in a draft pull request. A human reviews
-it and adds `spec-approved` before implementation starts on that same
-pull request.
-The worked trace below shows the expected spec, implementation, review, and
-handoff. Its paths and check results are illustrative, not a recorded run.
+Use an explicit Blueprint to take one small change from a committed spec to a
+draft PR on the same branch. You edit and approve the spec in the original
+issue before implementation. A separate reviewer checks each revised head.
+A person decides readiness and merge.
 
-Use this example to test and tune a factory. Run one small change, compare
-its artifacts with the trace, then adjust one setting and start a fresh
-trial from the same recorded baseline. For intake from Slack
-or a tracker, or the triage stage, see
-[`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr). This example stays on one
-task trace on purpose.
+The [disposable-fork exercise](#exercise-edit-a-committed-spec) needs no application
+fixture. The React trace below is illustrative, not a recorded run. To compare
+settings, use fresh issues and independently approved specs from the same
+baseline. For triage, optional mobile work, and other intake sources, see
+[`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr).
 
 ## What this example shows
 
-- A human controls the spec gate. Implementation cannot start until a person
-  adds `spec-approved`. The foreman is told never to add that label, and
-  the default bot policy would ignore the label if it did.
-- Two labels start work, and comments report progress. Both automations are
-  `github/issue_labeled` on the same repository, and the foreman re-enters the
-  procedure at the right stage from the issue's own state instead of assuming
-  an earlier run.
-- The spec is a file, not a conversation. The spec agent commits
-  `docs/specs/<issue>-<slug>.md` in a draft pull request. A human can edit it
-  in place before approving, and the implementer builds on that same branch
-  and pull request.
-- The review agent reports findings classified as unambiguous or
-  judgment calls. The foreman sends the first kind back to the implementer
-  once and posts the second kind on the pull request for a human.
-- A team can tune spec detail, implementer model, and reviewer strictness
-  after a first run. Each setting is in one file.
+- `factory.yaml` owns `intake`, `spec`, `implement`, `review`, and `handoff`,
+  their ordered prose routes, and the `spec-review` and `human-decision` gates.
+  The files under `agents/` select each worker's role, model, and runner.
+- `factory-ready` requests a spec. A filtered `@warp` issue mention answers
+  the pending gate or requests a revision. The retired `spec-approved` label
+  starts nothing and approves nothing.
+- The spec is a human-editable file at `docs/specs/<issue>-<slug>.md` in a
+  draft PR. Implementation reads the approved committed revision, including
+  your edits, rather than relying on the spec worker's conversation.
+- Unambiguous findings return to implementation on the same PR, then to
+  independent review. A contract change returns to a revised spec and fresh
+  approval. Nits alone do not cause another round.
 
 ## Directory structure
 
-```
-factory.yaml                       acme/webapp, alias Webapp, model auto
+```text
+factory.yaml                       inline Blueprint, acme/webapp, alias Webapp
 agents/
-  foreman/agent.md                 FOREMAN, two entry points, holds the approval gate
-  spec/agent.md                    SPEC, writes docs/specs/<issue>-<slug>.md in a draft PR
-    skills/spec-format/SKILL.md    the spec template; the spec-detail knob
-  implementer/agent.md             IMPLEMENT (model: auto-genius), builds on the spec PR's branch
-  reviewer/agent.md                REVIEW, findings report to the foreman, never posts on the PR
+  foreman/agent.md                 FOREMAN, communication and role boundaries
+  spec/agent.md                    SPEC, writes the committed spec
+    skills/spec-format/SKILL.md    short spec template
+  implementer/agent.md             IMPLEMENT, model auto-genius, same draft PR
+  reviewer/agent.md                REVIEW, reports current-head findings to foreman
 automations/
-  factory-ready/automation.md      github/issue_labeled, factory-ready: write the spec
-  spec-approved/automation.md      github/issue_labeled, spec-approved: implement, review, hand off
+  factory-ready/automation.md      github/issue_labeled, factory-ready
+  issue-mentioned/automation.md    github/issue_mentioned, handle + routing label
 runners/
-  linux-node.yaml                  4 vCPU / 8 GB, node:22-bookworm-slim, shared by all four agents
+  linux-node.yaml                  shared Linux runner
 ```
 
 ## How intake and approval are routed
 
-Both automations watch `acme/webapp` for `github/issue_labeled`, and both
-route to the foreman (an automation with no `agent:` field goes to the
-foreman). They differ only in the `labels` filter: `factory-ready` starts
-the spec stage, `spec-approved` starts implementation. Filters combine with
-AND, and on `issue_labeled` the `labels` filter matches the label that was
-just added, compared exactly (case-sensitive), so applying either label
-fires exactly one automation, once.
+Both automations filter to `acme/webapp` and reach the foreman. The label
+trigger matches the added label `factory-ready`. The mention trigger requires
+`mentioned: [warp, warp-factory]` and `labels: ["factory:Webapp"]`. Apply the
+routing label before a mention; filter keys combine with AND. Preserve both
+handles. Change the routing label when you change `alias`.
 
-`skip_bots` is not set, so it takes its default, `all`. Label changes made by
-bots, including Warp's own GitHub App, never fire either automation. The
-foreman applies the factory's routing label, `factory:<alias>`, to the issue
-and the pull request as it works. That label is not in either filter and would
-be skipped as a bot event anyway. Only a label a person adds starts a run.
-
-The automation bodies say "do not assume a previous run exists", and the
-foreman reads the issue's labels, comments, and linked spec pull request to
-find the stage. New activity on an issue the factory already handles continues
-the same work item, but the prompts do not depend on that. A `spec-approved`
-run that starts fresh still finds the spec pull request from the issue.
+The foreman applies `factory:<alias>` to in-scope work before asking for a gate
+answer. Mention the foreman in a new issue comment to answer it. Read the linked
+PR and current spec revision first. Matching follow-ups continue the pending
+stage using linked artifacts and conversation, not the current label alone.
 
 ### The approval gate
 
-As in the default agents, when a spec exists the foreman does not start
-implementation until a human approves the spec, and it never approves a
-spec on a human's behalf. The default agents accept a written confirmation
-or an approval of the draft pull request. This example narrows approval to
-one signal so a first run has exactly one thing to check.
+The native `spec-review` gate in `factory.yaml` holds the spec stage until you
+answer in the original issue with a new `@warp` mention. Name the spec PR and
+committed revision in the answer.
 
-- **Approve:** add the `spec-approved` label to the issue. Nothing else
-  counts, not a comment that says "approved", not an approving review on
-  the spec pull request, not the foreman's own confidence.
-- **Change the spec first:** edit `docs/specs/<issue>-<slug>.md` on the spec
-  pull request's branch (the GitHub web editor is enough), commit, then add
-  the label. The implementer reads the committed file at approval time, so
-  your edits are the contract.
-- **Answer a question:** if the foreman posts a question during
-  implementation, put the answer in the spec file, then remove and re-add
-  `spec-approved`. Re-adding the label fires the automation again, and the
-  implementer continues on the same branch.
-- **Start over:** close the spec pull request and remove `spec-approved` from
-  the issue if present. Fix the issue text, then remove and re-add
-  `factory-ready`. Review the replacement spec before adding `spec-approved`
-  again. The old approval does not carry over. Adding an already-present label
-  emits no new `issue_labeled` event. A human resets and approves. The factory
-  never changes `spec-approved` itself.
+- **Approve:** explicitly approve the current committed file on the open PR.
+- **Change the spec:** request a concrete change, or edit and commit the file
+  on that same branch. The revised file needs a fresh ask and approval. If
+  you edited directly, identify the edited revision you approve.
+- **Answer a question:** reply to the pending question in the original issue.
+  A question back or an unrelated reply is not approval.
+- **Cancel:** explicitly cancel the work. No implementation follows.
+- **Start over:** close the old spec PR, update the issue, then remove and
+  re-add `factory-ready`. Review and approve the replacement spec separately.
+  Closing the old PR invalidates its approval. An already-present label
+  emits no new label-added event.
 
-There is no trigger for free-text replies in this example. To let a
-maintainer steer the factory with `@warp` comments instead, add the
-`issue_mentioned` automation from
-[`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr).
+An old approval, legacy label, bot comment, or reviewer confidence cannot
+approve a different revision. A `@warp` approval without a pending matching
+spec does not start work.
 
 ### Unmatched events
 
-- A label other than the two, or either label on another repository,
-  starts nothing.
-- When `factory-ready` is added to an out-of-scope issue, the foreman
-  comments why and stops without creating a branch, spec, or label.
-  Out-of-scope issues include questions, bugs with no reproduction, work
-  outside `acme/webapp`, and work that needs more than one pull request.
-- When `factory-ready` is added to an issue that already links an open spec
-  pull request, the foreman comments with the existing pull request and stops.
-- When `factory-ready` is added with no open spec pull request but
-  `spec-approved` still present, the foreman asks a human to remove
-  `spec-approved`, then remove and re-add `factory-ready`. It stops without
-  creating a replacement spec.
-- When `spec-approved` is added to an issue with no open spec pull request,
-  the foreman comments that there is nothing to approve and stops.
-- The default bot policy skips labels added by bots or other automations.
+A different label, an issue outside the configured repository, a mention
+without the routing label, and all PR or assignment events match neither
+specialized automation. Do not assume another automation handles them.
+The default bot policy skips bot-generated events.
+
+The intake stage rejects questions, unreproduced bugs, and work spanning
+repositories before any branch. It permits the bounded documentation exercise
+below. Reapplying `factory-ready` to an issue with an open spec PR links that
+PR instead of creating a duplicate.
 
 ## Runner configuration
 
@@ -133,26 +102,18 @@ repository's documented lint, typecheck, and test commands.
    [Use an example](../../README.md#use-an-example).
 2. Connect GitHub to your Warp team. See [Connect GitHub to your
    factory](https://docs.warp.dev/factories/integrations/github/).
-3. Replace `acme/webapp` in `factory.yaml`,
-   `automations/factory-ready/automation.md`,
-   `automations/spec-approved/automation.md`, and the scope check in
-   `agents/foreman/agent.md` with a repository your Warp team's GitHub
-   installation can reach.
-4. Create the two labels, `factory-ready` and `spec-approved`, in that
-   repository. Warp creates `factory:<alias>` for you when the factory is
-   registered, but not these two. Rename them in both automations and in
-   `agents/foreman/agent.md` if your team uses other names.
-5. Set `alias` in `factory.yaml`. It becomes the routing label,
-   `factory:<alias>`, and the foreman's handle.
-6. Replace the runner's `dockerImage` in `runners/linux-node.yaml` with an
-   image that has your toolchain.
-7. Make sure the repository documents its lint,
-   typecheck, and test commands (a README or `package.json` scripts are
-   enough). The implementer and reviewer run "the repository's documented
-   checks". If they are not documented, name them in step 4 of
-   `agents/implementer/agent.md` and step 2 of `agents/reviewer/agent.md`.
-8. Change where specs live if `docs/specs/` is wrong for your repository.
-   The path and the branch pattern are in `agents/spec/agent.md`.
+3. Replace `acme/webapp` in `factory.yaml` (repository and intake prompt),
+   both automation filters, and any repository-specific instructions.
+4. Create `factory-ready` in that repository. Set `alias` in `factory.yaml`
+   and replace `factory:Webapp` in the mention filter with `factory:YOUR_ALIAS`.
+   Confirm the matching routing label exists before sending a mention.
+5. Select a runner image with your toolchain, including Git, in
+   `runners/linux-node.yaml`. For the Python exercise use `python:3.12-bookworm`.
+6. Document the real lint, typecheck, and test commands in your work repository,
+   or name them in the `implement` and `review` stage prompts. Do not install an
+   application toolchain for a documentation-only exercise.
+7. To change where specs live, update the `spec` stage and `agents/spec/agent.md`
+   together. Keep the approved revision and same-PR contract explicit.
 
 ## Validate the example
 
@@ -225,11 +186,12 @@ user-visible). The spec agent reads `ShareDialog.tsx`, its tests, and
 `docs/specs/128-copy-link-button.md`. The foreman comments on the issue:
 
 > Spec ready for review: acme/webapp#131. Review the spec. Edit the file on
-> the PR branch if it needs changes. When it is right, add the
-> `spec-approved` label to this issue.
+> the PR branch if it needs changes. Reply in this issue with a new `@warp`
+> mention and approve the current committed spec revision, request changes,
+> or cancel. The spec path and committed revision accompany this ask.
 
 Nothing else happens. The factory writes no code, creates no second branch,
-and does not add `spec-approved`.
+and waits at `spec-review`.
 
 #### The expected spec file
 
@@ -294,8 +256,8 @@ Assumptions when there are none.
 A maintainer reads the spec on pull request #131. Say they want a shorter
 confirmation: they edit `docs/specs/128-copy-link-button.md` on the branch,
 changing "2 seconds" to "1.5 seconds" in behaviors 3 and 4, criterion 2,
-and the duration assumption, then commit. They add `spec-approved` to issue
-#128. Implementation and review must now use the approved 1.5-second
+and the duration assumption, then commit. In issue #128 they post a new `@warp` mention approving
+the edited spec on #131 and naming its committed revision. Implementation and review must now use the approved 1.5-second
 duration, not the original draft's 2 seconds.
 
 #### The implementation and review
@@ -305,7 +267,7 @@ implementer, which works on `factory/128-copy-link-button`. The pull request
 first arrives with the following changes.
 
 - The title changes to `Add a "Copy link" button to the share dialog (#128)`,
-  and the pull request is marked ready for review.
+  and the pull request remains draft.
 - The commits contain the draft spec, the human's spec revision, then
   implementation.
 - The files include `docs/specs/128-copy-link-button.md` (approved version
@@ -331,7 +293,9 @@ first arrives with the following changes.
   ## Verification
   - `npm run lint`: clean. `npm run typecheck`: clean.
   - `npm test`: 27 passed (4 new).
-  - Two screenshots of the dialog, before and after the click, attached.
+  - Computer-use video of copying the displayed URL, confirmation, reset,
+    keyboard activation, and failure fallback attached. Screenshots are
+    supplemental static evidence.
   ```
 
 The foreman then dispatches the reviewer on pull request #131. The reviewer
@@ -357,25 +321,22 @@ returns the following findings report in full.
 
 Verdict: human decision needed.
 
-The foreman sends findings 1 and 2 to the implementer as one follow-up.
-The implementer pushes a second commit that clears the timer in the effect
-cleanup and extends the rejection test, re-runs the three checks, and
-updates the Verification section. The count stays at 27 passed because an
-assertion was added, not a test case.
+The foreman opens `human-decision` for finding 3 and relays the options in the
+original issue. A maintainer chooses to treat an absent API as a failed write.
+That changes the contract, so the spec is revised on #131 and the new committed
+revision receives fresh approval before implementation continues.
 
-The foreman posts finding 3 on pull request #131 as a comment-only review,
-neither approving nor requesting changes. It confirms `factory:Webapp` is
-on the issue and the pull request, then comments on the issue.
+The implementer fixes the timer, strengthens the selection assertion, and
+handles the approved absent-API behavior on the same branch and PR. It reruns
+the checks and updates verification. The foreman dispatches independent review
+of the new head. If that review finds another actionable defect, correction and
+review repeat. Fixed test counts above are illustrative observations, not a
+required count.
 
-> PR ready for review: acme/webapp#131. Verified with `npm run lint`,
-> `npm run typecheck`, and `npm test` (27 passed, 4 new). Review found two
-> issues, both fixed on the branch: an uncleared reset timer, and a
-> rejection test that did not check the text selection. One question is
-> open on the PR for you: what the button should do when the clipboard API
-> is absent. A human merges.
-
-The run stops there. The pull request is not merged, the issue is not closed,
-and `spec-approved` was added exactly once, by a person.
+The foreman reports #131, the approved spec revision, delivered and reviewed
+SHAs, actual checks, review findings, and remaining limits on the issue. The PR
+stays draft. A person decides whether to mark it ready and merge; ending this
+workflow means handoff, not merge.
 
 #### The out-of-scope issue
 
@@ -393,30 +354,23 @@ repository.
 
 ### First-run checks
 
-Use a throwaway issue like the one in the worked trace and confirm these
-results in order.
+Use a throwaway issue and record the actual results, not only run status.
 
-1. Adding `factory-ready` produced exactly one draft pull request, on a
-   `factory/<issue>-<slug>` branch, whose only change is
-   `docs/specs/<issue>-<slug>.md`, plus one issue comment with the approval
-   instruction. Nothing else changed in the repository.
-2. Nothing further happened until you added `spec-approved`. The Runs page
-   shows no run in between.
-3. Adding `spec-approved` produced commits on the same branch, the pull
-   request retitled and marked ready for review with the description shape
-   above, tests in the diff, at most one comment-only review on the pull
-   request, and one issue comment with the pull request link and the
-   verification evidence.
-4. The factory never merged, never approved the pull request, and never added
-   `spec-approved`. The issue's timeline shows a person as the only actor
-   on that label.
-5. Test a restart after approval. Close the old spec pull request, remove
-   `spec-approved`, update the issue, then remove and re-add `factory-ready`.
-   The replacement spec arrives in a draft pull request and waits without
-   implementation. Review it, then add `spec-approved` again. Only that fresh
-   human approval starts implementation on the replacement pull request's
-   branch. Confirm the issue timeline shows a person removing and re-adding
-   the approval label.
+1. `factory-ready` produces one spec-only draft PR and a `spec-review` ask
+   naming its file and revision. Implementation waits while it is unanswered.
+2. Request a spec change. Check for a revised file and fresh ask, without
+   implementation. Edit the file yourself and approve that committed revision
+   in the original issue with `@warp`.
+3. Confirm implementation uses the approved file, branch, and PR and leaves it
+   draft. Inspect the current-head independent review and reported checks.
+4. Request a concrete same-contract revision with `@warp` on the issue. Check
+   that the same PR gets new commits and another independent review of its head.
+5. Test an unrelated reply, a legacy approval label, and an approval with no
+   matching open spec. None authorizes implementation.
+6. Close an old spec PR, then restart with `factory-ready`. The replacement
+   waits for its own approval. No old approval transfers to it.
+7. Observe a failed required check. Handoff must name the failure, not report
+   the change as verified. The factory never approves or merges a PR.
 
 ## Tune the factory
 
@@ -456,34 +410,20 @@ Compare its duration and cost per agent after a change.
 
 ## Set up with an agent
 
-Paste this into your factory's foreman, the factory web composer, or a
-coding agent connected to your factory over MCP, after replacing the
-angle-bracket placeholders.
+Replace the uppercase placeholders, then send this to your foreman or a
+coding agent connected through [MCP](https://docs.warp.dev/factories/factory-mcp/).
 
-```text title="Set up the product-change factory for my repository"
-Read https://github.com/warpdotdev/warp-factory-examples/tree/main/examples/26-product-change-implementation
-and set up the same factory for my repository <owner>/<repo>.
-
-1. Copy the example's tree into <path in my definition repository>, keeping
-   the layout: factory.yaml; agents/foreman, agents/spec (with
-   agents/spec/skills/spec-format), agents/implementer, agents/reviewer;
-   automations/factory-ready and automations/spec-approved;
-   runners/linux-node.yaml.
-2. Replace every acme/webapp with <owner>/<repo>: factory.yaml, both
-   automations, and the scope check in agents/foreman/agent.md. Set alias
-   to <alias>.
-3. Set the runner's dockerImage to <image with my toolchain>, keeping the
-   instance shape a power of two.
-4. My documented checks are <lint command>, <typecheck command>, and
-   <test command>. Name them in step 4 of agents/implementer/agent.md and
-   step 2 of agents/reviewer/agent.md.
-5. Create the labels factory-ready and spec-approved in <owner>/<repo>.
-6. Validate the tree and open a pull request to my definition repository.
-   Do not change the human gates: a person removes spec-approved before
-   restarting and adds it again only after reviewing the replacement spec.
-   The factory never changes spec-approved itself and never merges.
-Then help me run the first test: pick one small, user-visible change from
-my backlog, write the issue the way the example's sample issue is written,
-and tell me what to expect at each stage so I can compare it with the
-example's trace.
+```text title="Set up the product-change factory"
+Copy example 26 from the immutable examples revision linked in this README's
+exercise, including factory.yaml, agents/, both automations, and runners/.
+Use OWNER/REPO as the work repository and DEFINITION_PATH for the definition.
+Replace acme/webapp in the repository entry, Blueprint intake, and automation
+filters. Set alias to ALIAS and the mention label to factory:ALIAS.
+Use RUNNER_IMAGE with Git and my toolchain. My checks are CHECK_COMMANDS.
+Keep the native spec-review gate, editable committed spec, explicit approval
+of its current revision in the original issue with @warp, same-PR implementation,
+and independent review of revised heads. Keep PRs draft; never merge.
+Validate the complete substituted tree. Open a definition PR, then list the
+GitHub access, labels, availability, and application steps that still need me.
+Do not apply a live configuration without separate authorization.
 ```

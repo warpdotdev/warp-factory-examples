@@ -6,6 +6,13 @@ provider first, then consumer. The merges are not atomic. One-repository
 work produces one pull request with evidence of compatibility with the
 unchanged repository. A human controls every merge.
 
+The inline Blueprint in `factory.yaml` routes `scope` → `implement` → `review`.
+It runs one advisory contract review per work item. Actionable findings go
+through `correct` on the existing implementation conversation and PRs, then
+`handoff`; otherwise review goes straight to handoff. Handoff names each
+reviewed SHA and current head and discloses that corrected heads were not
+independently re-reviewed. End means handoff, not merge.
+
 ## What this example shows
 
 - Both repositories listed in `repositories` are checked out under
@@ -136,7 +143,7 @@ stops.
 2. Replace `acme/api-service` (provider) and `acme/webapp` (consumer) with
    repositories your Warp team's GitHub installation can reach. They appear
    in `factory.yaml`, `automations/issue-labeled/automation.md`,
-   `runners/linux-services.yaml`, `agents/foreman/agent.md`,
+   the Blueprint prompts, `runners/linux-services.yaml`, `agents/foreman/agent.md`,
    `agents/implementer/agent.md`, and `agents/reviewer/agent.md`. Keep the
    roles distinct. The provider owns the contract.
 3. Replace the prefetch commands in `runners/linux-services.yaml`.
@@ -218,6 +225,7 @@ results.
    enum also has `delivered`" is unambiguous and goes back to the
    implementer, which fixes it on the same branch.
 5. The foreman posts a final comment on #118 with both pull request links, the
+   reviewed SHAs, revised heads, corrections not independently re-reviewed,
    merge order, and the note that the deployed web app ignores `status` until
    its pull request merges.
 6. A human merges `[1/2]`, waits for it to land, and merges `[2/2]`.

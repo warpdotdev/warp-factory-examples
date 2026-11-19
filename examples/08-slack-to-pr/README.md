@@ -233,3 +233,7 @@ definition and open a pull request without applying it.
 List what I still have to do by hand: connect Slack to the factory, invite
 the app to the channel, and have each requester link their Slack account.
 ```
+
+For a complete workflow with explicit Blueprint stages, approval gates, and
+independent review of revisions, see
+[`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr).

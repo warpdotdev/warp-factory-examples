@@ -7,6 +7,11 @@ readiness and merging. This extends
 [`01-single-repo-quickstart`](../01-single-repo-quickstart) with shared-impact
 review.
 
+The inline Blueprint in `factory.yaml` routes `scope` → `implement` → `review`
+→ `handoff`. Declined scope ends before a branch. Corrections reuse the PR and
+return to independent review. Worker files and the ownership skill retain the
+execution settings and repository checks. Handoff does not mean merge.
+
 ## What this example shows
 
 - Several products live in one attached repository. The factory is scoped
@@ -138,8 +143,8 @@ on the sandbox to add tools the image lacks.
    `skills/monorepo-ownership/SKILL.md`.
 4. Replace the product directory `apps/web` and the shared-package glob
    `packages/*` wherever they appear: `skills/monorepo-ownership/SKILL.md`,
-   the three `agents/*/agent.md` prompts, `runners/linux-web.yaml`, and the
-   automation body.
+   the Blueprint prompts, the three `agents/*/agent.md` prompts,
+   `runners/linux-web.yaml`, and the automation body.
 5. Create the label `factory-ready:web` in the repository, or rename it in
    `automations/web-issue-labeled/automation.md` (filter and body). The
    label has to exist before a maintainer can apply it, and the filter
@@ -213,7 +218,7 @@ Label it `factory-ready:web`. You should see the following results.
    `pnpm --filter "...[origin/main]" typecheck`, covering `api-client`,
    `web`, and the other dependent, `admin`.
 4. The reviewer's findings go to the foreman. Unambiguous ones come back as
-   commits on the same branch.
+   commits on the same branch, followed by independent review of the new head.
 5. The foreman comments on the issue with the pull request link and says it
    is a draft waiting on `@acme/platform`. A human on that team marks it
    ready for review, and a human merges.

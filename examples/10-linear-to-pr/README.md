@@ -249,3 +249,7 @@ the issue's agent session and on the pull request. Explain Warp's automatic
 claim-time workflow transition; the foreman should make no additional
 transition and must not merge.
 ```
+
+For a complete workflow with explicit Blueprint stages, approval gates, and
+independent review of revisions, see
+[`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr).
