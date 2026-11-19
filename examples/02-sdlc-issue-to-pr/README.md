@@ -220,13 +220,13 @@ separate authorization.
 4. On GitHub, set the fork's default branch to `blueprint-demo`. Check that
    its README does not explain single-example validation or exit code 2.
 5. Copy the definition and validation helper from the same
-   [pinned revision](https://github.com/warpdotdev/warp-factory-examples/tree/fc01e32555a0a7922b54da5a5f2c4bdc50296912).
+   [pinned revision](https://github.com/warpdotdev/warp-factory-examples/tree/81205a3c5a43e20cc6bd95b64bd8d3f7f098cdbb).
    You need Git and Python 3 locally. The `main` branch does not yet contain
    this Blueprint.
 
    ```bash
    git clone https://github.com/warpdotdev/warp-factory-examples.git blueprint-source
-   git -C blueprint-source checkout --detach fc01e32555a0a7922b54da5a5f2c4bdc50296912
+   git -C blueprint-source checkout --detach 81205a3c5a43e20cc6bd95b64bd8d3f7f098cdbb
    git clone DEFINITION_REPO_URL blueprint-definition
    cp -R blueprint-source/examples/02-sdlc-issue-to-pr/. blueprint-definition/
    ```

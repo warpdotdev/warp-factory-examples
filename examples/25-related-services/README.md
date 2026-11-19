@@ -271,7 +271,7 @@ Replace the uppercase placeholders, then send this to your foreman through
 <!-- terminology-allow-end -->
 
 ```text title="Set up a related-services factory"
-Read https://github.com/warpdotdev/warp-factory-examples/tree/21d3936ad7bed1af2748811e670c19d2a1388a4b/examples/25-related-services
+Read https://github.com/warpdotdev/warp-factory-examples/tree/81205a3c5a43e20cc6bd95b64bd8d3f7f098cdbb/examples/25-related-services
 and set up the same factory for my repositories. My provider repository is
 OWNER/PROVIDER; it owns the API contract. My consumer repository is
 OWNER/CONSUMER. Replace acme/api-service and acme/webapp everywhere they

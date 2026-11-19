@@ -246,7 +246,7 @@ Replace the uppercase placeholders, then send this to your foreman through
 <!-- terminology-allow-end -->
 
 ```text title="Set up a product-scoped monorepo factory"
-Read https://github.com/warpdotdev/warp-factory-examples/tree/21d3936ad7bed1af2748811e670c19d2a1388a4b/examples/24-monorepo-product
+Read https://github.com/warpdotdev/warp-factory-examples/tree/81205a3c5a43e20cc6bd95b64bd8d3f7f098cdbb/examples/24-monorepo-product
 and set up the same factory for my monorepo, OWNER/REPO. Keep its shape:
 one repository; a foreman that scopes every task to one product directory;
 an implementer that installs affected dependents and their dependencies
