@@ -99,7 +99,7 @@ def write_warp_server_fixture(root: Path, foreman_model: str) -> str:
 
 
 def write_matching_example(root: Path, seeds_go: str) -> None:
-    """Writes an examples/00-style tree that matches `seeds_go` and
+    """Writes a snapshot-style tree that matches `seeds_go` and
     PROMPT_TEMPLATES exactly, by construction (via the module's own render
     helpers), so tests can isolate the ref-pinning behavior from the
     content-diffing behavior."""

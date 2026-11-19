@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Verify examples/00-warp-default-agents against warp-server's canonical seeds.
+"""Verify examples/warp-default-agents against warp-server's canonical seeds.
 
-examples/00-warp-default-agents is a snapshot: it copies the product's
+examples/warp-default-agents is a snapshot: it copies the product's
 default agents (names, roles, descriptions, models, prompts) into files
 by hand. `scripts/validate_factory_files.py` catches schema drift in that
 tree, but it has no idea the tree is supposed to mirror anything, so it never
@@ -56,7 +56,7 @@ ROLES = [
 ]
 
 # This script only reconstructs the one composition
-# examples/00-warp-default-agents documents: GitHub code forge, a tracker
+# examples/warp-default-agents documents: GitHub code forge, a tracker
 # declared (the appendix line never names which one), Slack communications.
 # A tree rendered for a different composition needs a different appendix and
 # is out of scope here.
@@ -225,7 +225,7 @@ def main(argv=None) -> int:
     parser.add_argument(
         "--example",
         default=None,
-        help="Path to the example tree (default: examples/00-warp-default-agents "
+        help="Path to the example tree (default: examples/warp-default-agents "
         "relative to this repository's root).",
     )
     parser.add_argument(
@@ -254,7 +254,7 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
 
     repo_root = Path(__file__).resolve().parent.parent
-    example_root = Path(args.example) if args.example else repo_root / "examples" / "00-warp-default-agents"
+    example_root = Path(args.example) if args.example else repo_root / "examples" / "warp-default-agents"
 
     try:
         load, resolved_ref = make_loader(args)

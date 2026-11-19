@@ -85,7 +85,7 @@ class ValidatorTest(unittest.TestCase):
                     self.assertIn("state-dependent apply checks were not run", report["disclosure"])
 
     def test_collects_complete_inline_blueprint_resource_tree(self):
-        root = Path(__file__).resolve().parent.parent / "examples/02-sdlc-issue-to-pr"
+        root = Path(__file__).resolve().parent.parent / "examples/sdlc-issue-to-pr"
         files, problems = validator.collect_tree(root)
         expected = {"factory.yaml"}
         for pattern in (

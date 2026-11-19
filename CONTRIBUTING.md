@@ -90,7 +90,7 @@ CI runs both checks on every PR. CI also fails when the server's schema
 version moves past `v1alpha1`; that means the examples need a version-bump
 PR, not a workaround.
 
-If you change [`examples/00-warp-default-agents`](examples/00-warp-default-agents),
+If you change [`examples/warp-default-agents`](examples/warp-default-agents),
 also run `scripts/verify_default_agents.py` to confirm the tree still
 matches the product's default agents.
 

@@ -11,7 +11,7 @@ Structure
   - every Scorer's `agents:` entry names an agent directory that exists
   - every example has exactly one FOREMAN (or its MAIN alias)
   - every `examples/<name>` path named in Markdown actually exists, so a
-    renumbering can't leave dangling links behind
+    directory rename can't leave dangling links behind
 
 Terminology (see CONTRIBUTING.md)
   - "roster" and "agent set" are not product terms; the five agents are
@@ -49,21 +49,21 @@ from pathlib import Path
 DEFAULT_ROOT = Path(__file__).resolve().parent.parent
 
 BLUEPRINT_EXAMPLES = {
-    "02-sdlc-issue-to-pr",
-    "03-multi-harness",
-    "13-blueprint-linear",
-    "14-blueprint-revision-loop",
-    "15-blueprint-human-gate",
-    "24-monorepo-product",
-    "25-related-services",
-    "26-product-change-implementation",
+    "sdlc-issue-to-pr",
+    "multi-harness",
+    "blueprint-linear",
+    "blueprint-revision-loop",
+    "blueprint-human-gate",
+    "monorepo-product",
+    "related-services",
+    "product-change-implementation",
 }
 
 # Verbatim copies of upstream files. Exempt from terminology rules; see
 # CONTRIBUTING.md ("Before opening a PR").
 VENDORED = {
     "scripts/validate_factory_files.py",
-    "examples/09-github-skill/skills/github/SKILL.md",
+    "examples/github-skill/skills/github/SKILL.md",
 }
 
 # This checker and its tests have to name the banned terms in order to ban
@@ -105,6 +105,8 @@ def example_dirs(root: Path) -> list[Path]:
 def check_structure(root: Path, problems: list[str]) -> None:
     for example in example_dirs(root):
         rel = example.relative_to(root)
+        if re.match(r"^\d+-", example.name):
+            problems.append(f"{rel}: use a descriptive example directory without a number prefix")
         if example.name in BLUEPRINT_EXAMPLES:
             if not re.search(r"^blueprint:\s*$", (example / "factory.yaml").read_text(), re.M):
                 problems.append(f"{rel}: this example requires a top-level blueprint")
@@ -166,7 +168,13 @@ def markdown_files(root: Path) -> list[Path]:
 def check_example_links(root: Path, problems: list[str]) -> None:
     known = {d.name for d in example_dirs(root)}
     for path in markdown_files(root):
-        for match in re.finditer(r"examples/([0-9]{2}-[a-z0-9-]+)", path.read_text()):
+        text = re.sub(
+            r"https://github\.com/warpdotdev/warp-factory-examples/"
+            r"(?:tree|blob)/[0-9a-f]{40}/[^\s)>`]+",
+            "",
+            path.read_text(),
+        )
+        for match in re.finditer(r"(?<![a-z0-9-])examples/([a-z0-9][a-z0-9-]*)", text):
             name = match.group(1)
             if name not in known:
                 problems.append(
