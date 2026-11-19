@@ -14,23 +14,23 @@ Copy the entire example directory into your repository and follow the
 
 These examples use Warp Factories configuration schema version `v1alpha1`.
 
-Examples 02, 03, 13, 14, 15, 24, 25, and 26 define explicit
+The multi-stage workflow examples define explicit
 [Blueprints](https://docs.warp.dev/factories/blueprints/) in `factory.yaml`.
 Each Blueprint defines stages, the order in which work moves between them,
 and gates that wait for a person's answer. A worker is the agent assigned to
 execute a stage. The files under `agents/` configure its role, model or
 harness, runner, and skills. The other examples focus on individual tasks;
-00 and 09 preserve historical snapshots.
+the default-agent and GitHub-skill examples preserve historical snapshots.
 
 For smaller Blueprint patterns, start with
-[two stages in order](examples/13-blueprint-linear),
-[conditional entry and revision](examples/14-blueprint-revision-loop), or
-[a human decision gate](examples/15-blueprint-human-gate).
+[two stages in order](examples/blueprint-linear),
+[conditional entry and revision](examples/blueprint-revision-loop), or
+[a human decision gate](examples/blueprint-human-gate).
 Their procedures stay in `factory.yaml`, with one small foreman file and no
 automation, skill, runner, or project setup.
 
-Try [planning and revising one PR](examples/02-sdlc-issue-to-pr#exercise-plan-and-revise-one-pr)
-or [editing a committed spec before approval](examples/26-product-change-implementation#exercise-edit-a-committed-spec)
+Try [planning and revising one PR](examples/sdlc-issue-to-pr#exercise-plan-and-revise-one-pr)
+or [editing a committed spec before approval](examples/product-change-implementation#exercise-edit-a-committed-spec)
 in a disposable fork. These draft exercises still need verification of public
 availability, team access, successful definition application, and the live
 approval and revision steps. Do not treat them as runnable until those checks
@@ -38,74 +38,74 @@ are complete. Parser validation does not verify application or execution.
 
 ## The examples
 
-- [`examples/00-warp-default-agents`](examples/00-warp-default-agents):
+- [`examples/warp-default-agents`](examples/warp-default-agents):
   Explore the five default agents Warp creates for every new factory,
   including their prompts, descriptions, and models. Copy this example to
   edit and version their configurations.
-- [`examples/01-single-repo-quickstart`](examples/01-single-repo-quickstart):
+- [`examples/single-repo-quickstart`](examples/single-repo-quickstart):
   Start with this example to set up a factory for a single repository. A
   foreman routes labeled GitHub issues to an implementation agent, which
   opens a pull request with the changes.
-- [`examples/02-sdlc-issue-to-pr`](examples/02-sdlc-issue-to-pr):
+- [`examples/sdlc-issue-to-pr`](examples/sdlc-issue-to-pr):
   Take requests from Slack, Linear, and GitHub through triage,
   specification, implementation, and review to produce pull requests for
   human review. This example extends the default agents with a custom agent
   and shows how to configure models, compute resources, skills, and automated
   scoring.
-- [`examples/03-multi-harness`](examples/03-multi-harness):
+- [`examples/multi-harness`](examples/multi-harness):
   Coordinate work with the Warp Agent harness, implement changes with
   Claude Code, and review them with Codex. This example also shows how to
   authenticate third-party harnesses with managed secrets.
-- [`examples/04-code-review-only`](examples/04-code-review-only):
+- [`examples/code-review-only`](examples/code-review-only):
   Review newly opened pull requests and post findings for a human to
   consider. A single agent serves as both the foreman and reviewer.
-- [`examples/05-ui-verification`](examples/05-ui-verification):
+- [`examples/ui-verification`](examples/ui-verification):
   Check UI changes and reproduce reported bugs by having an agent run your
   app in a browser. Labels on pull requests and issues trigger the checks,
   and the agent posts links to screenshots and recordings.
-- [`examples/06-common-automations`](examples/06-common-automations):
+- [`examples/common-automations`](examples/common-automations):
   Automate routine maintenance with one agent that triages CI failures,
   audits dependencies weekly, checks documentation when code is pushed, and
   responds to Slack reactions.
-- [`examples/07-self-hosted-worker`](examples/07-self-hosted-worker):
+- [`examples/self-hosted-worker`](examples/self-hosted-worker):
   Run the quickstart factory on your own infrastructure. This example shows
   how to select a self-hosted worker with `workerHost` and configure a runner
   that matches the worker's platform.
-- [`examples/08-slack-to-pr`](examples/08-slack-to-pr):
+- [`examples/slack-to-pr`](examples/slack-to-pr):
   Request code changes by mentioning the factory in a designated Slack
   channel. The foreman confirms the request and returns progress, questions,
   and the pull request link in the same thread.
-- [`examples/09-github-skill`](examples/09-github-skill):
+- [`examples/github-skill`](examples/github-skill):
   Version a shared GitHub skill and review its updates separately from the
   factory configuration. The starting point is an exact historical default
   skill from before managed GitHub MCP support.
-- [`examples/10-linear-to-pr`](examples/10-linear-to-pr):
+- [`examples/linear-to-pr`](examples/linear-to-pr):
   Delegate Linear issues from one team to a factory. The agents report
   progress in the agent session and attach the pull request to the issue
   for human review.
-- [`examples/11-jira-to-pr`](examples/11-jira-to-pr):
+- [`examples/jira-to-pr`](examples/jira-to-pr):
   Assign or mention Warp on a Jira Cloud work item to request a code change.
   The factory limits intake by project and returns the pull request link
   in the agent session and a work-item comment.
-- [`examples/12-github-assigned-issue`](examples/12-github-assigned-issue):
+- [`examples/github-assigned-issue`](examples/github-assigned-issue):
   Start work by assigning a labeled GitHub issue to the factory. The foreman
   checks the request's scope and returns a linked pull request for human
   review. This example also explains when to use assignment instead of labels.
-- [`examples/13-blueprint-linear`](examples/13-blueprint-linear):
+- [`examples/blueprint-linear`](examples/blueprint-linear):
   Extract incident facts, then format a handoff in two ordered stages.
-- [`examples/14-blueprint-revision-loop`](examples/14-blueprint-revision-loop):
+- [`examples/blueprint-revision-loop`](examples/blueprint-revision-loop):
   Check or draft a release note, then return corrections to the draft stage.
-- [`examples/15-blueprint-human-gate`](examples/15-blueprint-human-gate):
+- [`examples/blueprint-human-gate`](examples/blueprint-human-gate):
   Wait for a person to choose an incident update's audience before writing it.
-- [`examples/24-monorepo-product`](examples/24-monorepo-product):
+- [`examples/monorepo-product`](examples/monorepo-product):
   Scope a factory to one product in a monorepo and verify changes across
   affected packages. Changes to shared packages require a draft pull request
   and review from their owners.
-- [`examples/25-related-services`](examples/25-related-services):
+- [`examples/related-services`](examples/related-services):
   Coordinate changes across an API and its consumer. The factory checks
   contract compatibility and opens one pull request per changed repository,
   with a provider-first merge order when both repositories change.
-- [`examples/26-product-change-implementation`](examples/26-product-change-implementation):
+- [`examples/product-change-implementation`](examples/product-change-implementation):
   Specify, approve, implement, and review a small product change on one pull
   request. Edit a committed spec before approval in a disposable-fork exercise,
   or follow an illustrative React example.
@@ -129,7 +129,7 @@ After setup, Warp syncs changes pushed to the configured branch once the
 Check an example with Warp's parser:
 
 ```bash
-python3 scripts/validate_factory_files.py examples/01-single-repo-quickstart
+python3 scripts/validate_factory_files.py examples/single-repo-quickstart
 ```
 
 The helper requires Python 3 and network access to Warp's validation service.

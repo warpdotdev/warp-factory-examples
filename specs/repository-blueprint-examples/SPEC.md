@@ -9,7 +9,7 @@ Audit every example. Move the five multi-stage workflows to explicit Blueprints.
 - Status: approved by the requester at commit `960160b2d9d4c7d22fcf8e36d4363452e6a49cd4`.
 - Delivery: exactly two draft PRs, one in this repository and one in `warpdotdev/docs`.
 - Implementation reuses this specification's branch and PR. Do not create a third spec-only PR.
-- This specification expands the old example-02-only scope. It does not reopen or replace the merged docs work.
+- This specification expands the old `sdlc-issue-to-pr`-only scope. It does not reopen or replace the merged docs work.
 
 ## Requester decisions
 
@@ -19,9 +19,9 @@ The requester answered the four scope proposals:
 
 The [written answer](https://warpdev.slack.com/archives/C09BVK0PL3Y/p1795110000462349) and the [foreman's decision record](https://github.com/warpdotdev/docs/issues/1045#issuecomment-7017068331) resolve the scope as follows:
 
-1. Convert examples 02, 03, 24, 25, and 26. Do not migrate every minimal or intake-focused example.
-2. Replace example 26's label-only spec approval with a native gate answered in the original issue conversation. Add the narrowly filtered mention intake required for answers. Independently review revisions.
-3. Add practical exercises to the existing 02 and 26 READMEs. Do not add an application fixture or another example directory.
+1. Convert the `sdlc-issue-to-pr`, `multi-harness`, `monorepo-product`, `related-services`, and `product-change-implementation` examples. Do not migrate every minimal or intake-focused example.
+2. Replace `product-change-implementation`'s label-only spec approval with a native gate answered in the original issue conversation. Add the narrowly filtered mention intake required for answers. Independently review revisions.
+3. Add practical exercises to the existing `sdlc-issue-to-pr` and `product-change-implementation` READMEs. Do not add an application fixture or another example directory.
 4. Include directly related docs corrections in a separate draft PR. Do not redo merged guides.
 
 These decisions approved the interview scope, not the then-unwritten specification. The requester subsequently answered “yes approved” to the approval request for committed specification `960160b2d9d4c7d22fcf8e36d4363452e6a49cd4`. See the [written approval](https://warpdev.slack.com/archives/C09BVK0PL3Y/p1795110569201039) and [approval record](https://github.com/warpdotdev/docs/issues/1045#issuecomment-7017292689). Approval covers this specification only. It does not authorize live configuration application, publication, or merge.
@@ -35,7 +35,7 @@ These decisions approved the interview scope, not the then-unwritten specificati
 | `warpdotdev/warp-server` | `f39168209795a161ad3c17f6e5b3c38061896a8d` | Parser, schema, runtime, and generated worker instructions |
 | `warpdotdev/docs-factory-config` | `3c80494cd71c2614c17d8f116286b2e437470d41` | Merged checkout provisioning and factory skills |
 
-Merged docs PRs #1046, #1055, and #1056 and provisioning PR #37 are prior work, not new deliverables. The earlier specification in `docs/specs/blueprints-docs-and-examples/SPEC.md` supplies preserved decisions and runtime holds. Its approval covered example 02, not this expansion.
+Merged docs PRs #1046, #1055, and #1056 and provisioning PR #37 are prior work, not new deliverables. The earlier specification in `docs/specs/blueprints-docs-and-examples/SPEC.md` supplies preserved decisions and runtime holds. Its approval covered `sdlc-issue-to-pr`, not this expansion.
 
 Baseline checks in this checkout:
 
@@ -57,7 +57,7 @@ Baseline parser success proves neither the proposed migrated definitions nor app
 4. A worker asks through the foreman when required information is missing. It does not silently choose an undefined route or leave a stage while a required human answer is pending.
 5. A specification gate distinguishes approval of the current spec, requested changes, and cancellation. A question or unrelated reply does not approve a spec. A new spec revision needs a new answer.
 6. Implementation and revisions reuse the existing branch and PR for each repository. A branch or PR never spans repositories.
-7. Independent review stays separate from implementation. Review is advisory. Example 25 retains its deliberately limited contract-review pass; the other converted workflows re-review actionable revisions.
+7. Independent review stays separate from implementation. Review is advisory. `related-services` retains its deliberately limited contract-review pass; the other converted workflows re-review actionable revisions.
 8. People control merge. A delivered PR, a resolved gate, a completed worker run, and a successful parser check are not merge evidence.
 9. Existing work retains its selected Blueprint. A separately started task uses the newly applied definition. Reapplying a label or closing a PR is not an independent comparison trial.
 10. Every exercise names prerequisites, substitutions, actions, expected artifacts, failure recovery, and verification limits. Illustrative output is never described as a recorded run.
@@ -96,28 +96,28 @@ Source reads and a schema's acceptance do not prove production availability. Kee
 | --- | --- |
 | Root `README.md` | Identify the five Blueprint examples; explain workflow versus worker configuration; link the two exercises and canonical docs; explain validator exit 2 and network access |
 | `CONTRIBUTING.md` | Explain when a Blueprint belongs in an example; retain one concept per example and complete-root rules; document new checks and validator recopy policy |
-| `00-warp-default-agents` | Preserve the pinned snapshot, prompts, source ref, and verification helper; do not relabel it as the current Blueprint default |
-| `01-single-repo-quickstart` | Keep the two-worker minimal workflow; add only a concise pointer to explicit Blueprint routing |
-| `02-sdlc-issue-to-pr` | Convert the complete lifecycle and optional mobile extension; add the first practical exercise |
-| `03-multi-harness` | Convert implementation and review routing; preserve third-party harness authentication and runner choices |
-| `04-code-review-only` | Preserve its single-worker advisory-review purpose; no forced implementation or spec stages |
-| `05-ui-verification` | Preserve verification-only intake and evidence limits; no new application fixture or lifecycle |
-| `06-common-automations` | Preserve independent maintenance jobs; do not combine them into a single SDLC lifecycle |
-| `07-self-hosted-worker` | Preserve hosting and worker-selection purpose; no blanket routing migration |
-| `08-slack-to-pr` | Preserve Slack intake and reply behavior; link the complete Blueprint workflow |
-| `09-github-skill` | Preserve the exact historical vendored skill and helper, including provenance; no silent refresh |
-| `10-linear-to-pr` | Preserve Linear intake, alias resolution, and progress reporting; link the complete Blueprint workflow |
-| `11-jira-to-pr` | Preserve Jira intake and filters; link the complete Blueprint workflow |
-| `12-github-assigned-issue` | Preserve assignment-versus-label teaching and filters; link the complete Blueprint workflow |
-| `24-monorepo-product` | Convert scope, implementation, review, revision, and owner handoff |
-| `25-related-services` | Convert scope, ordered implementation, contract review, correction, and human handoff |
-| `26-product-change-implementation` | Convert spec-first lifecycle and native approval; add the second practical exercise |
+| `warp-default-agents` | Preserve the pinned snapshot, prompts, source ref, and verification helper; do not relabel it as the current Blueprint default |
+| `single-repo-quickstart` | Keep the two-worker minimal workflow; add only a concise pointer to explicit Blueprint routing |
+| `sdlc-issue-to-pr` | Convert the complete lifecycle and optional mobile extension; add the first practical exercise |
+| `multi-harness` | Convert implementation and review routing; preserve third-party harness authentication and runner choices |
+| `code-review-only` | Preserve its single-worker advisory-review purpose; no forced implementation or spec stages |
+| `ui-verification` | Preserve verification-only intake and evidence limits; no new application fixture or lifecycle |
+| `common-automations` | Preserve independent maintenance jobs; do not combine them into a single SDLC lifecycle |
+| `self-hosted-worker` | Preserve hosting and worker-selection purpose; no blanket routing migration |
+| `slack-to-pr` | Preserve Slack intake and reply behavior; link the complete Blueprint workflow |
+| `github-skill` | Preserve the exact historical vendored skill and helper, including provenance; no silent refresh |
+| `linear-to-pr` | Preserve Linear intake, alias resolution, and progress reporting; link the complete Blueprint workflow |
+| `jira-to-pr` | Preserve Jira intake and filters; link the complete Blueprint workflow |
+| `github-assigned-issue` | Preserve assignment-versus-label teaching and filters; link the complete Blueprint workflow |
+| `monorepo-product` | Convert scope, implementation, review, revision, and owner handoff |
+| `related-services` | Convert scope, ordered implementation, contract review, correction, and human handoff |
+| `product-change-implementation` | Convert spec-first lifecycle and native approval; add the second practical exercise |
 | `scripts/` and `.github/workflows/validate.yml` | Refresh the validator by recopying; add focused regression coverage; retain all-example parser validation and fail-closed CI |
 | `.gitignore` and `LICENSE` | No change |
 
-There is no standalone templates tree. The template owned by this work is `examples/26-product-change-implementation/agents/spec/skills/spec-format/SKILL.md`.
+There is no standalone templates tree. The template owned by this work is `examples/product-change-implementation/agents/spec/skills/spec-format/SKILL.md`.
 
-### Example 02: complete lifecycle
+### `sdlc-issue-to-pr`: complete lifecycle
 
 Change `factory.yaml`, its README, conflicting worker procedures, and affected automation prose together.
 
@@ -144,17 +144,17 @@ The planning/build rules used after `intake` match those after `triage`: explici
 - Replace the README's direct-to-reviewer automation suggestion with a linked review-only example or an explicitly isolated review-only path. Do not accidentally turn a human PR review request into implementation.
 - Retain optional integrations. For the GitHub-only exercise, remove unused integration declarations and their automations together.
 
-### Examples 03, 24, and 25: preserve their distinct policies
+### `multi-harness`, `monorepo-product`, and `related-services`: preserve their distinct policies
 
-- **03:** use `intake`/foreman → `implement`/implementer → `review`/reviewer → `handoff`/foreman → `end`. Unambiguous review findings return to `implement` and then to `review`. Human questions pause the affected stage. Preserve Claude Code and Codex configuration, managed-secret prerequisites, and both runner definitions.
-- **24:** use `scope`/foreman → `implement`/implementer → `review`/reviewer → `handoff`/foreman → `end`. Rejected scope ends after the existing explanatory comment and before any branch. Unambiguous findings return to implementation and independent review. Keep additive shared edits, full dependent installation before shared checks, changed-package/dependent tests, explicit owner review requests, and shared-edit draft status. The factory never marks a shared-edit draft ready on an owner's behalf.
-- **25:** use `scope`/foreman → `implement`/implementer → `review`/reviewer. Review with unambiguous findings → `correct`/implementer → `handoff`/foreman → `end`; otherwise review → handoff. `scope` rejects breaking or unattached-repository work before creating branches. `correct` reuses the implementer's conversation and each existing PR.
-- Example 25 retains one advisory contract-review pass. Handoff names the reviewed SHA and each revised head, describes corrections, and states when the revised head was not independently re-reviewed. Do not claim a clean latest-head review.
-- Example 25 retains one PR per changed repository, one-repository cases without invented companion PRs, additive provider-first changes, linked-pair merge order, consumer probing against the provider's current default branch, and restoration/regeneration from the vendored schema after that probe.
-- Do not broaden 25's review into a general style/test review or live-service integration test. Preserve its existing boundary.
-- For 03/24/25, `end` means the configured handoff finished, not that PRs merged. Keep the PR state and human decision explicit.
+- **multi-harness:** use `intake`/foreman → `implement`/implementer → `review`/reviewer → `handoff`/foreman → `end`. Unambiguous review findings return to `implement` and then to `review`. Human questions pause the affected stage. Preserve Claude Code and Codex configuration, managed-secret prerequisites, and both runner definitions.
+- **monorepo-product:** use `scope`/foreman → `implement`/implementer → `review`/reviewer → `handoff`/foreman → `end`. Rejected scope ends after the existing explanatory comment and before any branch. Unambiguous findings return to implementation and independent review. Keep additive shared edits, full dependent installation before shared checks, changed-package/dependent tests, explicit owner review requests, and shared-edit draft status. The factory never marks a shared-edit draft ready on an owner's behalf.
+- **related-services:** use `scope`/foreman → `implement`/implementer → `review`/reviewer. Review with unambiguous findings → `correct`/implementer → `handoff`/foreman → `end`; otherwise review → handoff. `scope` rejects breaking or unattached-repository work before creating branches. `correct` reuses the implementer's conversation and each existing PR.
+- `related-services` retains one advisory contract-review pass. Handoff names the reviewed SHA and each revised head, describes corrections, and states when the revised head was not independently re-reviewed. Do not claim a clean latest-head review.
+- `related-services` retains one PR per changed repository, one-repository cases without invented companion PRs, additive provider-first changes, linked-pair merge order, consumer probing against the provider's current default branch, and restoration/regeneration from the vendored schema after that probe.
+- Do not broaden `related-services`' review into a general style/test review or live-service integration test. Preserve its existing boundary.
+- For `multi-harness`, `monorepo-product`, and `related-services`, `end` means the configured handoff finished, not that PRs merged. Keep the PR state and human decision explicit.
 
-### Example 26: native approval and reviewed revisions
+### `product-change-implementation`: native approval and reviewed revisions
 
 Use `intake`/foreman → `spec`/spec → `implement`/implementer → `review`/reviewer → `handoff`/foreman → `end`.
 
@@ -188,7 +188,7 @@ Common preparation:
 6. Validate the complete substituted definition. Commit it and, only with separate authorization, apply it to a disposable factory through the supported GitHub-backed path. Confirm the applied revision, checkout branch, PR base, and enabled automations.
 7. Use a new issue and independently approved spec for each exercise or comparison trial. Never merge trial output automatically.
 
-#### 02: explicitly request planning and revise the same PR
+#### `sdlc-issue-to-pr`: explicitly request planning and revise the same PR
 
 - Keep the earlier `Document single-example validation` exercise.
 - Ask for the single-example validator command and an explanation that exit 2 means no validation occurred.
@@ -200,7 +200,7 @@ Common preparation:
 - Request a same-PR revision to explain network access. Confirm the PR number and branch do not change and the new head receives independent review.
 - Expected final diff: `README.md` plus the single committed spec file. No worker/configuration changes belong in the work PR.
 
-#### 26: edit a committed spec before approval
+#### `product-change-implementation`: edit a committed spec before approval
 
 - Use a separate issue titled `Document helper unit tests`.
 - Request documentation in `CONTRIBUTING.md` for `python3 scripts/test_check_conventions.py -v` and `python3 scripts/test_verify_default_agents.py -v`. Those commands are absent from that pinned file.
@@ -233,9 +233,9 @@ Use a new docs draft PR. Link this specification and the exact delivered example
 | Existing page under `docs/src/content/docs/` | Allowed delta |
 | --- | --- |
 | `guides/agent-workflows/running-an-issue-to-pr-blueprint.mdx` | Replace the blocked acquisition claim with the delivered revision; reconcile all substitutions, Python runner setup, mobile/integration removal, gate names, and allowed spec-plus-README diff; retain runtime and availability holds without evidence |
-| `factories/guides/monorepo-factory.mdx` | Replace the generic 01 acquisition pointers with migrated 24 in the introduction and setup prompt; reconcile actual stage names and configuration locations only |
-| `factories/guides/microservices-factory.mdx` | Replace generic 01 pointers with migrated 25; retain additive contracts, one-repo cases, provider-first order, probe restoration, and the advisory review limit |
-| `factories/guides/testing-and-tuning-your-factory.mdx` | Link 26's no-fixture committed-spec exercise; align approval and latest-head re-review wording; retain fresh-task/fixed-baseline comparison rules |
+| `factories/guides/monorepo-factory.mdx` | Replace the generic `single-repo-quickstart` acquisition pointers with migrated `monorepo-product` in the introduction and setup prompt; reconcile actual stage names and configuration locations only |
+| `factories/guides/microservices-factory.mdx` | Replace generic `single-repo-quickstart` pointers with migrated `related-services`; retain additive contracts, one-repo cases, provider-first order, probe restoration, and the advisory review limit |
+| `factories/guides/testing-and-tuning-your-factory.mdx` | Link `product-change-implementation`'s no-fixture committed-spec exercise; align approval and latest-head re-review wording; retain fresh-task/fixed-baseline comparison rules |
 
 - Preserve each page's audience, content type, headings, and ownership. These are corrections/extensions, not new concept pages or a new tutorial.
 - Keep the merged Blueprint concept, routes, stages, gates, setup, and reference pages intact.
@@ -252,8 +252,8 @@ Use a new docs draft PR. Link this specification and the exact delivered example
 | Conversion scope | Five multi-stage workflows; preserve focused examples. This follows the accepted interview boundary. | Migrating all examples makes syntax uniform but obscures their single teaching purpose. |
 | Worker format | Keep existing agent definitions and `v1alpha1`; add explicit routing. | A new resource root or version adds compatibility work without adding Blueprint capability. |
 | Prompt placement | Inline stage prompts. Readers inspect a complete graph and the current validator collects the required configuration. | External prompts shorten YAML but need collector compatibility work outside this scope. |
-| Example 26 approval | Native gate plus filtered issue mentions; retire the approval label. It demonstrates the approved human-decision model. | Keeping two label triggers preserves the old teaching point but not the requested native-gate exercise. |
-| Review policy | Re-review 26 revisions; preserve 25's single advisory contract pass with honest SHA disclosure. | Quietly claiming every revised head was reviewed changes 25's policy and overstates evidence. |
+| `product-change-implementation` approval | Native gate plus filtered issue mentions; retire the approval label. It demonstrates the approved human-decision model. | Keeping two label triggers preserves the old teaching point but not the requested native-gate exercise. |
+| Review policy | Re-review `product-change-implementation` revisions; preserve `related-services`' single advisory contract pass with honest SHA disclosure. | Quietly claiming every revised head was reviewed changes `related-services`' policy and overstates evidence. |
 | Practical input | Two bounded documentation changes in a disposable fork. | A UI fixture permits application-level interaction but adds an unapproved app/toolchain maintenance scope. |
 | Docs work | Four narrow companion-page deltas, separate from examples. | Rewriting merged concepts duplicates completed work and risks losing holds. |
 | Delivery | This examples spec PR becomes the examples implementation PR; one docs companion. | A separate spec-only PR would create a third PR against the requester's two-PR instruction. |
@@ -262,8 +262,8 @@ Use a new docs draft PR. Link this specification and the exact delivered example
 ## Assumptions
 
 - Assumption: GitHub-backed definitions and GitHub issue intake remain the primary practical path. Optional existing Slack, Linear, mobile, and harness examples retain their documented prerequisites.
-- Assumption: a no-fixture documentation smoke test is within 26's small one-PR scope; the main product-change trace remains illustrative.
-- Assumption: for 26, a human marks the delivered draft ready. This is the conservative interpretation of keeping it draft through handoff.
+- Assumption: a no-fixture documentation smoke test is within `product-change-implementation`'s small one-PR scope; the main product-change trace remains illustrative.
+- Assumption: for `product-change-implementation`, a human marks the delivered draft ready. This is the conservative interpretation of keeping it draft through handoff.
 - Assumption: no new YAML-parsing dependency is needed for repository coverage/layout checks. The server remains the format authority.
 - Assumption: authorized runtime tests will use disposable reader-controlled repositories and factories. The scope answer alone does not grant that authorization.
 
@@ -300,11 +300,11 @@ git --no-pager diff --check
 ```
 
 - Require exit 0 for every one of the 16 parser invocations; the loop's final status alone is insufficient. Record an individual result for every example.
-- Validate complete reader-substituted 02 and 26 definitions separately with `python3 scripts/validate_factory_files.py DEFINITION_ROOT --server-root https://app.warp.dev`.
+- Validate complete reader-substituted `sdlc-issue-to-pr` and `product-change-implementation` definitions separately with `python3 scripts/validate_factory_files.py DEFINITION_ROOT --server-root https://app.warp.dev`.
 - Run the full `.github/workflows/validate.yml` checks after helper or CI changes.
 - Compare the copied validator's SHA-256 against its bundled source. Require byte-for-byte equality.
 - Compare the diff against the disposition table. Require no execution changes outside the five selected examples except the specified shared checks/helper refresh.
-- Confirm 00 and 09's pinned configuration/vendor content remains unchanged with `git --no-pager diff BASE_COMMIT -- examples/00-warp-default-agents examples/09-github-skill scripts/verify_default_agents.py`, where `BASE_COMMIT` is the recorded implementation base.
+- Confirm `warp-default-agents` and `github-skill`'s pinned configuration/vendor content remains unchanged with `git --no-pager diff BASE_COMMIT -- examples/warp-default-agents examples/github-skill scripts/verify_default_agents.py`, where `BASE_COMMIT` is the recorded implementation base.
 - Inspect each graph and worker prompt together against the stage tables. Produce a route checklist covering every conditional branch, every gate answer, optional mobile removal, and every stage worker binding. Server validation establishes reference correctness; the runtime cases below establish behavior.
 
 ### Docs checks
@@ -332,7 +332,7 @@ Run only after separate authorization to use a disposable factory and apply a de
 
 | Case | Check and expected result |
 | --- | --- |
-| Labeled GitHub issue plus configured mention | Execute the 02 request; one intended intake path reaches the workflow and asks for its explicitly required plan approval |
+| Labeled GitHub issue plus configured mention | Execute the `sdlc-issue-to-pr` request; one intended intake path reaches the workflow and asks for its explicitly required plan approval |
 | PR follow-up matching mention/assignment conditions | Record the event delivery and resulting work; overlapping triggers within one automation do not duplicate the same delivery; do not assume distinct deliveries are deduplicated |
 | Missing routing label or repository outside the filter | Send a fresh nonmatching input; the specialized GitHub automation does not start work; do not claim a fallback without evidence |
 | Requested plan changes | Request a concrete change before approving; no implementation starts; the revised spec asks for a fresh answer |
@@ -342,17 +342,17 @@ Run only after separate authorization to use a disposable factory and apply a de
 
 ### Added acceptance cases
 
-- **26 approval:** execute the complete no-fixture exercise; show the spec-only draft, unanswered native gate, human edit, approval of that revision, same-PR implementation, independent review, revision, and review of the new head.
-- **26 nonapproval:** test an unrelated reply, a legacy approval label, an approval without a matching open spec, and a replacement spec after closure. None authorizes implementation without fresh approval of the current spec.
-- **03:** record implementation and review worker/harness identities and preservation of credential prerequisites. A missing credential is a blocker, not a reason to substitute a different harness.
-- **24:** test product-only, additive shared-package, and out-of-product inputs. Confirm dependent installation/checks, owner review request, and shared-edit draft status; no branch for declined scope.
-- **25:** test provider-only, consumer-only, paired additive, and breaking requests. Confirm correct PR count, reciprocal links only for a pair, human merge order, default-branch probe, restored final client, and reviewed-versus-revised SHA disclosure.
+- **product-change-implementation approval:** execute the complete no-fixture exercise; show the spec-only draft, unanswered native gate, human edit, approval of that revision, same-PR implementation, independent review, revision, and review of the new head.
+- **product-change-implementation nonapproval:** test an unrelated reply, a legacy approval label, an approval without a matching open spec, and a replacement spec after closure. None authorizes implementation without fresh approval of the current spec.
+- **multi-harness:** record implementation and review worker/harness identities and preservation of credential prerequisites. A missing credential is a blocker, not a reason to substitute a different harness.
+- **monorepo-product:** test product-only, additive shared-package, and out-of-product inputs. Confirm dependent installation/checks, owner review request, and shared-edit draft status; no branch for declined scope.
+- **related-services:** test provider-only, consumer-only, paired additive, and breaking requests. Confirm correct PR count, reciprocal links only for a pair, human merge order, default-branch probe, restored final client, and reviewed-versus-revised SHA disclosure.
 - **All five:** inject or observe a failed required check. Handoff reports failure and missing evidence rather than calling the change verified.
 
 ### Visual proof and publication holds
 
 - Use computer use after the relevant build succeeds. Record video of authorized setup/definition inspection, request submission, pending gate, human approval, draft PR, independent review, and same-PR revision. Link the tested commit and observed UI labels.
-- Capture the 02 and 26 workflows separately when both cannot be shown clearly in one recording. Use static screenshots only as supplemental proof of a genuinely static state.
+- Capture the `sdlc-issue-to-pr` and `product-change-implementation` workflows separately when both cannot be shown clearly in one recording. Use static screenshots only as supplemental proof of a genuinely static state.
 - For the docs MDX changes, inspect the built changed pages for readable commands, links, callouts, and unbroken layout. This does not replace the live workflow proof.
 - Do not clear a hold using an illustrative trace, source read, parser pass, another task's captures, or a draft PR's existence.
 - Preserve explicit holds for public availability/access; complete-definition validation and successful application; public-parser/worker-path compatibility; all seven runtime cases; acquisition/substitution reconciliation; real setup-to-same-PR-revision proof; publication; and human merge.

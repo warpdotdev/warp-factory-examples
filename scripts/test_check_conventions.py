@@ -50,7 +50,7 @@ agentDefaults:
 
 
 def write_clean_example(root: Path) -> Path:
-    example = root / "examples" / "00-fixture"
+    example = root / "examples" / "fixture"
     (example / "agents" / "foreman").mkdir(parents=True)
     (example / "runners").mkdir(parents=True)
     (example / "factory.yaml").write_text(FACTORY)
@@ -72,7 +72,7 @@ class CheckConventionsTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             example = write_clean_example(root).rename(
-                root / "examples" / "02-sdlc-issue-to-pr"
+                root / "examples" / "sdlc-issue-to-pr"
             )
             result = run_checker(root)
             self.assertEqual(result.returncode, 1, result.stdout)
@@ -84,7 +84,7 @@ class CheckConventionsTest(unittest.TestCase):
     def test_focused_example_needs_no_blueprint(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            write_clean_example(root).rename(root / "examples" / "04-code-review-only")
+            write_clean_example(root).rename(root / "examples" / "code-review-only")
             result = run_checker(root)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
@@ -92,7 +92,7 @@ class CheckConventionsTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             example = write_clean_example(root).rename(
-                root / "examples" / "26-product-change-implementation"
+                root / "examples" / "product-change-implementation"
             )
             with (example / "factory.yaml").open("a") as factory:
                 factory.write("blueprint:\n")
@@ -105,9 +105,18 @@ class CheckConventionsTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_clean_example(root)
+            (root / "README.md").write_text("[Example](examples/fixture)\n")
             result = run_checker(root)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertIn("Conventions OK", result.stdout)
+
+    def test_numbered_example_directory_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_clean_example(root).rename(root / "examples" / "01-fixture")
+            result = run_checker(root)
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn("without a number prefix", result.stdout)
 
     def test_unresolved_runner_reference_is_caught(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -160,10 +169,34 @@ class CheckConventionsTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             write_clean_example(root)
-            (root / "README.md").write_text("See examples/99-does-not-exist for more.\n")
+            (root / "README.md").write_text("See examples/does-not-exist for more.\n")
             result = run_checker(root)
             self.assertEqual(result.returncode, 1, result.stdout)
-            self.assertIn("99-does-not-exist", result.stdout)
+            self.assertIn("does-not-exist", result.stdout)
+
+    def test_immutable_example_url_does_not_use_current_paths(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_clean_example(root)
+            pinned = (
+                "https://github.com/warpdotdev/warp-factory-examples/tree/"
+                + "a" * 40
+                + "/examples/historical-name"
+            )
+            (root / "README.md").write_text(f"[Source]({pinned})\n")
+            self.assertEqual(run_checker(root).returncode, 0)
+
+            (root / "README.md").write_text(
+                f"[Source]({pinned.replace('a' * 40, 'main')})\n"
+            )
+            self.assertEqual(run_checker(root).returncode, 1)
+
+            (root / "README.md").write_text(
+                f"[Source]({pinned})\nSee examples/historical-name.\n"
+            )
+            result = run_checker(root)
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn("historical-name", result.stdout)
 
     def test_retired_terminology_is_caught(self):
         cases = {
@@ -186,7 +219,7 @@ class CheckConventionsTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             example = write_clean_example(root).rename(
-                root / "examples" / "09-github-skill"
+                root / "examples" / "github-skill"
             )
             snapshot = example / "skills" / "github" / "SKILL.md"
             snapshot.parent.mkdir(parents=True)
@@ -206,7 +239,7 @@ class CheckConventionsTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             example = write_clean_example(root).rename(
-                root / "examples" / "09-github-skill"
+                root / "examples" / "github-skill"
             )
             snapshot = example / "skills" / "github" / "SKILL.md"
             snapshot.parent.mkdir(parents=True)
