@@ -14,13 +14,20 @@ Copy the entire example directory into your repository and follow the
 
 These examples use Warp Factories configuration schema version `v1alpha1`.
 
-Examples 02, 03, 24, 25, and 26 define explicit
+Examples 02, 03, 13, 14, 15, 24, 25, and 26 define explicit
 [Blueprints](https://docs.warp.dev/factories/blueprints/) in `factory.yaml`.
 Each Blueprint defines stages, the order in which work moves between them,
 and gates that wait for a person's answer. A worker is the agent assigned to
 execute a stage. The files under `agents/` configure its role, model or
 harness, runner, and skills. The other examples focus on individual tasks;
 00 and 09 preserve historical snapshots.
+
+For smaller Blueprint patterns, start with
+[two stages in order](examples/13-blueprint-linear),
+[conditional entry and revision](examples/14-blueprint-revision-loop), or
+[a human decision gate](examples/15-blueprint-human-gate).
+Their procedures stay in `factory.yaml`, with one small foreman file and no
+automation, skill, runner, or project setup.
 
 Try [planning and revising one PR](examples/02-sdlc-issue-to-pr#exercise-plan-and-revise-one-pr)
 or [editing a committed spec before approval](examples/26-product-change-implementation#exercise-edit-a-committed-spec)
@@ -84,6 +91,12 @@ are complete. Parser validation does not verify application or execution.
   Start work by assigning a labeled GitHub issue to the factory. The foreman
   checks the request's scope and returns a linked pull request for human
   review. This example also explains when to use assignment instead of labels.
+- [`examples/13-blueprint-linear`](examples/13-blueprint-linear):
+  Extract incident facts, then format a handoff in two ordered stages.
+- [`examples/14-blueprint-revision-loop`](examples/14-blueprint-revision-loop):
+  Check or draft a release note, then return corrections to the draft stage.
+- [`examples/15-blueprint-human-gate`](examples/15-blueprint-human-gate):
+  Wait for a person to choose an incident update's audience before writing it.
 - [`examples/24-monorepo-product`](examples/24-monorepo-product):
   Scope a factory to one product in a monorepo and verify changes across
   affected packages. Changes to shared packages require a draft pull request

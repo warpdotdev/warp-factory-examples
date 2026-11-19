@@ -81,7 +81,7 @@ python3 scripts/test_validate_factory_files.py -v
 ```
 
 This checks the ground rules a script can check: runner references, scorer
-agent names, one foreman per example, the five selected Blueprint examples'
+agent names, one foreman per example, the selected Blueprint examples'
 top-level coverage and `agents/` layout, `examples/` links, and the
 terminology rules. Prose that must name a banned term can fence itself off
 with `<!-- terminology-allow-begin -->` / `<!-- terminology-allow-end -->`.

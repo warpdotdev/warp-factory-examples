@@ -1,0 +1,29 @@
+schemaVersion: v1alpha1
+name: blueprint-linear
+description: Turn incident notes into a handoff in two ordered stages.
+repositories: []
+agentDefaults:
+  model: auto
+blueprint:
+  worker: foreman
+  start:
+    to: extract
+  stages:
+    extract:
+      worker: foreman
+      inputs: Incident notes supplied in the request.
+      prompt: |
+        Extract the start time, recovery time, customer impact, and cause from
+        the supplied notes. Mark missing facts as not supplied. Do not infer
+        a cause or claim the incident is resolved beyond what the notes say.
+      outputs: A timeline, customer impact, and known or missing cause.
+      to: handoff
+    handoff:
+      worker: foreman
+      inputs: The extracted timeline, impact, and cause.
+      prompt: |
+        Return a handoff with Timeline, Impact, and Open questions headings.
+        Include missing facts under Open questions. Use only the supplied
+        notes and extracted facts. Do not publish the handoff.
+      outputs: The handoff text in the originating conversation.
+      to: end

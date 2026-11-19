@@ -51,6 +51,9 @@ DEFAULT_ROOT = Path(__file__).resolve().parent.parent
 BLUEPRINT_EXAMPLES = {
     "02-sdlc-issue-to-pr",
     "03-multi-harness",
+    "13-blueprint-linear",
+    "14-blueprint-revision-loop",
+    "15-blueprint-human-gate",
     "24-monorepo-product",
     "25-related-services",
     "26-product-change-implementation",
