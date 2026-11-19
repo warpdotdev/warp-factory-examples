@@ -74,7 +74,7 @@ Baseline parser success proves neither the proposed migrated definitions nor app
 - Do not invent executable expressions or typed server-validated stage outputs.
 - Every stage has an outgoing route. The graph has a path from `start` to `end`. Do not add a rule that all stages must be reachable from `start`; disconnected entry stages are supported.
 - Keep role boundaries and shared instructions in worker files and skills. Move stage-specific procedures, routing, and gate policy into the Blueprint. Remove or rewrite conflicting descriptions and numbered workflow procedures together.
-- Automations retain their existing event and filter constraints except for the explicit example-26 change. Do not add blanket stage targeting or execution overrides.
+- Automations retain their existing event and filter constraints except for the explicit `product-change-implementation` change. Do not add blanket stage targeting or execution overrides.
 - If an automation uses `stage`, it names an existing stage and declares neither `agent`/`worker` nor per-run execution overrides. A separate review-only path must not send an externally supplied PR through implementation.
 - Report missing tools, access, failed checks, and unresolved questions as such. Do not approve or merge a PR.
 
