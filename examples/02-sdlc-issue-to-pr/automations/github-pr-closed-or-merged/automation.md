@@ -12,7 +12,7 @@ triggers:
       labels: ["factory:Acme"]
 ---
 A pull request with this factory's routing label was closed or merged.
-Inspect its description for links to work items. If it was merged, move each
-linked Linear issue to its completed state and complete the factory task that
-produced the pull request. If it was closed without merging, report that on
-the linked issue instead. Do not mark anything done.
+Follow the Blueprint's completion stage. Inspect linked work and every required
+PR before reporting success or completing a tracked issue. A merged backend PR
+does not complete work whose mobile PR is still open. Report closure without
+merge on the originating issue; it is not successful completion.

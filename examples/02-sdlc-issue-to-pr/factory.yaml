@@ -20,3 +20,183 @@ integrations:
 agentDefaults:
   model: auto
   runner: linux-standard
+blueprint:
+  worker: foreman
+  start:
+    to: intake
+  stages:
+    intake:
+      worker: foreman
+      inputs: |
+        The original request or lifecycle event, linked issues, PRs, and prior work.
+      outputs: |
+        Intended recipient, source, tracked work, scope, existing PRs, planning requirement, and mobile work.
+      prompt: |
+        Check that this event is intended for this factory; otherwise stop silently.
+        Read linked work before creating anything. Reuse existing issues, branches,
+        PRs, and worker conversations. Identify every affected repository and whether
+        work is mobile-only, non-mobile, or mixed. Do not repeat supplied triage.
+      to:
+        - stage: end
+          when: The request is intended for someone else.
+        - stage: completion
+          when: This is a merge or closure notification about linked work.
+        - stage: triage
+          when: Cause or scope is unknown, a tracked issue is missing, or duplicate work is uncertain.
+        - stage: spec
+          when: Planning is explicitly requested, or the work is large or ambiguous.
+        - stage: mobile-build
+          when: The scoped work is mobile-only.
+        - stage: implement
+          when: The scoped work includes non-mobile changes.
+    triage:
+      worker: triage
+      inputs: |
+        Original request, existing tracked work, and the uncertainty to investigate.
+      outputs: |
+        Evidence, reproduction, tracked issue, scope, complexity, mobile work, and unresolved decisions.
+      prompt: |
+        Research the affected code and existing issues. Reproduce bugs before
+        concluding. Update the existing issue or create one in the connected
+        tracker; use a GitHub issue for GitHub-only intake. Record evidence,
+        scope, complexity, and decisions that require a person.
+      to:
+        - stage: spec
+          when: Planning is explicitly requested, or the work is large or ambiguous.
+        - stage: mobile-build
+          when: The scoped work is mobile-only.
+        - stage: implement
+          when: The scoped work includes non-mobile changes.
+    spec:
+      worker: spec
+      inputs: |
+        Tracked issue, scope, unresolved decisions, existing spec PRs, and any requested spec revision.
+      outputs: |
+        Committed spec path, revision, PR, assumptions, and spec-review answer with its referenced revision.
+      prompt: |
+        Read the issue and affected code. Write the shortest spec that resolves
+        the decisions, with behavior, non-goals, and validation criteria. Commit
+        it in a draft PR named for the work item. Reuse that branch and PR on
+        revision. Report blocking questions through the foreman, not guesses.
+        Do not implement. Implementation must reuse the approved spec PR.
+      gates:
+        spec-review:
+          prompt: |
+            Link the draft PR, committed spec path, and revision in the original
+            conversation. Ask for approval of that revision, requested changes,
+            or cancellation. A new spec revision needs a new answer.
+          outputs: |
+            Explicit approval of the current committed spec, requested changes,
+            or explicit cancellation, with the referenced revision. A question
+            or unrelated reply leaves the gate open.
+      to:
+        - stage: spec
+          when: spec-review requests changes.
+        - stage: end
+          when: spec-review explicitly cancels the work.
+        - stage: mobile-build
+          when: spec-review approves the current revision and work is mobile-only.
+        - stage: implement
+          when: spec-review approves the current revision and work includes non-mobile changes.
+    implement:
+      worker: implementer
+      inputs: |
+        Issue, approved committed spec when present, non-mobile scope, existing PRs, and actionable findings.
+      outputs: |
+        Non-mobile PRs and heads, changes, exact checks and results, blockers, and outstanding mobile work.
+      prompt: |
+        Implement only the non-mobile scope against the approved contract when
+        present. Reuse each repository's existing branch and PR, including the
+        spec PR. Follow repository conventions and add useful regression tests.
+        Run documented checks and report their actual results. Do not edit iOS
+        code. Report outstanding mobile work and any scope change to the foreman.
+      to:
+        - stage: mobile-build
+          when: Mobile changes remain outstanding.
+        - stage: review
+          when: All required implementation results are available.
+    mobile-build:
+      worker: mobile-build
+      inputs: |
+        iOS scope, issue, approved contract when present, existing iOS PR, and mobile findings.
+      outputs: |
+        iOS PR and head, changes, scheme and simulator, build and test results, and blockers.
+      prompt: |
+        Own the change in acme/ios-app on macOS. Reuse its existing branch and
+        PR, or open its own PR if none exists; never share a PR across repositories.
+        Build and run the repository's test plan. Report exact checks, failures,
+        and missing tools. Do not merge.
+      to: review
+    review:
+      worker: reviewer
+      inputs: |
+        Every required PR and current head, issue, approved spec, and previous findings.
+      outputs: |
+        Reviewed heads, evidence, findings by repository, unambiguous corrections, and human-decision answer when needed.
+      prompt: |
+        Wait for every required PR, including the iOS result. Review each current
+        head against the issue and approved spec. Check behavior and regression
+        coverage. Report locations, impact, and corrections only to the foreman.
+        Classify findings by repository and as unambiguous or needing a human.
+        Re-review revised heads. Never approve or merge PRs.
+      gates:
+        human-decision:
+          when: A judgment call affects the contract or the correction.
+          prompt: |
+            Relay the finding, options, and consequences through the foreman to the requester.
+          outputs: |
+            A contract revision, an unambiguous correction, or explicit acceptance of a nonblocking finding.
+      to:
+        - stage: spec
+          when: The human decision changes the product contract.
+        - stage: implement
+          when: Non-mobile or mixed actionable findings remain.
+        - stage: mobile-build
+          when: Only mobile actionable findings remain.
+        - stage: handoff
+          when: No actionable findings remain.
+    handoff:
+      worker: foreman
+      inputs: |
+        All PRs and heads, review evidence, exact checks, and unresolved limits.
+      outputs: |
+        Report in the originating conversation and the handoff-decision answer.
+      prompt: |
+        Confirm factory:<alias> on every PR and on GitHub issues; report label
+        failures without hiding them. Return every PR, current and reviewed
+        heads, actual checks, and limits in the original conversation. Do not
+        call failed or missing checks verified. Delivery is not merge evidence.
+      gates:
+        handoff-decision:
+          prompt: |
+            Ask for a revision, merge or closure information, or explicit cancellation. Delivery alone waits here.
+          outputs: |
+            A concrete revision request, merge or closure information, or explicit cancellation.
+      to:
+        - stage: spec
+          when: The answer changes the contract.
+        - stage: implement
+          when: The answer requests a non-mobile or mixed revision.
+        - stage: mobile-build
+          when: The answer requests only a mobile revision.
+        - stage: completion
+          when: The answer reports a merge or closure.
+        - stage: end
+          when: The answer explicitly cancels the work.
+    completion:
+      worker: foreman
+      inputs: |
+        The full linked PR set and merge or closure information.
+      outputs: |
+        Verified merge state for every required PR, closure without merge, or an incomplete set.
+      prompt: |
+        Inspect every linked PR. Report merged only from verified merge evidence.
+        Closure without merge is not successful completion. If any required PR
+        remains unmerged or is missing, report it and return to human handoff.
+      to:
+        - stage: end
+          when: Every required PR is verified merged.
+        - stage: end
+          when: A person explicitly cancels the work.
+        - stage: handoff
+          when: A PR closed without merge or the required linked set is incomplete.

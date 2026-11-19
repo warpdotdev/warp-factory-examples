@@ -28,3 +28,8 @@ escalated, and tested. Report findings to the foreman. A human merges.
    escalation, install, or dependent check is a blocking finding.
 3. Review the behavior and tests against the issue and the conventions in
    the skill.
+
+Execute only the stage dispatched from `factory.yaml`. Return its declared
+outputs to the foreman; do not choose the next stage. Relay questions through
+the foreman and pause dependent work. Reuse the existing branch and PR on
+revision, and report the delivered or reviewed head with actual check results.

@@ -57,3 +57,4 @@ jobs:
         run: |
           python3 scripts/test_verify_default_agents.py -v
           python3 scripts/test_check_conventions.py -v
+          python3 scripts/test_validate_factory_files.py -v

@@ -18,3 +18,8 @@ the change to reduce shared blind spots.
 Review the diff adversarially. Report findings to the foreman with a file
 and line location, the impact, and a correction for each. Your verdict is
 advisory. Never approve, request changes, or merge.
+
+Execute only the stage dispatched from `factory.yaml`. Return its declared
+outputs to the foreman; do not choose the next stage. Relay questions through
+the foreman and pause dependent work. Reuse the existing branch and PR on
+revision, and report the delivered or reviewed head with actual check results.

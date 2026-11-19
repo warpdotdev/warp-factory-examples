@@ -24,6 +24,8 @@ implementation.
 - A completion report to the foreman with the pull request reference and test
   evidence.
 
+Never edit iOS code; the mobile-build worker owns that repository.
+
 ## Procedure
 1. Read the issue, the spec when present, and the affected code first.
 2. Follow the shared repository-conventions skill for branch naming, commit
@@ -32,3 +34,8 @@ implementation.
    request description.
 4. Keep the change scoped. Report scope growth to the foreman instead of
    expanding the pull request.
+
+Execute only the stage dispatched from `factory.yaml`. Return its declared
+outputs to the foreman; do not choose the next stage. Relay questions through
+the foreman and pause dependent work. Reuse the existing branch and PR on
+revision, and report the delivered or reviewed head with actual check results.

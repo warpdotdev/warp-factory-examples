@@ -68,6 +68,39 @@ def run_checker(root: Path) -> subprocess.CompletedProcess:
 
 
 class CheckConventionsTest(unittest.TestCase):
+    def test_migrated_example_requires_blueprint(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            example = write_clean_example(root).rename(
+                root / "examples" / "02-sdlc-issue-to-pr"
+            )
+            result = run_checker(root)
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn("requires a top-level blueprint", result.stdout)
+            with (example / "factory.yaml").open("a") as factory:
+                factory.write("blueprint:\n")
+            self.assertEqual(run_checker(root).returncode, 0)
+
+    def test_focused_example_needs_no_blueprint(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_clean_example(root).rename(root / "examples" / "04-code-review-only")
+            result = run_checker(root)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_migrated_example_retains_agent_layout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            example = write_clean_example(root).rename(
+                root / "examples" / "26-product-change-implementation"
+            )
+            with (example / "factory.yaml").open("a") as factory:
+                factory.write("blueprint:\n")
+            (example / "agents").rename(example / "workers")
+            result = run_checker(root)
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn("retain the agents/<name>/agent.md layout", result.stdout)
+
     def test_clean_tree_passes(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

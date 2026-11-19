@@ -27,6 +27,7 @@ triggers:
 ---
 The factory was mentioned on or assigned to a GitHub issue or pull request
 that carries this factory's routing label. Read the thread that triggered
-this run, check that the request is for this factory, and follow the standard
-lifecycle. Pull request mentions usually ask you to address review comments.
-Dispatch implementation on the existing branch rather than opening new work.
+this run, check that the request is for this factory, and continue its pending
+Blueprint stage. A spec answer belongs to the matching spec gate. For review
+corrections, reuse the existing branch and PR and independently review the new
+head. Do not bypass an unanswered gate or create duplicate work.

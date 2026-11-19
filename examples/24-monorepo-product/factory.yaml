@@ -11,3 +11,75 @@ repositories:
 agentDefaults:
   model: auto
   runner: linux-web
+blueprint:
+  worker: foreman
+  start:
+    to: scope
+  stages:
+    scope:
+      worker: foreman
+      inputs: |
+        Triggering issue, linked work, and monorepo ownership skill.
+      outputs: |
+        Scope decision, concrete deliverable, product directory, shared-impact rule, and existing PR.
+      prompt: |
+        Read the issue and monorepo-ownership skill. Ignore requests not addressed
+        to this factory. Scope one deliverable to apps/web. Permit only minimal
+        additive packages/* edits needed for that product. For another product
+        or mainly shared work, comment once with directory and owners, then
+        decline before any branch. If scope is ambiguous, ask one clarifying
+        question and wait. Record the scope and shared-impact rule for implementation.
+      to:
+        - stage: end
+          when: The request is not for this factory or scope is declined.
+        - stage: implement
+          when: The deliverable is scoped to apps/web.
+    implement:
+      worker: implementer
+      inputs: |
+        Issue, scoped deliverable, ownership skill, existing PR, and actionable findings.
+      outputs: |
+        PR and head, scope mismatch if found, shared paths, owner review request, draft state, and exact checks.
+      prompt: |
+        Follow the ownership skill and implement inside apps/web. Shared edits
+        must be minimal and additive; report a scope mismatch before broadening.
+        For product-only work use the scoped install. Before shared checks,
+        require a successful full install, then test and typecheck changed
+        packages and their dependents. Declare every shared path. Shared edits
+        require a draft and an owning-team review request. Reuse the same branch
+        and PR on revision. Report failed or missing checks honestly.
+      to:
+        - stage: scope
+          when: The required change is mainly shared work or outside product scope.
+        - stage: review
+          when: Implementation has reported its PR and verification results.
+    review:
+      worker: reviewer
+      inputs: |
+        Issue, scoped deliverable, ownership skill, PR, and current head.
+      outputs: |
+        Reviewed head, findings, check evidence, and any human decision.
+      prompt: |
+        Review behavior, tests, and every path against scope. Require shared paths
+        in the PR's Shared packages section, a draft, owner review request, and
+        successful full installation before changed-package and dependent checks.
+        Report unambiguous findings only to the foreman. Relay judgment calls
+        through the foreman and wait for answers. Independently review each revision.
+      to:
+        - stage: implement
+          when: Unambiguous actionable findings remain.
+        - stage: handoff
+          when: No actionable findings remain.
+    handoff:
+      worker: foreman
+      inputs: |
+        PR, current and reviewed heads, checks, shared paths, owner request, and limits.
+      outputs: |
+        Issue comment with PR state, evidence, and owner handoff.
+      prompt: |
+        Confirm factory:<alias> on the issue and PR; report any label failure.
+        Link the PR and actual checks on the issue. For shared edits name the
+        owners whose review was requested and keep the PR draft. Never mark it
+        ready on an owner's behalf. A human controls readiness and merge.
+        End means the handoff finished, not that the PR merged.
+      to: end

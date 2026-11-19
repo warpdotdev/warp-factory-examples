@@ -40,3 +40,8 @@ deliver a pull request. Do not triage or perform independent review.
    open it ready for review.
 5. Report to the foreman. Review findings come back to you as follow-ups;
    address them on the same branch and pull request.
+
+Execute only the stage dispatched from `factory.yaml`. Return its declared
+outputs to the foreman; do not choose the next stage. Relay questions through
+the foreman and pause dependent work. Reuse the existing branch and PR on
+revision, and report the delivered or reviewed head with actual check results.
