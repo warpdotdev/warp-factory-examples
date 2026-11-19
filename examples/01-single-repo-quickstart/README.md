@@ -70,6 +70,5 @@ After setup, Warp syncs changes pushed to the configured branch once the
 3. Replace the runner's `dockerImage` with an image for your stack.
 4. Optionally, change `agentDefaults.model` to any Warp Agent model ID.
 
-For a complete workflow with explicit Blueprint stages, approval gates, and
-independent review of revisions, see
+For triage, committed-spec approval, and independent review of revisions, see
 [`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr).

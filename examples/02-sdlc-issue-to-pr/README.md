@@ -1,30 +1,30 @@
 # 02: Issue to pull request
 
-This example is a complete engineering factory that takes requests from
-Slack, Linear, and GitHub through triage, specification when needed, and
-implementation. A separate agent reviews the changes before the factory
-hands the pull request to a human.
+Route requests from Slack, Linear, and GitHub through triage, specification
+when needed, implementation, and independent review. The foreman returns the
+pull requests and check results in the original conversation. A person merges.
 
-The inline Blueprint in `factory.yaml` owns the workflow. The worker files
-retain the default roles plus a mobile worker and their execution settings.
+The Blueprint in `factory.yaml` defines the workflow. The files under `agents/`
+configure the default roles and an additional agent for iOS work.
 For the historical default-agent snapshot, see
 [`00-warp-default-agents`](../00-warp-default-agents).
 
 The stages are `intake`, `triage`, `spec`, `implement`, `mobile-build`,
 `review`, `handoff`, and `completion`. Planning takes priority when explicitly
-requested or when work is large or ambiguous. `spec-review` waits for approval,
-changes, or cancellation of a committed spec revision. Review can open
-`human-decision`; revisions return to the responsible worker and independent
-review. `handoff-decision` waits for a revision, merge or closure information,
-or cancellation. Completion inspects every required PR; closed is not merged.
+requested or when work is large or ambiguous. The `spec-review` gate waits for
+approval of the committed spec, requested changes, or cancellation. A review
+finding that needs your judgment opens `human-decision`. Corrections return to
+the responsible worker and then to independent review. At `handoff-decision`,
+you request a revision, report a merge or closure, or cancel. The `completion`
+stage checks every required PR; closing a PR without merging it is not
+successful completion.
 
 ## What this example shows
 
 - All five default agents (`FOREMAN`, `TRIAGE`, `SPEC`, `IMPLEMENT`, and
   `REVIEW`) appear, along with a `CUSTOM` agent for work the default agents
   don't cover. The `triage` and `reviewer` agents override the default
-  `model`. The reviewer uses a different model than the implementer to reduce
-  shared blind spots.
+  `model`. The reviewer uses a different model than the implementer.
 - Three runners differ by size, image, and operating system, and each agent
   can select the one that suits its stage. See
   [Runner configuration](#runner-configuration).
@@ -194,11 +194,11 @@ Use a disposable fork to document a validator command. The expected final
 work diff is `README.md` plus one committed spec file. Your definition changes
 belong in a separate repository, not in that work PR.
 
-Availability and team access, successful application, the actual runner
-toolchain, and the full approval-to-revision flow remain verification holds.
-The steps below define what to test after those prerequisites are confirmed;
-they are not a record of a successful run. Do not apply a live definition
-without separate authorization.
+This draft exercise has not verified availability, team access, definition
+application, the runner's tools, or the live approval and revision steps.
+Confirm those prerequisites before treating it as runnable. The instructions
+are not a record of a successful run. Apply a live definition only with
+separate authorization.
 
 ### Prepare the two repositories
 
@@ -219,10 +219,10 @@ without separate authorization.
 
 4. On GitHub, set the fork's default branch to `blueprint-demo`. Check that
    its README does not explain single-example validation or exit code 2.
-5. Acquire the migrated definition and helper together from this immutable
-   [implementation revision](https://github.com/warpdotdev/warp-factory-examples/tree/fc01e32555a0a7922b54da5a5f2c4bdc50296912).
-   Use Git and Python 3 locally. Do not substitute unchanged `main` during
-   draft review.
+5. Copy the definition and validation helper from the same
+   [pinned revision](https://github.com/warpdotdev/warp-factory-examples/tree/fc01e32555a0a7922b54da5a5f2c4bdc50296912).
+   You need Git and Python 3 locally. The `main` branch does not yet contain
+   this Blueprint.
 
    ```bash
    git clone https://github.com/warpdotdev/warp-factory-examples.git blueprint-source
@@ -232,8 +232,7 @@ without separate authorization.
    ```
 
    `DEFINITION_REPO_URL` is your separate, empty definition repository.
-   Keep its `.git` directory. Example 26 uses the same source revision but
-   copies its own example directory instead.
+   Keep its `.git` directory.
 
 ### Substitute the complete definition
 
@@ -262,7 +261,7 @@ In `blueprint-definition`, make these changes together:
    `setupCommands` block from `linux-build.yaml` and update its description.
    Keep the Linux shape, architecture, worker bindings, models, and scorers.
    Confirm `git --version` and `python3 --version` in the selected runtime
-   before claiming the runner works.
+   before running the exercise.
 6. In `skills/repository-conventions/SKILL.md`, name the fork and
    `blueprint-demo` PR base. Require a draft through handoff and no merge.
    In `agents/implementer/skills/testing-standards/SKILL.md`, require
@@ -281,15 +280,17 @@ From the directory containing the three checkouts, run:
 python3 blueprint-source/scripts/validate_factory_files.py blueprint-definition --server-root https://app.warp.dev
 ```
 
-Exit 0 covers parser and state-independent checks, not application or runtime.
-Exit 1 needs correction; exit 2 means no validation occurred. Do not continue
-on either result. Commit and push the substituted definition after validation.
+Exit 0 means the parser checked the definition without diagnostics; it does
+not prove that application or execution will succeed. On exit 1, fix the
+diagnostics. On exit 2, restore access to the validator and retry. Continue
+only after exit 0, then commit and push the customized definition.
 
 With separate authorization, use the
 [GitHub-backed setup path](https://docs.warp.dev/factories/factory-as-code/#where-the-definition-lives)
 for a disposable factory. Confirm its applied definition revision and enabled
 automations. In the actual work checkout confirm `blueprint-demo` is the
-default branch and eventual PR base. A definition commit does not prove a sync.
+default branch and eventual PR base. Check the applied revision, not only the
+commit you pushed.
 
 ### Request planning, approval, and a revision
 
@@ -306,10 +307,10 @@ default branch and eventual PR base. A definition commit does not prove a sync.
    honestly. Open a draft pull request. Do not merge.
    ```
 
-2. Check for a spec-only draft and an unanswered `spec-review` ask. Request
+2. Check for a spec-only draft and an unanswered `spec-review` request. Request
    one change before approval, for example: `@warp Add the exact validator
    command to the spec's acceptance criteria.` Confirm no implementation
-   starts and the revised committed plan gets a fresh ask.
+   starts and the revised committed spec gets a new approval request.
 3. Read the revised file. In the same issue, post a new `@warp` comment
    approving its linked PR and committed revision. Require the draft and
    no-merge limits again.
@@ -320,7 +321,7 @@ default branch and eventual PR base. A definition commit does not prove a sync.
    rerun the convention check. Do not merge.`
 6. Confirm the branch and PR number stayed the same, the new head explains
    network access, and independent review covers that new head. Record both
-   heads, checks, and run links. Delivery waits at `handoff-decision`; leave
+   heads, checks, and run links. The foreman waits at `handoff-decision`; leave
    the PR unmerged and explicitly cancel the disposable trial when finished.
 
 ### Recover a blocked exercise
@@ -333,7 +334,8 @@ default branch and eventual PR base. A definition commit does not prove a sync.
   filters. Apply the label, then send a new mention. Nonmatching events do
   not use this specialized intake.
 - **Approval is stale or missing:** read the open spec's current revision and
-  answer its pending ask in the original issue. Questions do not approve it.
+  answer its pending approval request in the original issue. A question is not
+  approval.
 - **The spec PR is closed:** restart on a replacement spec and approve it
   separately. Never transfer an old approval.
 - **A required check fails:** keep the failure and correction request visible.

@@ -1,12 +1,12 @@
 # 03: Multi-harness
 
-This example uses a different harness for each role. The foreman runs on the
-Warp Agent harness and routes work, a Claude Code agent implements changes,
-and a Codex agent reviews them. The
-Blueprint in `factory.yaml` routes `intake` → `implement` → `review` →
-`handoff`. Actionable findings return to implementation on the same PR and
-then to independent review. Questions pause the affected stage. Ending means
-handoff, not merge. The worker files retain their separate harnesses and runners.
+Route work with the Warp Agent harness, implement with Claude Code, and review
+with Codex. Set each agent's harness and runner in its file under `agents/`.
+
+The Blueprint in `factory.yaml` routes `intake` → `implement` → `review` →
+`handoff`. Corrections use the same PR and return to independent review.
+Questions pause the affected stage until you answer. The workflow ends after
+handoff; a person merges the PR.
 
 ## What this example shows
 
@@ -21,8 +21,7 @@ handoff, not merge. The worker files retain their separate harnesses and runners
   models take one, but current Claude models don't.
 - Harness authentication uses `auth.source: managedSecret` and a named team
   secret.
-- The reviewer runs on a different model family than the implementer, which
-  reduces shared blind spots.
+- The reviewer uses a different model family than the implementer.
 
 ## Directory structure
 
@@ -41,8 +40,7 @@ runners/
 
 ## Runner configuration
 
-Harness and compute are independent. An agent picks a harness with `harness`
-and a machine with `runner`, and neither setting constrains the other.
+Select the agent's harness with `harness` and its compute with `runner`.
 
 The supported platforms are `linux/x86_64`, `linux/aarch64`,
 `macos/aarch64`, and `windows/x86_64`. macOS supports only `aarch64`, and

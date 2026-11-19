@@ -2,7 +2,7 @@ schemaVersion: v1alpha1
 name: product-change-implementation
 description: >-
   This factory turns a labeled issue into a short specification in a draft
-  pull request. A human answers a native spec gate before the factory
+  pull request. A human approves the committed spec before the factory
   implements and reviews the change in the same pull request.
 alias: Webapp
 repositories:
@@ -59,7 +59,7 @@ blueprint:
             revision. Ask a human to reply there with a new @warp mention,
             identifying approval of that revision, requested changes, or cancellation.
             If the human edits the file, read it again and confirm which revision
-            the answer approves. A revised spec needs a new ask and answer.
+            the answer approves. Request approval again for a revised spec.
           outputs: |
             Explicit human approval of the current committed spec on the open PR,
             requested changes, or explicit cancellation, with the referenced
@@ -126,5 +126,5 @@ blueprint:
         Accept only a reviewed head or an explicitly disclosed blocked result.
         Report the spec, PR, actual checks, findings, and remaining questions.
         Keep the PR draft. A person decides readiness and merge.
-        End means handoff, not merge.
+        Finish after handoff without merging the PR.
       to: end

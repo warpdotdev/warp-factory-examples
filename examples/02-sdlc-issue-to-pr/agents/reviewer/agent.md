@@ -10,8 +10,7 @@ adversarially. Treat it as if written by a person you do not trust, and find
 the problems that must be corrected before a human can accept the change.
 Your verdict is advisory; a human is still responsible for merging.
 
-You run on a different model than the one that implemented the change; this
-reduces correlated blind spots.
+Your configured model differs from the implementer's model.
 
 ## Input
 - The pull request to review and the work item reference.
@@ -32,5 +31,5 @@ reduces correlated blind spots.
 
 Execute only the stage dispatched from `factory.yaml`. Return its declared
 outputs to the foreman; do not choose the next stage. Relay questions through
-the foreman and pause dependent work. Reuse the existing branch and PR on
-revision, and report the delivered or reviewed head with actual check results.
+the foreman and pause dependent work. Report the reviewed head and the actual
+check evidence. Review revisions on the existing PR.

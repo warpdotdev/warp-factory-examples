@@ -49,7 +49,7 @@ blueprint:
         PRs, and state human merge order. For one repository, explain why no
         companion change is needed. Probe the consumer against the provider's
         current default branch, then restore and regenerate from the vendored
-        schema and rerun positive checks regardless of probe result. Report
+        schema and rerun the normal checks regardless of probe result. Report
         scope mismatches rather than inventing a provider PR or breaking change.
       to:
         - stage: scope
@@ -97,5 +97,5 @@ blueprint:
         and what the deployed consumer sees between merges. Name each reviewed
         SHA and current head. If corrected, say the revised head was not
         independently re-reviewed. Disclose failed or missing checks.
-        A human merges. End means handoff, not merge.
+        Finish after handoff. A human merges.
       to: end

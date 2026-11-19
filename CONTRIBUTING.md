@@ -20,16 +20,15 @@
   and every other prerequisite the committed files cannot satisfy on their own
   (connecting an integration, creating a secret, resolving a Linear team
   name), must appear in that checklist.
-- Keep prompts short and pedagogical. Teach the shape of a good stage prompt
-  (role, non-responsibilities, input, output, procedure) rather than
-  shipping a production prompt library.
+- Keep prompts short. Show each stage's task, boundaries, inputs, outputs,
+  and procedure rather than shipping a production prompt library.
 - One concept per example. If a new example mostly repeats an existing one,
   extend the existing README instead.
 - Use an explicit Blueprint for a multi-stage workflow whose routing or human
-  decisions are the teaching point. Keep stage procedures, ordered prose
-  conditions, and gates in `factory.yaml`; keep execution settings and shared
-  role boundaries in `agents/`. A focused intake or review example needs no
-  Blueprint merely for consistency.
+  decisions are the teaching point. Define stage procedures, route conditions
+  in evaluation order, and gates in `factory.yaml`. Keep execution settings
+  and shared role boundaries in `agents/`. Do not add a Blueprint to a focused
+  intake or review example only to match the others.
 <!-- terminology-allow-begin -->
 - Match the product's terminology; the
   [docs](https://docs.warp.dev/factories/) are the source of truth.

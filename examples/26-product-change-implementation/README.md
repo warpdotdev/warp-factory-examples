@@ -1,8 +1,8 @@
 # 26: Product-change implementation
 
-Use an explicit Blueprint to take one small change from a committed spec to a
-draft PR on the same branch. You edit and approve the spec in the original
-issue before implementation. A separate reviewer checks each revised head.
+Use a Blueprint to specify and implement one small change on the same draft
+PR. Edit the spec file on the PR branch, then approve its current committed
+revision in the original issue. A separate reviewer checks each revised head.
 A person decides readiness and merge.
 
 The [disposable-fork exercise](#exercise-edit-a-committed-spec) needs no application
@@ -13,12 +13,13 @@ baseline. For triage, optional mobile work, and other intake sources, see
 
 ## What this example shows
 
-- `factory.yaml` owns `intake`, `spec`, `implement`, `review`, and `handoff`,
-  their ordered prose routes, and the `spec-review` and `human-decision` gates.
+- `factory.yaml` defines `intake`, `spec`, `implement`, `review`, and `handoff`,
+  their routes in evaluation order, and the `spec-review` and `human-decision`
+  gates.
   The files under `agents/` select each worker's role, model, and runner.
 - `factory-ready` requests a spec. A filtered `@warp` issue mention answers
-  the pending gate or requests a revision. The retired `spec-approved` label
-  starts nothing and approves nothing.
+  the pending gate or requests a revision. A `spec-approved` label does not
+  start work or approve a spec.
 - The spec is a human-editable file at `docs/specs/<issue>-<slug>.md` in a
   draft PR. Implementation reads the approved committed revision, including
   your edits, rather than relying on the spec worker's conversation.
@@ -64,7 +65,7 @@ committed revision in the answer.
 
 - **Approve:** explicitly approve the current committed file on the open PR.
 - **Change the spec:** request a concrete change, or edit and commit the file
-  on that same branch. The revised file needs a fresh ask and approval. If
+  on that same branch. The revised file needs a new approval request. If
   you edited directly, identify the edited revision you approve.
 - **Answer a question:** reply to the pending question in the original issue.
   A question back or an unrelated reply is not approval.
@@ -172,9 +173,9 @@ Acceptance:
 - Keyboard users can reach and activate the button.
 ```
 
-The issue is deliberately incomplete: it does not say how long "briefly"
-is, what happens when the copy fails, or where the confirmation appears.
-Those are the spec agent's job.
+The issue does not say how long "briefly" lasts, what happens when copying
+fails, or where confirmation appears. The spec agent proposes these details
+for a person to approve before implementation.
 
 #### The draft spec pull request
 
@@ -188,10 +189,10 @@ user-visible). The spec agent reads `ShareDialog.tsx`, its tests, and
 > Spec ready for review: acme/webapp#131. Review the spec. Edit the file on
 > the PR branch if it needs changes. Reply in this issue with a new `@warp`
 > mention and approve the current committed spec revision, request changes,
-> or cancel. The spec path and committed revision accompany this ask.
+> or cancel. The approval request includes the spec path and committed revision.
 
-Nothing else happens. The factory writes no code, creates no second branch,
-and waits at `spec-review`.
+The factory waits at `spec-review` without implementing or creating a second
+branch.
 
 #### The expected spec file
 
@@ -335,8 +336,7 @@ required count.
 
 The foreman reports #131, the approved spec revision, delivered and reviewed
 SHAs, actual checks, review findings, and remaining limits on the issue. The PR
-stays draft. A person decides whether to mark it ready and merge; ending this
-workflow means handoff, not merge.
+stays draft. A person decides whether to mark it ready and merge.
 
 #### The out-of-scope issue
 
@@ -356,11 +356,11 @@ repository.
 
 Use a throwaway issue and record the actual results, not only run status.
 
-1. `factory-ready` produces one spec-only draft PR and a `spec-review` ask
+1. `factory-ready` produces one spec-only draft PR and a `spec-review` request
    naming its file and revision. Implementation waits while it is unanswered.
-2. Request a spec change. Check for a revised file and fresh ask, without
-   implementation. Edit the file yourself and approve that committed revision
-   in the original issue with `@warp`.
+2. Request a spec change. Check for a revised file and new approval request,
+   without implementation. Edit the file yourself and approve that committed
+   revision in the original issue with `@warp`.
 3. Confirm implementation uses the approved file, branch, and PR and leaves it
    draft. Inspect the current-head independent review and reported checks.
 4. Request a concrete same-contract revision with `@warp` on the issue. Check
@@ -413,7 +413,7 @@ plus one committed spec file.
    ```
 
 6. Apply `factory-ready`. Expect one spec-only draft PR and a `spec-review`
-   ask in the original issue naming the spec path and committed revision.
+   request in the original issue naming the spec path and committed revision.
    Implementation must remain blocked.
 7. On that same PR branch, edit and commit the spec file to require an explicit
    distinction between helper unit tests and server validation. In the original
@@ -439,9 +439,10 @@ for access, validation, nonmatching intake, stale approval, closed specs, failed
 checks, or human waits. A legacy `spec-approved` label or an approval without a
 pending matching spec never starts implementation.
 
-Availability, complete substituted-definition application, runner toolchain,
-and live setup-to-same-PR-revision evidence remain holds until actually tested.
-A parser pass or the illustrative trace cannot establish those results.
+This draft exercise still needs verification of availability, successful
+application of the customized definition, the runner's tools, and the live
+approval and revision steps. Parser validation and the illustrative trace
+do not verify those results.
 
 ## Tune the factory
 

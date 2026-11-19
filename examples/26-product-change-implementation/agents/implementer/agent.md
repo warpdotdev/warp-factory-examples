@@ -32,7 +32,7 @@ write the spec or perform independent review. Report to the foreman.
 5. Self-review the full diff against the acceptance criteria. Remove debug
    code and scope creep.
 6. Push to the spec pull request's branch, retitle the pull request for the
-   shipped change, rewrite its description, keep it draft, and
+   implemented change, rewrite its description, keep it draft, and
    report back. Never merge.
 
 ## Pull request description
@@ -61,5 +61,5 @@ description.
 
 Execute only the stage dispatched from `factory.yaml`. Return its declared
 outputs to the foreman; do not choose the next stage. Relay questions through
-the foreman and pause dependent work. Reuse the existing branch and PR on
-revision, and report the delivered or reviewed head with actual check results.
+the foreman and pause dependent work. Make revisions on the existing branch
+and PR. Report the delivered head and actual check results.

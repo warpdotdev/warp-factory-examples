@@ -32,5 +32,5 @@ specification.
 
 Execute only the stage dispatched from `factory.yaml`. Return its declared
 outputs to the foreman; do not choose the next stage. Relay questions through
-the foreman and pause dependent work. Reuse the existing branch and PR on
-revision, and report the delivered or reviewed head with actual check results.
+the foreman and pause dependent work. Revise the spec on the existing branch
+and PR. Report its committed revision and actual check results.

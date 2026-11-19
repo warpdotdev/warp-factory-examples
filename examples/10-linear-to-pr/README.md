@@ -250,6 +250,5 @@ claim-time workflow transition; the foreman should make no additional
 transition and must not merge.
 ```
 
-For a complete workflow with explicit Blueprint stages, approval gates, and
-independent review of revisions, see
+For triage, committed-spec approval, and independent review of revisions, see
 [`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr).

@@ -1,6 +1,6 @@
 # Warp Factories examples
 
-[Warp Factories](https://docs.warp.dev/factories/) provide open, flexible
+[Warp Factories](https://docs.warp.dev/factories/) provides open, flexible
 infrastructure for building your own software factory. This repository
 contains workflows defined as code that you can adapt for your projects,
 from a single review automation to an issue-to-PR workflow.
@@ -8,25 +8,26 @@ from a single review automation to an issue-to-PR workflow.
 Choose an example, customize its definition, and test it on work from your
 repository. Use the results to identify what to change in your configuration. For guidance on evaluating results and comparing configurations, see [Measure and improve](https://docs.warp.dev/factories/measure-and-improve/).
 
-Each directory under `examples/` contains all the files needed to define a
-factory. To get started, copy the entire example directory into your
-repository and follow the [setup instructions below](#use-an-example).
+Each directory under `examples/` contains a complete factory definition.
+Copy the entire example directory into your repository and follow the
+[setup instructions below](#use-an-example).
 
 These examples use Warp Factories configuration schema version `v1alpha1`.
 
 Examples 02, 03, 24, 25, and 26 define explicit
 [Blueprints](https://docs.warp.dev/factories/blueprints/) in `factory.yaml`.
-Their stages choose workers, procedures, ordered routes, and human gates.
-The files under `agents/` still configure how those workers execute: role,
-model or harness, runner, and skills. The other examples keep their focused
-workflows; 00 and 09 preserve historical snapshots.
+Each Blueprint defines stages, the order in which work moves between them,
+and gates that wait for a person's answer. A worker is the agent assigned to
+execute a stage. The files under `agents/` configure its role, model or
+harness, runner, and skills. The other examples focus on individual tasks;
+00 and 09 preserve historical snapshots.
 
 Try [planning and revising one PR](examples/02-sdlc-issue-to-pr#exercise-plan-and-revise-one-pr)
 or [editing a committed spec before approval](examples/26-product-change-implementation#exercise-edit-a-committed-spec)
-in a disposable fork. Public availability, team access, application, and the
-live setup-to-revision flows still need verification before these draft
-Blueprint exercises can be treated as runnable. Parser success alone does not
-clear those holds.
+in a disposable fork. These draft exercises still need verification of public
+availability, team access, successful definition application, and the live
+approval and revision steps. Do not treat them as runnable until those checks
+are complete. Parser validation does not verify application or execution.
 
 ## The examples
 
@@ -92,10 +93,9 @@ clear those holds.
   contract compatibility and opens one pull request per changed repository,
   with a provider-first merge order when both repositories change.
 - [`examples/26-product-change-implementation`](examples/26-product-change-implementation):
-  Take a small product change through specification, human approval,
-  implementation, and review on the same pull request. An illustrative
-  walkthrough shows the expected outputs and how to compare configuration
-  changes in separate trials.
+  Specify, approve, implement, and review a small product change on one pull
+  request. Edit a committed spec before approval in a disposable-fork exercise,
+  or follow an illustrative React example.
 
 ## Use an example
 
@@ -113,7 +113,7 @@ After setup, Warp syncs changes pushed to the configured branch once the
 
 ## Validate an example
 
-Check that an example is a valid factory definition:
+Check an example with Warp's parser:
 
 ```bash
 python3 scripts/validate_factory_files.py examples/01-single-repo-quickstart
@@ -121,9 +121,9 @@ python3 scripts/validate_factory_files.py examples/01-single-repo-quickstart
 
 The helper requires Python 3 and network access to Warp's validation service.
 Exit 0 means the parser checked the tree without diagnostics; state-dependent
-apply checks did not run. Exit 1 reports diagnostics. Exit 2 means validation
-did not run and is not a pass. A rejected ambient credential is retried once
-without it because the parser endpoint needs no credential.
+apply checks did not run. Exit 1 reports diagnostics to fix before retrying.
+Exit 2 means validation did not run; restore Python, network, or service access
+and retry. Neither exit 1 nor exit 2 is a pass.
 
 Existing work keeps its selected Blueprint. After applying a definition
 change, start a separate task to test the new workflow. Reapplying an intake

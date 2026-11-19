@@ -81,5 +81,5 @@ blueprint:
         Link the PR and actual checks on the issue. For shared edits name the
         owners whose review was requested and keep the PR draft. Never mark it
         ready on an owner's behalf. A human controls readiness and merge.
-        End means the handoff finished, not that the PR merged.
+        Finish after handoff without merging the PR.
       to: end

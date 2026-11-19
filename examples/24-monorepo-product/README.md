@@ -1,16 +1,16 @@
 # 24: Monorepo product
 
-Scope a factory to `apps/web` inside a monorepo. Changes are checked against
-every affected workspace package. Shared-package edits are declared in a
-draft pull request with review requested from their owners. A human controls
-readiness and merging. This extends
-[`01-single-repo-quickstart`](../01-single-repo-quickstart) with shared-impact
-review.
+Scope a factory to `apps/web` inside a monorepo. The implementer tests every
+affected workspace package, including dependents of shared packages.
+Shared-package edits require a draft pull request and a review request to
+their owners. A person on the owning team marks the PR ready. A person merges.
+This extends [`01-single-repo-quickstart`](../01-single-repo-quickstart) with
+shared-impact review.
 
-The inline Blueprint in `factory.yaml` routes `scope` → `implement` → `review`
-→ `handoff`. Declined scope ends before a branch. Corrections reuse the PR and
-return to independent review. Worker files and the ownership skill retain the
-execution settings and repository checks. Handoff does not mean merge.
+The Blueprint in `factory.yaml` routes `scope` → `implement` → `review`
+→ `handoff`. The foreman declines out-of-scope work without creating a branch.
+Corrections reuse the PR and return to independent review. Configure worker
+execution in `agents/` and repository checks in the ownership skill.
 
 ## What this example shows
 
@@ -118,12 +118,9 @@ dependencies. The scoped setup does not prepare them. Do not suppress a
 failure of this expanded install or skip a dependent's checks. Installing
 and checking another product does not permit editing it.
 
-Both runner setup commands end in `|| echo "Warning: ..." >&2`. A setup
-command that exits non-zero fails the whole sandbox before any agent can
-read the error, so a flaky registry would become a failed run with nothing
-to inspect. See the same rule in
-[`02-sdlc-issue-to-pr`](../02-sdlc-issue-to-pr). A logged warning lets the
-implementer see it and rerun the install from the skill.
+Both runner setup commands end in `|| echo "Warning: ..." >&2`. A nonzero
+exit status stops setup before the agent starts. The warning lets the
+implementer retry the install using the skill's commands.
 Every setup command starts from `/workspace`, which is why the install
 changes into `/workspace/monorepo` first.
 
@@ -157,7 +154,7 @@ on the sandbox to add tools the image lacks.
    `runners/linux-web.yaml` if your workspace tool differs (npm or yarn
    workspaces, Nx, Turborepo, Bazel). Keep the initial install scoped to
    the product and its dependencies. Keep an expanded install of
-   affected dependents and their dependency closure before shared-change
+   affected dependents and their dependencies before shared-change
    checks, and test and typecheck commands that select changed packages
    plus their dependents. If your default branch is not `main`, change
    `[origin/main]` in the skill.
@@ -188,9 +185,6 @@ containing `factory.yaml`, as described in
 [Use an example](../../README.md#use-an-example). Register it before
 creating test issues.
 
-Use the sample below to compare the factory's output with the expected
-behavior. Then run the checks under [First-run checks](#first-run-checks).
-
 ### Sample task and expected output
 
 Open an issue in `acme/monorepo` titled "Show the account's display name
@@ -200,7 +194,8 @@ in the web header" with this body:
 > response. The API already returns the field, but `packages/api-client`
 > does not expose it on `Profile` yet.
 
-Label it `factory-ready:web`. You should see the following results.
+Label it `factory-ready:web`. The following output is illustrative; compare
+your run's actual artifacts and checks with it.
 
 1. A work item appears in the factory dashboard, and the foreman comments
    on the issue that it has started on `apps/web` and that the change will
@@ -244,13 +239,14 @@ Check these cases in order.
 
 ## Set up with an agent
 
-Paste this into your factory's foreman, the factory web composer, or a
-coding agent connected to your factory through
-[MCP](https://docs.warp.dev/factories/factory-mcp/). Fill in the uppercase
-placeholders first.
+<!-- terminology-allow-begin -->
+Replace the uppercase placeholders, then send this to your foreman through
+**New Chat** in the factory dashboard or to a coding agent connected through
+[Factory MCP](https://docs.warp.dev/factories/factory-mcp/).
+<!-- terminology-allow-end -->
 
 ```text title="Set up a product-scoped monorepo factory"
-Read https://github.com/warpdotdev/warp-factory-examples/tree/main/examples/24-monorepo-product
+Read https://github.com/warpdotdev/warp-factory-examples/tree/21d3936ad7bed1af2748811e670c19d2a1388a4b/examples/24-monorepo-product
 and set up the same factory for my monorepo, OWNER/REPO. Keep its shape:
 one repository; a foreman that scopes every task to one product directory;
 an implementer that installs affected dependents and their dependencies
@@ -268,6 +264,6 @@ factory-ready:web with the label I will apply; and the pnpm commands with
 the commands this repository uses for the scoped initial install, the
 expanded install before shared-change checks, and tests and typechecks of
 changed packages plus their dependents. Validate the definition before you
-open a pull request, and tell me which labels, teams, and access I still
-have to create or grant.
+open a pull request. Never merge. Tell me which labels, teams, and access
+I still have to create or grant.
 ```
