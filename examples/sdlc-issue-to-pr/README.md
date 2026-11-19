@@ -299,7 +299,7 @@ commit you pushed.
 
    ```text
    In the root README, document:
-   python3 scripts/validate_factory_files.py examples/sdlc-issue-to-pr.
+   python3 scripts/validate_factory_files.py examples/*sdlc-issue-to-pr
    Explain that exit code 2 means validation did not run and is not a pass.
    Keep implementation changes in README.md; the committed specification is
    the only other allowed file. Propose a short plan and wait for my approval.
