@@ -121,3 +121,7 @@ python3 scripts/validate_factory_files.py examples/01-single-repo-quickstart
 ## License
 
 [MIT](LICENSE)
+
+## Temporary Blueprint verification
+
+This temporary README-only change verifies the stage example for docs PR #1099.
